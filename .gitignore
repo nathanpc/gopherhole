@@ -1,0 +1,6 @@
+# Test gopherhole.
+/gopher
+
+# Misc.
+.DS_Store
+Thumbs.db
