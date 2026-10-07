@@ -85,6 +85,28 @@ class Gopher {
 
 		return $entries;
 	}
+
+	/**
+	 * Checks if a host is in fact ourselves.
+	 *
+	 * @param string $host     Host to be checked.
+	 * @param array  $specials Special hosts that are also considered to be us.
+	 *
+	 * @return bool True if the host is ourselves, false otherwise.
+	 */
+	public static function IsHostOurs($host, $specials = []) {
+		// Check for common host names that are used for ourselves or invalid.
+		if (empty($host) || ($host == 'localhost') || ($host == 'null.host'))
+			return true;
+
+		// Check each of the hosts contained in the specials array.
+		foreach ($specials as $item) {
+			if ($host == $item)
+				return true;
+		}
+
+		return false;
+	}
 }
 
 /**
@@ -100,6 +122,7 @@ class GopherEntry {
 	// Gopher entry types.
 	public const TYPE_TEXT = '0';
 	public const TYPE_DIRECTORY = '1';
+	public const TYPE_INFO = 'i';
 
 	/**
 	 * Constructs a Gopher directory entry object.
@@ -123,11 +146,25 @@ class GopherEntry {
 	public function asHTML() {
 		$html = '';
 
+		// Build the address of the entry's link.
+		$href = "?type={$this->type}&selector={$this->selector}";
+		if (preg_match("/^URL:/", $this->selector)) {
+			$href = substr($this->selector, 4);
+		} elseif (!Gopher::IsHostOurs($this->host)) {
+			$href = "https://portal.mozz.us/gopher/{$this->host}:" .
+				"{$this->port}/{$this->type}{$this->selector}";
+		}
+
+		// Build the HTML component.
 		$html .= "<div class=\"gopher-entry gopher-entry-type-{$this->type}\"" .
 			">\n";
-		if ($this->type != GopherEntry::TYPE_DIRECTORY)
+		if ($this->type == GopherEntry::TYPE_INFO) {
+			$html .= "\t<span class=\"entry-label\">{$this->label}</span>\n";
+		} else {
 			$html .= "\t<span class=\"entry-type\">{$this->type}</span>\n";
-		$html .= "\t<span class=\"entry-label\">{$this->label}</span>\n";
+			$html .= "\t<a class=\"entry-label\" href=\"$href\">" .
+				"{$this->label}</a>\n";
+		}
 		$html .= '</div>';
 
 		return $html;
