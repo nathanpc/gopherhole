@@ -36,7 +36,7 @@ class Gopher {
 		// Create socket for connection with gopher server.
 		$socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
 		if ($socket === false) {
-			throw new GopherException("socket_create() failed: reason: " .
+			throw new GopherException($selector, 'socket_create() failed: ' .
 				socket_strerror(socket_last_error()));
 		}
 
@@ -44,7 +44,7 @@ class Gopher {
 		$result = socket_connect($socket, $this->host, $this->port);
 		if ($result === false) {
 			socket_close($socket);
-			throw new GopherException('socket_connect() failed. Reason: ' .
+			throw new GopherException($selector, 'socket_connect() failed: ' .
 				"($result) " . socket_strerror(socket_last_error($socket)));
 		}
 
@@ -61,10 +61,102 @@ class Gopher {
 		socket_close($socket);
 		return $response;
 	}
+
+	/**
+	 * Parses the response from a Gopher server of type directory (1) into an
+	 * array of entries.
+	 *
+	 * @param string $response Response from the server with entries.
+	 *
+	 * @return array An array of entries as represented in the response.
+	 */
+	public function parseEntries($response) {
+		$entries = array();
+
+		foreach (explode("\n", $response) as $line) {
+			// Ignore empty lines or the terminating dot line.
+			$line = trim($line);
+			if (empty($line) || ($line == '.'))
+				continue;
+
+			// Parse the entry and append it to the array.
+			$entries[] = new GopherEntry($line);
+		}
+
+		return $entries;
+	}
+}
+
+/**
+ * Gopher directory entry object.
+ */
+class GopherEntry {
+	public $type;
+	public $label;
+	public $selector;
+	public $host;
+	public $port;
+
+	// Gopher entry types.
+	public const TYPE_TEXT = '0';
+	public const TYPE_DIRECTORY = '1';
+
+	/**
+	 * Constructs a Gopher directory entry object.
+	 *
+	 * @param string $line Response line from a directory listing.
+	 */
+	public function __construct($line) {
+		$this->type = substr($line, 0, 1);
+		$parts = explode("\t", substr($line, 1));
+		$this->label = $parts[0];
+		$this->selector = $parts[1];
+		$this->host = $parts[2];
+		$this->port = intval($parts[3]);
+	}
+
+	/**
+	 * Gets the HTML representation of this entry line.
+	 *
+	 * @return string HTML representation of the object.
+	 */
+	public function asHTML() {
+		$html = '';
+
+		$html .= "<div class=\"gopher-entry gopher-entry-type-{$this->type}\"" .
+			">\n";
+		if ($this->type != GopherEntry::TYPE_DIRECTORY)
+			$html .= "\t<span class=\"entry-type\">{$this->type}</span>\n";
+		$html .= "\t<span class=\"entry-label\">{$this->label}</span>\n";
+		$html .= '</div>';
+
+		return $html;
+	}
 }
 
 /**
  * Gopher exception when fetching or parsing content.
  */
 class GopherException extends Exception {
+	private $selector;
+
+	/**
+	 * Constructs a new Gopher error object.
+	 *
+	 * @param string $selector Selector which caused the issue.
+	 * @param string $message  Error message detailing issue.
+	 */
+	public function __construct($selector, $message) {
+		parent::__construct($message);
+		$this->selector = $selector;
+	}
+
+	/**
+	 * Gets the selector which caused the issue.
+	 *
+	 * @return string Selector that caused the issue.
+	 */
+	public function getSelector() {
+		return $this->selector;
+	}
 }

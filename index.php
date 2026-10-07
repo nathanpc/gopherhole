@@ -13,7 +13,15 @@ $selector = $_GET['selector'];
 
 // Setup Gopher object.
 $gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
+$error = null;
+try {
+	// Get response from server.
+	$response = $gopher->getContents($selector);
+} catch (GopherException $e) {
+	$error = $e;
+}
 
+// TODO: Get title from first entry.
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
@@ -25,18 +33,24 @@ $gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
 		content="width=600, initial-scale=1, user-scalable=1" />-->
 
 	<!-- Stylesheets -->
-	<!--<link rel="stylesheet" href="/assets/css/main.css">-->
+	<!--<link rel="stylesheet" href="main.css">-->
 
 	<!-- Page information. -->
 	<title>webhole</title>
 </head>
 <body>
 	<pre id="gophermap"><?php
-		// Get response from server.
-		$response = $gopher->getContents($selector);
-
-		echo $response;
-
+		// Handle special types.
+		if ($type == GopherEntry::TYPE_DIRECTORY) {
+			// Directory listing.
+			$entries = $gopher->parseEntries($response);
+			foreach ($entries as $entry) {
+				echo $entry->asHTML();
+			}
+		} else {
+			// Other types.
+			echo $response;
+		}
 		end:
 	?></pre>
 </body>
