@@ -14,6 +14,7 @@ $selector = $_GET['selector'];
 // Setup Gopher object.
 $gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
 $error = null;
+$response = null;
 try {
 	// Get response from server.
 	$response = $gopher->getContents($selector);
@@ -40,6 +41,15 @@ try {
 </head>
 <body>
 	<pre id="gophermap"><?php
+		if (!is_null($error)) {
+			echo "Error when requesting {$error->getSelector()}: " .
+				"{$error->getMessage()}\n";
+			goto end;
+		} elseif (is_null($response)) {
+			echo "Error: Empty response\n";
+			goto end;
+		}
+
 		// Handle special types.
 		if ($type == GopherEntry::TYPE_DIRECTORY) {
 			// Directory listing.
@@ -51,6 +61,7 @@ try {
 			// Other types.
 			echo $response;
 		}
+
 		end:
 	?></pre>
 </body>
