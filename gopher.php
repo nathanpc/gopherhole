@@ -159,7 +159,13 @@ class GopherEntry {
 		$html .= "<div class=\"gopher-entry gopher-entry-type-{$this->type}\"" .
 			">\n";
 		if ($this->type == GopherEntry::TYPE_INFO) {
-			$html .= "\t<span class=\"entry-label\">{$this->label}</span>\n";
+			$label = $this->label;
+			if (empty(trim($this->label))) {
+				$html .= "\t<span class=\"entry-label\" style=\"visibility: " .
+					"hidden\">  </span>\n";
+			} else {
+				$html .= "\t<span class=\"entry-label\">$label</span>\n";
+			}
 		} else {
 			$html .= "\t<span class=\"entry-type\">{$this->type}</span>\n";
 			$html .= "\t<a class=\"entry-label\" href=\"$href\">" .

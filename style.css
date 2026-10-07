@@ -1,0 +1,23 @@
+/**
+ * style.css
+ * Theme of the webhole proxy server.
+ *
+ * @author Nathan Campos <hi@nathancampos.me>
+ */
+
+html, body {
+	font-family: 'Menlo', 'DejaVu Sans Mono', 'Courier New', monospace;
+}
+
+.gopher-entry .entry-label {
+	white-space: pre;
+}
+
+.gopher-entry .entry-type {
+	display: inline-block;
+	width: 20px;
+}
+
+.gopher-entry-type-i .entry-label {
+	margin-left: 28px;
+}

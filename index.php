@@ -34,13 +34,14 @@ try {
 		content="width=600, initial-scale=1, user-scalable=1" />-->
 
 	<!-- Stylesheets -->
-	<!--<link rel="stylesheet" href="main.css">-->
+	<link rel="stylesheet" href="style.css">
 
 	<!-- Page information. -->
 	<title>webhole</title>
 </head>
 <body>
-	<pre id="gophermap"><?php
+	<?php
+		// Check for errors.
 		if (!is_null($error)) {
 			echo "Error when requesting {$error->getSelector()}: " .
 				"{$error->getMessage()}\n";
@@ -59,10 +60,10 @@ try {
 			}
 		} else {
 			// Other types.
-			echo $response;
+			echo "<pre id=\"gophermap\">$response</pre>";
 		}
 
 		end:
-	?></pre>
+	?>
 </body>
 </html>
