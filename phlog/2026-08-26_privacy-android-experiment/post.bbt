@@ -1,0 +1,72 @@
+[h1]First steps towards an open mobile platform[/h1]
+
+During the last couple of months I've been thinking about switching from my iPhone back to Android, after making the switch 3 year ago, but this time take the opportunity to force myself to try to have a more privacy-focused experience. This post is basically a brain dump of the first couple of days trying to setup a privacy-focused Android phone and trying to live with it alongside my iPhone.
+
+The device I chose for this experiment was my Fairphone 5, a device I sadly didn't use for a long time due to a series of issues with the early unit I had, leading me eventually to switch to the iPhone I currently use.
+
+[h2]Unlocking the bootloader and installing /e/OS[/h2]
+
+I chose to use [url=https://e.foundation/]/e/OS[/url] as the privacy-focused custom ROM for this experiment. Deciding between it and [url=https://lineageos.org/]LineageOS[/url] wasn't easy, there's a lot of fanboyism only for both ROMs, making getting credible information about each a bit difficult, but in the end I decided that /e/OS with their own stock applications removed manually later would provide me the best privacy out-of-the-box.
+
+The first step towards installing this custom ROM involved removing all my accounts and screen locks from the stock ROM and unlocking the Fairphone's bootloader. I thought this was going to be easy, since I had done it many times in the past, during the Gingerbread and Lollipop eras, but apparently this process is now a lot more involved.
+
+Following the [url=https://support.fairphone.com/hc/en-us/articles/10492476238865-How-to-unlock-or-lock-your-Fairphone-s-bootloader]official bootloader unlocking guide[/url] from Fairphone was straightforward. The only issue I had was that my device wasn't recognized by Windows when it was in bootloader mode. To fix this I had to use [url=https://community.e.foundation/t/solved-windows-does-not-see-my-phone-in-fastboot-mode/69887]weird workaround using Windows Update[/url] to ensure that I had the correct drivers. I couldn't find these drivers anywhere on the internet for download without using Windows Update.
+
+After installing the drivers, I was able to successfully unlock my bootloader and proceed with the installation of /e/OS using the command-line method, which I must admit was very easy compared to what I was used to when it comes to custom ROMs in the past.
+
+[h2]Rooting the device[/h2]
+
+Since my goal is to properly own my own device for the first time in a decade, I decided that I was going to root it on principle.
+
+According to the [url=https://doc.e.foundation/os/advanced/rooting#why-cant-i-root-from-developer-options-on-official-builds]/e/OS support guide on rooting[/url], you can't root an official build using adb, thus forcing me to use [url=https://github.com/topjohnwu/Magisk]Magisk[/url], a tool I've never used before, since the last time I had root on one of my devices this was done using recovery mode and the [url=https://en.wikipedia.org/wiki/SuperSU]SuperSU[/url] application.
+
+The installation of Magisk is quite a roundtrip between the computer and your device, having to patch the boot image on the device and having to transfer it back for installation, but overall went without any issues. Now I can finally own my smartphone and do whatever I want with it, after all it's a computer like any other.
+
+[h2]Installing applications[/h2]
+
+As the focus of this experiment is to be privacy-focused, I will try to stay away from the Play Store as much as possible, thus the majority of my applications are going to be installed using [url=https://f-droid.org/]F-Droid[/url], where the majority of open source applications for Android are hosted, or [url=https://obtainium.imranr.dev/]Obtainium[/url], whenever I encounter an application that's only available via GitHub.
+
+[h2]Removing bloatware[/h2]
+
+Although /e/OS is pretty light and doesn't come with much bloat, it still has a couple of applications that are packed in the default install that I won't ever use and are, in my opinion, bloatware, specially the ones that are linked to their Murena Cloud offering.
+
+To remove these applications I used [url=https://shizuku.rikka.app/]Shizuku[/url], an application that provides a common root API interface, together with [url=https://samolego.github.io/Canta/]Canta[/url], an application that allows the user to uninstall any application on the operating system, even the ones that would lead to a bricked system.
+
+The stock applications that I have removed were:
+
+[list]
+  [*]/e/ Drive (foundation.e.drive)
+  [*]Backup (foundation.e.backup)
+  [*]Browser (foundation.e.browser)
+  [*]Calendar (foundation.e.calendar)
+  [*]Camera (foundation.e.camera)
+  [*]Mail (foundation.e.mail)
+  [*]Maps (com.generalmagic.magicearth)
+  [*]Message (foundation.e.message)
+  [*]Notes (foundation.e.notes)
+  [*]MJ PDF (foundation.e.pdfviewer)
+  [*]Tasks (foundation.e.tasks)
+  [*]Web Calendar Manager (foundation.e.webcalendarmanager)
+[/list]
+
+[h2]Applications[/h2]
+
+Here is a non-exhaustive list of applications that I have installed so far to use on a daily basis during this experiment:
+
+[list]
+  [*]Web Browser: IronFox
+  [*]Navigation: Organic Maps
+  [*]Calculator: Droid48
+  [*]QR Code Tools: Binary Eye
+  [*]Launcher: Lawnchair
+  [*]SMS: QUIK
+  [*]Weather: Overmorrow
+  [*]Mail: Thunderbird Mobile
+  [*]Notes: FUTO Notes
+  [*]Keyboard: FUTO Keyboard
+  [*]Password Manager: Bitwarden
+[/list]
+
+[h2]Conclusion[/h2]
+
+I don't know if I'll be able to use only my Fairphone as my only smartphone, but I'll give it the best shot possible. Hopefully in a couple of months I'll be sharing my positive experience...

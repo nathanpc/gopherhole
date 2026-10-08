@@ -1,0 +1,86 @@
+It has been 0 days since I was bitten by a WinSock2 bug
+=======================================================
+
+This will be a short one, but I just want to log this and create yet another
+link that can be used to objectively point out that WinSock2 was a mistake.
+
+I love UNIX and POSIX, but there's something about Windows that constantly
+attracts me to it. I guess it's a sense of nostalgia, since it was the operating
+system that I learned how to compute on, or maybe it's simply a matter of
+enjoying painful experiences, I'm not really sure.
+
+Either way, every project that I build, I ensure that it can be compiled/run on
+Windows natively, meaning no Cygwin [1], and specially I want to compile it with
+Microsoft's native tools, meaning Visual C++, since that's the correct way of
+doing it, and feels proper, but this comes with a major gotcha: Standards
+compatibility.
+
+I don't know if Microsoft wanted to break compatibility with standards on
+purpose or not, although given their behaviour in the 90's, it most likely was
+on purpose, but their implementation of POSIX and C/C++ standards was a
+nightmare. Some of the issues I've encountered when porting applications over
+have been logged on my wiki [2], but this one bit me yet again this week...
+
+I'm currently in the process of rewriting, for the third time, my AirDrop-like
+program called GroundLift [3], and in doing so I wanted to port it over to
+Windows and get it to compile under Visual Studio.
+
+Porting networking applications over to Windows is a nightmare that no one
+should have to endure, and Microsoft has tried to document some of the issues
+surrounding this process [4], but at least once a year, I get bitten by the same
+bug: Passing a struct timeval as the value to the SO_RCVTIMEO socket option.
+
+In UNIX sockets you have this really nice option for sockets called SO_RCVTIMEO.
+It allows you to periodically timeout a recv() call, so that you are able to
+shutdown a server cleanly for example. It's a really handy option to use, and
+thus is included in almost any piece of networking code that listens for
+connections.
+
+Under a sane build environment [5], this option takes a struct timeval [6] that
+represents the time in seconds until socket operations should timeout, but
+Microsoft, in all their wisdom, decided that in their implementation of the
+sockets API, the SO_RCVTIMEO should take a DWORD with the number of milliseconds
+until a timeout occurs [7], and since the setsockopt() function takes a pointer
+to a variable for its parameters, it means that if you use a struct timeval as a
+sane person, and pass it over to setsockopt(), it will compile without warnings
+and the system will simply use the contents of the structure as the timeout
+value, which depending on your code, can lead to very nasty bugs where only some
+connections timeout, ensuring that you pull your hair out while trying to debug
+it.
+
+If you wish for your code to run on both platforms you will have to do something
+like this:
+
+    struct timeval tv;
+    #ifdef _WIN32
+    DWORD dwTimeout;
+    #endif /* _WIN32 */
+    
+    /* Set a reception timeout so that we don't block indefinitely. */
+    tv.tv_sec = 2;
+    tv.tv_usec = 0;
+    #ifdef _WIN32
+    dwTimeout = tv.tv_sec * 1000;
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, (const char*)&dwTimeout,
+            sizeof(dwTimeout)) == SOCKET_ERROR) {
+        closesocket(sockfd);
+        return -1;
+    }
+    #else
+    if (setsockopt(sockfd, SOL_SOCKET, SO_RCVTIMEO, &tv, sizeof(tv)) == -1) {
+        close(sockfd);
+        return -1;
+    }
+    #endif /* _WIN32 */
+
+I guess this is it, I just wanted to rant about Microsoft's awful sockets
+implementation. Thanks for wasting your time reading this, I do appreciate it.
+
+
+[1]: https://cygwin.com/
+[2]: https://wiki.nathancampos.me/doku.php?id=devnotes:msvc-porting
+[3]: https://github.com/nathanpc/groundlift
+[4]: https://learn.microsoft.com/en-us/windows/win32/winsock/porting-socket-applications-to-winsock
+[5]: https://www.man7.org/linux/man-pages/man7/socket.7.html
+[6]: https://www.man7.org/linux/man-pages/man3/timeval.3type.html
+[7]: https://learn.microsoft.com/en-us/windows/win32/api/winsock/nf-winsock-setsockopt

@@ -1,0 +1,50 @@
+Sony VAIO VGN-TX1XP Windows OEM Files
+=====================================
+
+Right after OCC 2025 [1] and Headcrash's [2] talk about how amazing some of the
+older smallish, almost netbook-sized, Sony VAIOs were, I decided that I wanted
+to get into some of that fun and play around with one.
+
+I was able to score a VAIO VGN-TX1XP [3] from 2005 for quite a reasonable price
+(~35 EUR) on Wallapop in Spain. It was sadly damaged during shipping, but still
+works quite well:
+
+gopher://nathancampos.me/I/phlog/2025-12-25_vaio-vgn-tx1xp-oem/DSC05605.JPG
+
+After trying and failing several times to exchange its spinning rust 1.8" IDE
+hard drive with an SSD of some kind, as none of my adapters worked and all of
+them went unrecognized by the machine's BIOS, I gave up and placed the original
+60GB HDD back in its place.
+
+Overall the machine is amazing. It's small in size, the display is extremely
+high resolution for its time, at 1366x768 pixels, and its VGP-BPL5 battery [4]
+is still available and can be purchased for around 25 EUR. I guess its only down
+side is the pain in the ass hard drive and BIOS combination.
+
+Windows XP OEM Files
+--------------------
+
+After all this talk about the machine, let me finally get to the point of this
+post. The machine came installed with an almost stock version of Windows XP,
+although it had clearly been restored with its factory media, since it had all
+of its drivers installed, and most importantly had its OEM information in the
+Windows about window.
+
+In a rare moment of intelligence on my part, I decided to make a backup of the
+Windows OEM files from system32 (oembios.**, oeminfo.ini, oemlogo.bmp) before
+wiping it clean with a brand new Windows XP SP3 CD.
+
+gopher://nathancampos.me/I/phlog/2025-12-25_vaio-vgn-tx1xp-oem/screenshot.png
+
+I have uploaded all of them to The Internet Archive [5] to ensure that they are
+saved forever, but I'm also hosting a mirror that's available both on Gopher [6]
+and HTTP [7] here on my site.
+
+
+[1]: gopher://nathancampos.me:70/1/occ/2025
+[2]: http://stuxnode.com/
+[3]: https://www.small-laptops.com/sony-vaio-vgn-tx1xp/
+[4]: https://www.amazon.es/dp/B09NQW31QF
+[5]: https://archive.org/details/vaio-vgn-tx1xp-win-oeminfo
+[6]: gopher://nathancampos.me:70/1/phlog/2025-12-25_vaio-vgn-tx1xp-oem/oemfiles
+[7]: http://nathancampos.me/log/2025-12-25_vaio-vgn-tx1xp-oem/oemfiles

@@ -1,0 +1,71 @@
+OCC 2025 (Day 4) A New "Server"
+===============================
+
+As part of the challenge, I quickly realized that my website and gopherhole are
+currently extremely over-engineered in terms of architecture for deployment, and
+as discussed in my post for day 1, this sometimes blocks me from posting more.
+In order to change this behaviour, have more fun with my setup, and possibly
+moving to a self sustainable (solar-powered) hosting setup, I decided to grab an
+old HP t5740 thin client I had laying around and repurpose it as the web and
+Gopher server for my site.
+
+Since one of the goals of this setup is to have fun and enjoy my little garden
+on the web, I decided to not go with the sane route of Linux or a BSD, but
+instead to use Windows, but not any version of Windows...
+
+Pictures of the highlights of the day can be found here:
+   gopher://nathancampos.me/1/occ/2025/day4/
+
+
+Windows POSReady 2009
+---------------------
+
+At first I wanted to use Windows POSReady 2009, a fitting and era appropriate
+OS for this system, and since I never actually played around with it, this was
+a great opportunity to do so.
+
+After installing and ensuring it was up-to-date using Legacy Update [1], I went
+to setup IIS and create a test website, only to realize that multiple sites in
+IIS (equivalent to Apache's virtual hosts) is a feature that is only available
+in Windows Server [2].
+
+Sadly, not having multiple websites in IIS is a deal breaker for me. I want to
+use this system for many other things, and I thus I require the ability to have
+this isolation.
+
+After thinking a lot about this, I decided once again to focus on having fun,
+ignore the obviously sane choices and continue with Windows, only this time I
+installed Windows Sever 2008 (not R2), the Windows Vista-equivalent version of
+Microsoft's server offering.
+
+
+Windows Server 2008
+-------------------
+
+I thought deeply about this, and really wanted to try out Windows Server 2003
+R2, but it being end-of-life'd back in 2015, and having been extremely popular
+in businesses back in the day, in my mind I think it's a big target for
+malicious actors (as if Server 2008 isn't), and thus I decided to go with
+something a bit more modern.
+
+Server 2008 isn't a reference when it comes to security, and pairing it up with
+IIS only makes things worse. I think the type of website that I run doesn't
+attract that many bad actors for me to worry, but I will ensure to put
+everything behind a proxy and isolate it so any damage can be controlled. I hope
+people on the internet can be nice to each other for once.
+
+The installation of the 32-bit version of Server 2008 went smoothly and I'm
+currently installing all the required updates using Legacy Update [1]. I guess
+it will make for quite an interesting web sever!
+
+
+Next Project
+------------
+
+With the server more or less taken care of, I need another project to entertain
+me during the week, so I'm thinking about writing a tiny portable Gopher server
+that I can run on my PowerBook and on my thin client. May be a fun project!
+
+
+[1]: http://legacyupdate.net/
+[2]: https://serverfault.com/a/68371/12889

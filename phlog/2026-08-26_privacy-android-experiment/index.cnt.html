@@ -1,0 +1,126 @@
+<!--
+First steps towards an open mobile platform
+Blog post published on 2026-08-26. Also available on Gopher: gopher://nathancampos.me/0/phlog/2026-08-26_privacy-android-experiment/post.txt
+-->
+
+<p>During the last couple of months I've been thinking about switching from my iPhone back
+	to Android, after making the switch 3 year ago, but this time take the opportunity to
+	force myself to try to have a more privacy-focused experience. This post is basically
+	a brain dump of the first couple of days trying to setup a privacy-focused Android
+	phone and trying to live with it alongside my iPhone.</p>
+
+<p>The device I chose for this experiment was my Fairphone 5, a device I sadly didn't use
+	for a long time due to a series of issues with the early unit I had, leading me
+	eventually to switch to the iPhone I currently use.</p>
+
+<h3>Unlocking the bootloader and installing /e/OS</h3>
+
+<p>I chose to use <a href="https://e.foundation/">/e/OS</a> as the privacy-focused custom
+	ROM for this experiment. Deciding between it and <a
+		href="https://lineageos.org/">LineageOS</a> wasn't easy, there's a lot of
+	fanboyism only for both ROMs, making getting credible information about each a bit
+	difficult, but in the end I decided that /e/OS with their own stock applications
+	removed manually later would provide me the best privacy out-of-the-box.</p>
+
+<p>The first step towards installing this custom ROM involved removing all my accounts and
+	screen locks from the stock ROM and unlocking the Fairphone's bootloader. I thought
+	this was going to be easy, since I had done it many times in the past, during the
+	Gingerbread and Lollipop eras, but apparently this process is now a lot more involved.
+</p>
+
+<p>Following the <a
+		href="https://support.fairphone.com/hc/en-us/articles/10492476238865-How-to-unlock-or-lock-your-Fairphone-s-bootloader">official
+		bootloader unlocking guide</a> from Fairphone was straightforward. The only issue
+	I had was that my device wasn't recognized by Windows when it was in bootloader mode.
+	To fix this I had to use <a
+		href="https://community.e.foundation/t/solved-windows-does-not-see-my-phone-in-fastboot-mode/69887">weird
+		workaround using Windows Update</a> to ensure that I had the correct drivers. I
+	couldn't find these drivers anywhere on the internet for download without using
+	Windows Update.</p>
+
+<p>After installing the drivers, I was able to successfully unlock my bootloader and
+	procceed with the installation of /e/OS using the command-line method, which I must
+	admit was very easy compared to what I was used to when it comes to custom ROMs in the
+	past.</p>
+
+<h3>Rooting the device</h3>
+
+<p>Since my goal is to properly own my own device for the first time in a decade, I
+	decided that I was going to root it on principle.</p>
+
+<p>According to the <a
+		href="https://doc.e.foundation/os/advanced/rooting#why-cant-i-root-from-developer-options-on-official-builds">/e/OS
+		support guide on rooting</a>, you can't root an official build using adb, thus
+	forcing me to use <a href="https://github.com/topjohnwu/Magisk">Magisk</a>, a tool
+	I've never used before, since the last time I had root on one of my devices this was
+	done using recovery mode and the <a
+		href="https://en.wikipedia.org/wiki/SuperSU">SuperSU</a> application.</p>
+
+<p>The installation of Magisk is quite a roundtrip between the computer and your device,
+	having to patch the boot image on the device and having to transfer it back for
+	installation, but overall went without any issues. Now I can finally own my smartphone
+	and do whatever I want with it, after all it's a computer like any other.</p>
+
+<h3>Installing applications</h3>
+
+<p>As the focus of this experiment is to be privacy-focused, I will try to stay away from
+	the Play Store as much as possible, thus the majority of my applications are going to
+	be installed using <a href="https://f-droid.org/">F-Droid</a>, where the majority of
+	open source applications for Android are hosted, or <a
+		href="https://obtainium.imranr.dev/">Obtainium</a>, whenever I encounter an
+	application that's only available via GitHub.</p>
+
+<h3>Removing bloatware</h3>
+
+<p>Although /e/OS is pretty light and doesn't come with much bloat, it still has a couple
+	of applications that are packed in the default install that I won't ever use and are,
+	in my opinion, bloatware, specially the ones that are linked to their Murena Cloud
+	offering.</p>
+
+<p>To remove these applications I used <a href="https://shizuku.rikka.app/">Shizuku</a>,
+	an application that provides a common root API interface, together with <a
+		href="https://samolego.github.io/Canta/">Canta</a>, an application that allows the
+	user to uninstall any application on the operating system, even the ones that would
+	lead to a bricked system.</p>
+
+<p>The stock applications that I have removed were:</p>
+
+<ul>
+	<li>/e/ Drive (<code>foundation.e.drive</code>)</li>
+	<li>Backup (<code>foundation.e.backup</code>)</li>
+	<li>Browser (<code>foundation.e.browser</code>)</li>
+	<li>Calendar (<code>foundation.e.calendar</code>)</li>
+	<li>Camera (<code>foundation.e.camera</code>)</li>
+	<li>Mail (<code>foundation.e.mail</code>)</li>
+	<li>Maps (<code>com.generalmagic.magicearth</code>)</li>
+	<li>Message (<code>foundation.e.message</code>)</li>
+	<li>Notes (<code>foundation.e.notes</code>)</li>
+	<li>MJ PDF (<code>foundation.e.pdfviewer</code>)</li>
+	<li>Tasks (<code>foundation.e.tasks</code>)</li>
+	<li>Web Calendar Manager (<code>foundation.e.webcalendarmanager</code>)</li>
+</ul>
+
+<h3>Applications</h3>
+
+<p>Here is a non-exaustive list of applications that I have installed so far to use on a
+	daily basis during this experiment:</p>
+
+<ul>
+	<li>Web Browser: IronFox</li>
+	<li>Navigation: Organic Maps</li>
+	<li>Calculator: Droid48</li>
+	<li>QR Code Tools: Binary Eye</li>
+	<li>Launcher: Lawnchair</li>
+	<li>SMS: QUIK</li>
+	<li>Weather: Overmorrow</li>
+	<li>Mail: Thunderbird Mobile</li>
+	<li>Notes: FUTO Notes</li>
+	<li>Keyboard: FUTO Keyboard</li>
+	<li>Password Manager: Bitwarden</li>
+</ul>
+
+<h3>Conclusion</h3>
+
+<p>I don't know if I'll be able to use only my Fairphone as my only smartphone, but I'll
+	give it the best shot possible. Hopefully in a couple of months I'll be sharing my
+	positive experience...</p>

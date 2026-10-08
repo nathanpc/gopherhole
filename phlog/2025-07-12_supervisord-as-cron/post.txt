@@ -1,0 +1,105 @@
+Using supervisord as cron inside Docker containers
+==================================================
+
+Recently, while rebuilding my local Git repository server to run within Docker
+(docker-source-vault [1]), I was once again faced with the problem of having to
+run multiple programs at the same time within the same container project, a task
+that's usually solved by either breaking things into multiple containers and
+orchestrating everything with 'docker compose', by using a simple entrypoint
+shell script [2] and sending all programs to the background, or the correct way,
+which is to use a process manager, as is adviced by Docker themselves [3].
+
+Since my use case required that services such as SSH and Apache were properly
+monitored and cared for, as no one wants their repositories offline, I went down
+the process manager route with supervisord [4]. This solution has proved very
+reliable in production so it was a safe bet, although this time, for the first
+time, I had to have something akin to cron inside my container, since I have a
+repository synchronization script that should run every 5 minutes, and ensures
+that I mirror all my local changes to GitHub.
+
+Having cron inside a container is a really bad idea, since it's not really
+designed to work in that specific environment, not only that, but since we
+already have supervisord, we should have everything that's needed to run a task
+at a fixed interval, since it has an event system [5] that supports TICK events.
+
+The problem with supervisord's TICK events is that they only work in fixed
+intervals of every 5 seconds, every minute, or every hour, meaning they are not
+arbitrary, which is a big problem, and of course people have asked for
+solutions [6] and the developers simply tell them to:
+
+    Subscribe to one TICK_* event and increment a counter each time the event is
+    received. When a certain number of counts have occurred, act and reset the
+    count.
+
+This is great, except there's no documentation on how to properly do this from a
+simple shell script and adhering to the event system's communication protocol.
+
+After digging through the event system documentation and understanding how to
+properly manage event states [7], I came up with the following solution using
+bash:
+
+    #!/bin/bash
+    
+    # Go into ready state and wait for the event to come in.
+    echo 'READY'
+    read -s eventinfo
+    echo "$eventinfo" 1>&2
+    
+    # Get the counter value.
+    counter=0
+    counterfile=/tmp/counter  # TODO: Change this if you have multiple events.
+    if [ -f "$counterfile" ]; then
+        counter=$(head -n 1 "$counterfile")
+    fi
+    
+    # Increment the counter and store it.
+    counter=$((counter+1))
+    echo "$counter" > "$counterfile"
+    echo "Counter: $counter" 1>&2
+    
+    # Check if we've reached our timer goal.
+    if [ "$counter" -lt "$TICK_GOAL" ]; then
+        # See you next time.
+        echo -e -n "RESULT 2\nOK"
+        exit 0
+    else
+        # Reset the counter.
+        counter=0
+        echo "$counter" > "$counterfile"
+    fi
+    
+    # TODO: Put here everything that you need to run at a fixed interval.
+    
+    # Notify we processed the event.
+    echo -e -n "RESULT 2\nOK"
+
+This shell script performs all the necessary communications with supervisord in
+order to keep it happy and can have its time interval configured by selecting
+the right combination of event type and an environment variable called
+TICK_GOAL, allowing for completely arbitrary intervals.
+
+Here's an excerpt of the supervisord.conf used to perform the synchronization
+task every 5 minutes:
+
+    [eventlistener:gitsync]
+    command = /git-scripts/auto-sync
+    events = TICK_60
+    environment = TICK_GOAL="5"
+    autostart = true
+    autorestart = true
+    redirect_stderr = false
+    stderr_logfile = /logs/event_%(program_name)s.log
+    stderr_logfile_maxbytes = 2MB
+    stderr_logfile_backups = 10
+
+That's all you need to have tasks running at fixed intervals inside your
+containers.
+
+
+[1]: https://github.com/nathanpc/docker-source-vault
+[2]: https://docs.docker.com/engine/containers/multi-service_container/#use-bash-job-controls
+[3]: https://docs.docker.com/engine/containers/multi-service_container/#use-a-process-manager
+[4]: https://supervisord.org/
+[5]: https://supervisord.org/events.html
+[6]: https://narkive.com/hPOo79mM
+[7]: https://supervisord.org/events.html#event-listener-states

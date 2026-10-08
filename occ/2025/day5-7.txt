@@ -1,0 +1,78 @@
+OCC 2025 (Day 5-7) An Interesting Weekend
+=========================================
+
+There weren't any updates for the last 3 days of the challenge, but it sure was
+an interesting weekend. Me and my family decided last minute to rent a summer
+house to have a nice weekend together.
+
+For this trip, to force myself not to work, I decided to not bring my work
+laptop and only take my PowerBook with me. This turned out to make the weekend
+even more interesting.
+
+
+No Internet
+-----------
+
+Quickly I realized that the Wi-Fi router of the place was of course, way too new
+for my old machine, meaning it only supported WPA2 authentication, something I
+never thought as a problem ever since I started using a special router in my
+house for retro computers (recently upgraded [1]).
+
+My iPhone's hotspot wasn't any different, so this meant I had no internet on my
+laptop, and since I planned on forcing myself on not using my phone, meant I
+passed almost the entire weekend without internet, something that felt
+refreshing and definitely made me less anxious, although I did miss the fun on
+IRC.
+
+
+Projects
+--------
+
+Although I had to put on hold the thin client server I mentioned building on
+Day 4 for obvious internet reasons, I realized that there are no modern Gopher
+servers for Windows, at least none that I could find on 5 minutes I spent
+searching for it on my phone.
+
+With that in mind and a need to have something to do on my PowerBook while
+idling over the weekend I decided to write a tiny and ultra portable Gopher
+server that I'll be releasing shortly into the wild.
+
+The reason why it's not yet released is that I decided to also learn how to use
+CVS, something I always wanted to play around with since clients work on almost
+any old OS, something that always bugged me with Git for retro projects. Now I
+just have to figure out how I can sustainably mirror my local CVS module to a
+GitHub repository.
+
+
+Future Work
+-----------
+
+If I have time, during this week I will finish setting up a secure way to tunnel
+traffic from my public cloud server to the thin client on my local network, and
+start serving at least my website from it, although these last couple of days
+before the holidays are usually pretty intense at work, let's see how it goes.
+
+
+Conclusion
+----------
+
+As happened last year, I simply continued the challenge [2], and I still plan to
+continue prioritizing my old gear. I guess every year I reassess how bloated,
+"unnecessarily modern" or complex my daily life/services are, and with each
+reassessment I try to fix things, simplify, make them retro-friendly, meaning
+each year I get closer and closer to an ideal scenario where I may be able to,
+apart from work, only use my old computers. A great positive feedback scenario.
+
+Sadly this year I couldn't commit more time to the challenge as I originally
+hoped and how I was able to last year, life and work always gets in the way, but
+I really enjoyed this time nonetheless.
+
+To close things off, I would like to thank everyone that organized and
+participated in this year's challenge, but also would like to thank everything
+that made this challenge into an amazing community to hang around year-round.
+
+Looking forward to OCC 2026!
+
+
+[1]: http://nathancampos.me/blog/2025-04-21_best-retro-wifi/
+[2]: http://nathancampos.me/blog/2024-09-20_occ-2024-wrap/

@@ -1,0 +1,96 @@
+Windows SDK for Windows 7 Failling to Install
+=============================================
+
+I've been trying to install the Microsoft Windows SDK for Windows 7 and .NET
+Framework 4 [1] on my Windows Server 2008 machine that hosts this content so
+that I can natively compile my Gopher server software [2] without having to
+install a full blown version of Visual Studio.
+
+The issue that I've been having is that, no matter what I do, I can't get past
+the first step of actually installing the SDK to get access to the Microsoft
+compilers. I always get the following error:
+
+gopher://nathancampos.me/I/phlog/2025-09-02_win7-sdk-install-fix/install-fail.png
+
+If I clicked the "View Logs" button I would get a very verbose log that
+contained key parts such as:
+
+    MSI (s) (C8:FC) [08:44:59:221]: Product: Microsoft Windows SDK for Windows 7
+    (7.1) -- Removal completed successfully.
+    
+    MSI (s) (C8:FC) [08:44:59:236]: Windows Installer removed the product.
+    Product Name: Microsoft Windows SDK for Windows 7 (7.1). Product Version:
+    7.1.30514. Product Language: 1033. Removal success or error status: 0.
+    
+    08:44:50 Tuesday, 02 September, 2025: SFX C:\Program Files\Microsoft
+    SDKs\Windows\v7.1\Setup\SFX\vcredist_x86.exe installation started with log
+    file C:\Users\Administrator\AppData\Local\Temp\1\Microsoft Windows SDK for
+    Windows 7_b769bc4d-e6a4-4aac-9ebe-a8e9ca879b93_SFX.log
+    08:44:54 Tuesday, 02 September, 2025: C:\Program Files\Microsoft SDKs\
+    Windows\v7.1\Setup\SFX\vcredist_x86.exe installation failed with return code
+    5100
+    08:44:59 Tuesday, 02 September, 2025: [SDKSetup:Error]
+    Config_Products_Install: Installation of Product Microsoft Windows SDK for
+    Windows 7 (failed): Please refer to Samples\Setup\HTML\ConfigDetails.htm
+    document for further information. Stack:    at
+    SDKSetup.Product.ConfigureRelatedSfx()       at
+    SDKSetup.Product.ConfigureNewProduct(ManualResetEvent CancelEvent)
+    08:44:59 Tuesday, 02 September, 2025: [SDKSetup:Info]
+    Config_Products_InstallNew: End installation of new product: Microsoft
+    Windows SDK for Windows 7
+    08:44:59 Tuesday, 02 September, 2025: [SDKSetup:Error]
+    Config_Products_Install: Windows SDK Setup (failed): Installation of the
+    "Microsoft Windows SDK for Windows 7" product has reported the following
+    error: Please refer to Samples\Setup\HTML\ConfigDetails.htm document for
+    further information. Stack:    at
+    SDKSetup.Product.ConfigureNewProduct(ManualResetEvent CancelEvent)       at
+    SDKSetup.Product.SetupProduct(TaskMode taskMode, ManualResetEvent
+    CancelEvent)       at SDKSetup.ProductCollection.SetupProducts(TaskMode
+    taskMode, DownloadManager downloadManager, ManualResetEvent cancelEvent)
+    at SDKSetup.ConfigProducts.DoCurrentTask(TaskMode Task)
+
+Very helpful right? Logs should theoretically be more detailed and provide some
+debugging hints, but I guess Microsoft doesn't understand these concepts.
+
+After some quick googling with DuckDuckGo using parts of the logs I was able to
+find a very helpful StackOverflow question [3] of someone in the exact same
+situation as I was. The answers were pointing to the exact same culprit and one
+even linked to a helpful Microsoft KB [4] with the following content:
+
+    CAUSE
+    
+    This issue occurs when you install the Windows 7 SDK on a computer that has
+    a newer version of the Visual C++ 2010 Redistributable installed.
+    
+    RESOLUTION
+    
+    To resolve this issue, you must uninstall all versions of the Visual C++
+    2010 Redistributable before installing the Windows 7 SDK. You may have one
+    or more of the following products installed:
+    
+      - Microsoft Visual C++ 2010 x86 Redistributable
+      - Microsoft Visual C++ 2010 x64 Redistributable
+    
+    After uninstalling the Microsoft Visual C++ 2010 Redistributable products,
+    you may install the Windows 7 SDK. After installing the Windows 7 SDK, you
+    may then reinstall the newer version of the Visual C++ 2010 Redistributable
+    products, in order to restore the Visual C++ 2010 Redistributable products
+    to their original state.
+
+Apparently Microsoft's extremely complex MSI installer system wasn't able to
+detect that I had a newer version of the Visual C++ 2010 Redistributable
+installed using the TechPowerUp Redistributable AIO pack [5], and simply gave up
+with a cryptic error message that made no sense.
+
+Uninstalling the newer version of the redistributable package allowed me to
+finally install the SDK, followed by reinstalling the newer redistributable
+version.
+
+The joys of playing with old Microsoft software...
+
+
+[1]: https://www.microsoft.com/en-us/download/details.aspx?id=8442
+[2]: https://github.com/nathanpc/amigos
+[3]: https://stackoverflow.com/q/19366006
+[4]: https://web.archive.org/web/20150110143324/http://support.microsoft.com/kb/2717426
+[5]: https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/

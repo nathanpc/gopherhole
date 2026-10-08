@@ -1,0 +1,102 @@
+StarFive VisionFive 2 Lite: First Impression
+============================================
+
+After waiting a couple of months since backing the project on Kickstarter [1], I
+finally have in my hands yet another attempt at a budget RISC-V single board
+computer.
+
+My first dance with RISC-V came when the MangoPi MQ-Pro [2] was released back in
+2022. Having a first taste of RISC-V for around $20 was simply too good to be
+true. After receiving it and realizing I had to flash a random .img from a Baidu
+or Yandex Drive folder, and the random crashes due to the FENCE.TSO instruction
+not being implemented [3], the whole experience left me with a very bad
+impression of the architecture.
+
+Fast forward 3 years, and I'm once again trying out a budget RISC-V board, but I
+thought, since the Kickstarter went so well, that this time the experience would
+be a lot better, since the company had to please 436 backers.
+
+
+Finding the right image
+-----------------------
+
+Upon receiving my board, I immediately bought a 128GB M.2 2242 NVMe drive, since
+I wanted to give it the best possible chance at reaching peak performance. I
+went to the Kickstarter page to find where I could get the images for the SSD,
+and in their post on the topic of images [4], they pointed everyone to a GitHub
+releases page where they keep their Debian and Ubuntu releases.
+
+At first, I was wrongfully led by their Kickstarter post to the
+JH7110_VF2_6.12_v6.0.0 image [5] thinking it was Debian. I flashed it to my SSD,
+and it never booted to a shell. I still don't know what that image is supposed
+to be.
+
+After digging around their website for a while, I finally found their Debian
+releases page [6], which had an interesting note about them using a snapshot
+from 2023-06-12 of the Debian bookworm (then unstable) APT repositories, this
+left me a bit nervous about the rest of the image, although I simply ignored it.
+
+After flashing the proper Debian image for my VisionFive 2 Lite, I had it
+booting to a Gnome desktop, that's when things got very frustrating...
+
+
+The performance surprise
+------------------------
+
+While I was doing all of this, I was also chatting on #deadnet (Libera.Chat)
+about the RISC-V board, and bsandro, who has the VisionFive 2 (non-Lite) board
+with the same CPU, pointed out that it was "slow":
+
+    <bsandro> nathanpc: oh cool! i'm still rocking this irssi from regular vf2
+    <nathanpc> nice!
+    <nathanpc> since it's the same CPU the performance will be the same
+    <nathanpc> how is it?
+    <bsandro> slow :D
+    <nathanpc> lol
+    <nathanpc> that's how I like it :P
+
+At this point, I thought I liked slow computers, but I was surprised when the
+SBC booted into Gnome. The performance was abysmal, everything felt super clunky
+and slow, opening applications felt like a monumental task, and all animations
+in the UI dropped most of their frames.
+
+I thought that all of these issues were due to the fact that I was running
+Gnome, which I despise for their decisions that are hostile towards power users
+of Linux, and also because it's a resource hog, so I installed my trusty IceWM
+to feel how much better it would run.
+
+Upon switching to IceWM I immediately noticed that updating the screen caused
+visual glitches on the changed region, and that it was noticeably more clunky
+and slower than Gnome, something I never thought was possible until now. I guess
+all of these issues are due to IceWM using X11 and the GPU drivers for the
+JH7110 being targeted towards Wayland, but still, the performance was on par
+with the first Raspberry Pi, in my opinion.
+
+
+Final thoughts
+--------------
+
+After not being able to get anything done with the desktop, not even customizing
+its look, I got so frustrated that I simply shut the thing down. I don't know
+what I was expecting, it's a quad-core CPU, so I figured it would be a little
+bit more performant, but the slowness in the UI is simply too infuriating for me
+to deal with and have fun.
+
+For now, I'll be shelving the VisionFive 2 Lite for a while, at least until the
+disappointment dissipates, and maybe more up-to-date versions of Debian get
+released for it. I had this vision (no pun intended) of having some fun with it
+as a desktop, and seeing how I could live with a RISC-V computer, but it's just
+so slow that I can't even try it right now.
+
+I guess I could try a lightweight Wayland compositor to see if things are a bit
+better, but for now, I do believe this board is only good as a headless server.
+Hopefully, my mind may change when I decide to play around with it more in the
+future, but for now, it'll be relegated to the box of single board computers.
+
+
+[1]: https://www.kickstarter.com/projects/starfive/visionfive-2-lite-unlock-risc-v-sbc-at-199
+[2]: https://mangopi.org/mangopi_mqpro
+[3]: https://github.com/llvm/llvm-project/issues/50090
+[4]: https://www.kickstarter.com/projects/starfive/visionfive-2-lite-unlock-risc-v-sbc-at-199/posts/4552688
+[5]: https://github.com/starfive-tech/VisionFive2/releases/tag/JH7110_VF2_6.12_v6.0.0
+[6]: https://github.com/starfive-tech/Debian/releases

@@ -1,0 +1,220 @@
+I'm no longer a happy customer of Namecheap
+===========================================
+
+I've been a happy customer of Namecheap since July 13th 2011, when I registered
+the domain name dreamintech.net to create a technology news site with a couple
+of IRC friends from the #dreamincode channel.
+
+Back then I only knew about GoDaddy and LocaWeb (the defacto registrar and
+hosting company in Brazil), but my friends told me that this Namecheap registrar
+was the best. I won't lie, because of its name, I was a bit hesitant, but I
+registered with them anyway, since people on IRC never lie right?
+
+They were right, and I was pretty happy with their service during the last 14
+years. It's the only domain registrar I had ever used, and I felt very good when
+the whole GoDaddy backing the Stop Online Piracy Act controversy [1] was
+happening and Namecheap was heralded online as the best registrar to move to.
+
+During almost 15 years I registered well over 20 domains with them, and
+recommended them to anyone that ever talked to me about getting a domain, I was
+an extremely loyal customer and championed their platform whenever possible.
+Their names were cheap, and even though their website was painful to use, it
+provided the service I wanted for good price and nothing more.
+
+Fastforward to January of this year 2026, and I get an email talking about price
+increases on some of my domains. I always ignored these, since I know that from
+time to time, the prices do go up, it's normal, but this time I noticed two
+things regarding a .eu domain that I own:
+
+  - The registration price went up 2 USD (from $6.98 to $8.98)
+  - The renewal price went up 1.50 USD (from $9.48 to $10.98)
+
+A 2 US dollar increase felt way more substantial than the regular increase over
+the years due to ICANN fees or simple registry fees going up. Also I noticed
+that the renewal price was different than the registration one. I always thought
+they were the same, apart from new domain deals registrars usually use to trick
+people into buying expensive domains.
+
+Because of these discrepancies I decided to look at the prices of similar
+domains with other registrars, and to my surprise, they were a lot cheaper, like
+$5 cheaper. This made me very furious, Namecheap was no longer cheap...
+
+I started searching for what happened, and apparently Namecheap started getting
+a pretty bad reputation when I wasn't looking [2][3].
+
+I asked some friends IRL for suggestions on the current best registrar and they
+all recommended either CloudFlare or Porkbun. Searching Reddit and their
+recommendations line up with comments online. Since I wasn't looking forward to
+dealing directly with CloudFlare, given I don't like them very much, and their
+registrar is a loss-leader [4], I decided to register with Porkbun, which still
+uses CloudFlare [5], but I was willing to cope with this.
+
+Registering with Porkbun wasn't very pleasant since I had to perform the dreaded
+online ID verification process [6], which I'm fully against. This step almost
+made me ditch Porkbun, but I guess money and good customer service is a priority
+right now and I'm still conflicted about consenting to the whole process.
+
+I have currently moved 2 of my domains, including this one (nathancampos.me) to
+Porkbun without any issues, and I plan to move completely away from Namecheap as
+my domains near their expiry date this year.
+
+Moving away from Namecheap with ease
+------------------------------------
+
+As a side note I would like to document the process of quickly moving away from
+Namecheap and not having any down time.
+
+The first step you should take is to get a zone file from Namecheap. This can be
+done by bypassing their AI support chatbot and asking a human to retrieve it for
+you or you can also do it by visiting the following URL while logged in to your
+Namecheap account [7] and downloading a JSON file with all your DNS information.
+
+The downloaded JSON file can then be passed through this Python script provided
+by GitHub user ashleykleynhans [8]:
+
+    #!/usr/bin/env python3
+    ############################################################################
+    # Generate DNS Zone file from Namecheap
+    #
+    # Modification History:
+    # Date         Version   Modified by          Description
+    # 2016-03-11   1.0       Judotens Budiarto    Initial creation
+    # 2020-01-17   1.1       Andrew               Resolve CAPTCHA issue
+    # 2020-12-07   1.2       Dinis                Cloudflare and AAAA record
+    #                                             support
+    # 2022-08-30   1.3       Ashley Kleynhans     Python3 and more DNS records
+    #                                             support, Refactored code to
+    #                                             break out of loop sooner, use
+    #                                             argparse to validate command
+    #                                             line arguments, option to
+    #                                             choose default or Cloudflare
+    #                                             format. Improved error
+    #                                             handling, autodetect domain
+    #                                             name.
+    ############################################################################
+    
+    import argparse
+    import json
+    
+    RECORD_TYPES = {
+        1: 'A',
+        2: 'CNAME',
+        3: 'MX',
+        5: 'TXT',
+        8: 'AAAA',
+        9: 'NS',
+        10: 'URL Redirect',
+        11: 'SRV',
+        12: 'CAA',
+        13: 'ALIAS'
+    }
+    
+    
+    def get_args():
+        parser = argparse.ArgumentParser(
+            description='Get Namecheap DNS records.',
+        )
+    
+        parser.add_argument(
+            'filename',
+            type=str,
+            help='Filename'
+        )
+    
+        parser.add_argument(
+            '--format', '-format', '--f', '-f',
+            type=str,
+            required=False,
+            default='default',
+            choices={'default', 'cloudflare'},
+            help='Output format (default/cloudflare)'
+        )
+    
+        return parser.parse_args()
+    
+    
+    def parse_dns_info(dns_info, output_format):
+        items = []
+    
+        if 'Result' in dns_info and\
+        'CustomHostRecords' in dns_info['Result'] and\
+        'Records' in dns_info['Result']['CustomHostRecords']:
+            records = dns_info['Result']['CustomHostRecords']['Records']
+        else:
+            raise KeyError('JSON is in an unexpected format')
+    
+        if not len(records):
+            raise Exception('No DNS records found in JSON')
+    
+        for record in records:
+            # Skip inactive records
+            if not record['IsActive']:
+                continue
+    
+            # Skip unknown record types
+            if record['RecordType'] not in RECORD_TYPES.keys():
+                continue
+    
+            record_type = RECORD_TYPES[record['RecordType']]
+            value = record['Data']
+            host = record['Host']
+    
+            if record_type == 'MX':
+                value = f"{record['Priority']} {value}"
+            elif record_type == 'TXT':
+                value = f'"{value}"'
+    
+            if output_format == 'cloudflare':
+                domain = dns_info['Result']['DomainBasicDetails']['DomainName']
+                if host == '@':
+                    host = domain
+                else:
+                    host = f'{host}.{domain}.'
+    
+            items.append([
+                host,
+                str(record['Ttl']),
+                'IN',
+                record_type,
+                value
+            ])
+    
+        return items
+    
+    
+    if __name__ == '__main__':
+        try:
+            args = get_args()
+            filename = args.filename
+            output_format = args.format
+            file = open(filename, 'r')
+            dns_info = json.loads(file.read())
+            file.close()
+            records = parse_dns_info(dns_info, output_format)
+    
+            for record in records:
+                print('\t'.join(record))
+        except (IOError, KeyError, Exception) as e:
+            print(f'ERROR: {e}')
+        except json.decoder.JSONDecodeError as e:
+            print(f'ERROR: Unable to decode JSON from {filename}: {e}')
+
+After exporting the zone file you can follow Porkbun's tutorial on how to
+transfer a domain with minimal downtime [9] and don't forget to speed up the
+process by approving the transfer [10] as soon as you get the email from
+Namecheap.
+
+This are the steps that I followed to transfer my domains, so I hope it helps
+you do the same. Fuck Namecheap.
+
+
+[1]: https://en.wikipedia.org/wiki/Controversies_surrounding_GoDaddy#Backing_of_SOPA_and_resultant_boycott
+[2]: https://old.reddit.com/r/NameCheap/comments/1nbx5ie/renewals_pricing_is_out_of_control/
+[3]: https://old.reddit.com/r/NameCheap/comments/yhhrzy/renewal_price_going_up_over_1200/
+[4]: https://old.reddit.com/r/selfhosted/comments/19a1fsc/choosing_cloudflare_as_my_domain_registrar/kiib5vi/
+[5]: https://porkbun.com/products/dns_management
+[6]: https://www.eff.org/deeplinks/2024/06/hack-age-verification-company-shows-privacy-danger-social-media-laws
+[7]: https://ap.www.namecheap.com/Domains/dns/GetAdvancedDnsInfo?fillTransferInfo=false&domainName=YOURDOMAINNAME.tld
+[8]: https://gist.github.com/ashleykleynhans/69e4fb525d4f32d766313d3f9d22b688
+[9]: https://kb.porkbun.com/article/89-how-to-transfer-a-domain-to-porkbun-with-no-downtime
+[10]: https://kb.porkbun.com/article/88-how-to-transfer-a-domain-from-namecheap-to-porkbun#expedite-transfer

@@ -1,0 +1,122 @@
+<!--
+Compiling SoftEther VPN on a modern environment
+Blog post published on 2026-07-07. Also available on Gopher: gopher://nathancampos.me/0/phlog/2026-07-07_softether-penitence/post.txt
+-->
+
+<p>This all started with a very simple need to run SoftEther VPN on a Docker
+container <a href="https://github.com/SoftEtherVPN/SoftetherVPN-docker#usage-docker-run">as
+per their own instructions</a>... What I didn't realize was that such a simple
+task would require forking the project and patching makefiles...</p>
+
+<p>Apart from Tailscale, which is great at creating a mesh network of all my
+modern devices, my go to VPN has always been <a href="https://www.softether.org/">SoftEther</a>,
+it's a great choice if you want to quickly setup OpenVPN or L2TP with ease,
+apart from this, if you are like me and want to VPN your retro hardware, it's
+the best VPN software available.</p>
+
+<p>I currently have 2 SoftEther servers running on the infrastructure that I
+manage and noticing that they had a Docker container available, I decided to
+try it out, since it may make setup, migration and backup of the server a lot
+easier in the future.</p>
+
+<p>The first issue I noted was that <a href="https://hub.docker.com/layers/softethervpn/vpnserver/stable/images/sha256-0007de9b4e2a0aaf0d10da3401bb54ba0afe45929a2df8f26ea0b3b04d51cea7">their
+stable image was only compiled for Intel</a>, not ARM64, which is usually what
+my cloud servers run. The new version of SoftEther, version 5, was available
+for ARM64, but due to incompatibilities with the old stable version and my
+reluctance in upgrading, I wasn't ready to try it out.</p>
+
+<p>In order to have the stable version working under Docker on one of my ARM64
+servers, I decided that it was easy enough to just grab
+<a href="https://github.com/SoftEtherVPN/SoftetherVPN-docker/blob/master/Dockerfile.stable">their
+<code>Dockerfile</code> for the stable version</a> and create a simple
+<code>docker-compose.yml</code> to build that container image locally instead
+of having to rely on the pre-built one from the Docker Registry. While I was at
+it I also took care to change the Git tag in the <code>Dockerfile</code> since
+that was pointing to an already years old version of the software, pointing it
+now to the latest stable release.</p>
+
+<p>Everything was going way too smoothly, and soon enough I quickly ran into an
+issue that will become very common with old C code bases as C23 support becomes
+mainstream and the default option in most C compilers:</p>
+
+<pre class="code-block"> > [builder 5/5] RUN cd SoftEtherVPN_Stable &&  git submodule init &&   git submodule update && ./configure &&  make:
+0.715 In file included from ./src/Mayaqua/Mayaqua.h:334:
+0.715 ./src/Mayaqua/MayaType.h:262:33: error: 'bool' cannot be defined via 'typedef'
+0.715   262 | typedef unsigned int            bool;
+0.715       |                                 ^~~~
+0.715 ./src/Mayaqua/MayaType.h:262:33: note: 'bool' is a keyword with '-std=c23' onwards
+0.715 ./src/Mayaqua/MayaType.h:262:1: warning: useless type name in empty declaration
+0.715   262 | typedef unsigned int            bool;
+0.715       | ^~~~~~~
+0.771 make: *** [Makefile:111: tmp/objs/Mayaqua/Cfg.o] Error 1</pre>
+
+<p>The developers of SoftEther, due to its Win32 origins, decided to ensure they
+had a compatible boolean type under UNIX, as they may be abusing the size of a
+boolean in their code base, since on Windows it's defined as an <code>unsigned
+int</code> and developers are used to taking advantage of its size sometimes.</p>
+
+<p>The issue with this (re)definition is that in C23
+<a href="https://old.reddit.com/r/C_Programming/comments/17ia5n1/what_is_the_point_of_booleans_in_c23/">bool
+is now a proper keyword</a> and thus you cannot <code>typedef</code> something
+to it, just like you cannot <code>typedef</code> to an <code>if</code> or a
+<code>while</code>.</p>
+
+<p>First I tried to add a C standard directive to instruct the compiler to use an
+older standard, just <a href="https://github.com/NixOS/nixpkgs/pull/503840/changes/4f7f556db22ae7cf4787549dc7b45fafb0ec8d54">like
+the good folks over at NixOS did</a>. In order to do this I decided to add
+suffixes to the <code>make</code> command, like so:</p>
+
+<pre class="code-block sh_sh">RUN cd SoftEtherVPN_Stable &&\
+        git submodule init &&\
+        git submodule update &&\
+        ./configure &&\
+        make CFLAGS='-std=gnu17' CXXFLAGS='-std=gnu17'</pre>
+
+<p>This did not work and produced the exact same errors as above, meaning my
+directive was being completely ignored, specially when looking at
+<code>make</code>'s output, my flags weren't appearing in the invoked
+compilation command.</p>
+
+<p>I decided to look through the SoftEther stable repository pull requests to
+see if anyone had already encountered this issue before and contributed
+something that hadn't yet been merged. To my surprise, the developers may be
+completely ignoring the stable branch of SoftEther in favor of the new version
+5 project, since there were some very trivial open pull requests that have been
+lingering unmerged for an entire year
+<sup>[<a href="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/pull/31">1</a>,<a href="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/pull/31">2</a>]</sup>,
+although none of these had to do with my C23 issue.</p>
+
+<p>I decided that enough was enough and it was time to maintain
+<a href="https://github.com/nathanpc/SoftEtherVPN">my own fork</a>, with the
+changes they hadn't merged and the C23 fix. This would ensure that I could, in
+the short term, have my VPN server running inside Docker in one of my ARM64
+cloud servers, at the cost of having to maintain a fork, which given the
+stability of their code base means doing nothing at all, so no issues on that
+front.</p>
+
+<p>In order to ensure that my workaround for GCC version 14 and above, when C23
+became the standard, was only applied when a modern version of GCC was used,
+thus abiding by <a href="https://github.com/SoftEtherVPN/SoftEtherVPN/wiki/SoftEther-VPN-Developers-Guideline">their
+guidelines</a> that the project must support GCC 2.x, in the makefiles I guarded
+the direction to add the C standard flag only when GCC version 14 and above was
+used:</p>
+
+<pre class="code-block sh_makefile">ifeq "$(shell expr `gcc -dumpversion | cut -f1 -d.` \>= 14)" "1"
+    OPTIONS_COMPILE += -std=gnu17
+endif</pre>
+
+I have submitted a <a href="https://github.com/SoftEtherVPN/SoftEtherVPN_Stable/pull/33">pull
+request with the workaround</a>, and I will use this pull request to gauge if
+the maintainers are still active on the project. If it never gets merged I will
+assume the project is stalled and prepare for the inevitable move to version 5.</p>
+
+<link type="text/css" rel="stylesheet" href="/assets/shjs/sh_default.css">
+<script type="text/javascript" src="/assets/shjs/sh_main.min.js"></script>
+<script type="text/javascript" src="/assets/shjs/lang/sh_sh.min.js"></script>
+<script type="text/javascript">
+if (window.addEventListener){
+	window.addEventListener('load', sh_highlightDocument);
+} else {
+	window.attachEvent('onload', sh_highlightDocument);
+}
+</script>

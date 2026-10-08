@@ -1,0 +1,172 @@
+nathanpc@juniper ~/Downloads/IMG-e-4.2-a15-20260814662906-official-FP5
+$ ./flash_FP5_factory.sh
+INFO: You are using MinGW on Windows.
+INFO: Looking for connected device(s)...
+INFO: One Fairphone 5 in fastboot mode found (serial number: 0926ea1e).
+Info: Your phone is in regular bootloader mode.
+Sending 'bluetooth_a' (3436 KB)                    OKAY [  0.094s]
+Writing 'bluetooth_a'                              OKAY [  0.012s]
+Finished. Total time: 0.154s
+Sending 'bluetooth_b' (3436 KB)                    OKAY [  0.081s]
+Writing 'bluetooth_b'                              OKAY [  0.011s]
+Finished. Total time: 0.107s
+Sending 'devcfg_a' (52 KB)                         OKAY [  0.004s]
+Writing 'devcfg_a'                                 OKAY [  0.002s]
+Finished. Total time: 0.047s
+Sending 'devcfg_b' (52 KB)                         OKAY [  0.004s]
+Writing 'devcfg_b'                                 OKAY [  0.013s]
+Finished. Total time: 0.034s
+Sending 'dsp_a' (65536 KB)                         OKAY [  1.827s]
+Writing 'dsp_a'                                    OKAY [  0.314s]
+Finished. Total time: 2.181s
+Sending 'dsp_b' (65536 KB)                         OKAY [  1.490s]
+Writing 'dsp_b'                                    OKAY [  0.114s]
+Finished. Total time: 1.617s
+Sending 'modem_a' (186076 KB)                      OKAY [  5.152s]
+Writing 'modem_a'                                  OKAY [  0.481s]
+Finished. Total time: 5.675s
+Sending 'modem_b' (186076 KB)                      OKAY [  4.287s]
+Writing 'modem_b'                                  OKAY [  0.547s]
+Finished. Total time: 4.850s
+Sending 'xbl_a' (3602 KB)                          OKAY [  0.083s]
+Writing 'xbl_a'                                    OKAY [  0.010s]
+Finished. Total time: 0.167s
+Sending 'xbl_b' (3602 KB)                          OKAY [  0.084s]
+Writing 'xbl_b'                                    OKAY [  0.020s]
+Finished. Total time: 0.119s
+Sending 'tz_a' (3725 KB)                           OKAY [  0.087s]
+Writing 'tz_a'                                     OKAY [  0.016s]
+Finished. Total time: 0.173s
+Sending 'tz_b' (3725 KB)                           OKAY [  0.085s]
+Writing 'tz_b'                                     OKAY [  0.017s]
+Finished. Total time: 0.122s
+Sending 'hyp_a' (3617 KB)                          OKAY [  0.095s]
+Writing 'hyp_a'                                    OKAY [  0.020s]
+Finished. Total time: 0.189s
+Sending 'hyp_b' (3617 KB)                          OKAY [  0.083s]
+Writing 'hyp_b'                                    OKAY [  0.020s]
+Finished. Total time: 0.120s
+Sending 'keymaster_a' (265 KB)                     OKAY [  0.008s]
+Writing 'keymaster_a'                              OKAY [  0.004s]
+Finished. Total time: 0.066s
+Sending 'keymaster_b' (265 KB)                     OKAY [  0.006s]
+Writing 'keymaster_b'                              OKAY [  0.002s]
+Finished. Total time: 0.030s
+Sending 'abl_a' (152 KB)                           OKAY [  0.006s]
+Writing 'abl_a'                                    OKAY [  0.002s]
+Finished. Total time: 0.057s
+Sending 'abl_b' (152 KB)                           OKAY [  0.006s]
+Writing 'abl_b'                                    OKAY [  0.002s]
+Finished. Total time: 0.024s
+Sending 'aop_a' (203 KB)                           OKAY [  0.006s]
+Writing 'aop_a'                                    OKAY [  0.002s]
+Finished. Total time: 0.087s
+Sending 'aop_b' (203 KB)                           OKAY [  0.008s]
+Writing 'aop_b'                                    OKAY [  0.004s]
+Finished. Total time: 0.026s
+Sending 'featenabler_a' (84 KB)                    OKAY [  0.004s]
+Writing 'featenabler_a'                            OKAY [  0.002s]
+Finished. Total time: 0.047s
+Sending 'featenabler_b' (84 KB)                    OKAY [  0.004s]
+Writing 'featenabler_b'                            OKAY [  0.004s]
+Finished. Total time: 0.024s
+Sending 'imagefv_a' (64 KB)                        OKAY [  0.004s]
+Writing 'imagefv_a'                                OKAY [  0.002s]
+Finished. Total time: 0.060s
+Sending 'imagefv_b' (64 KB)                        OKAY [  0.004s]
+Writing 'imagefv_b'                                OKAY [  0.004s]
+Finished. Total time: 0.024s
+Sending 'multiimgoem_a' (13 KB)                    OKAY [  0.002s]
+Writing 'multiimgoem_a'                            OKAY [  0.000s]
+Finished. Total time: 0.056s
+Sending 'multiimgoem_b' (13 KB)                    OKAY [  0.003s]
+Writing 'multiimgoem_b'                            OKAY [  0.002s]
+Finished. Total time: 0.024s
+Sending 'qupfw_a' (55 KB)                          OKAY [  0.002s]
+Writing 'qupfw_a'                                  OKAY [  0.004s]
+Finished. Total time: 0.058s
+Sending 'qupfw_b' (55 KB)                          OKAY [  0.004s]
+Writing 'qupfw_b'                                  OKAY [  0.011s]
+Finished. Total time: 0.032s
+Sending 'uefisecapp_a' (122 KB)                    OKAY [  0.005s]
+Writing 'uefisecapp_a'                             OKAY [  0.004s]
+Finished. Total time: 0.049s
+Sending 'uefisecapp_b' (122 KB)                    OKAY [  0.004s]
+Writing 'uefisecapp_b'                             OKAY [  0.004s]
+Finished. Total time: 0.024s
+Sending 'xbl_config_a' (220 KB)                    OKAY [  0.008s]
+Writing 'xbl_config_a'                             OKAY [  0.013s]
+Finished. Total time: 0.052s
+Sending 'xbl_config_b' (220 KB)                    OKAY [  0.008s]
+Writing 'xbl_config_b'                             OKAY [  0.004s]
+Finished. Total time: 0.029s
+Sending 'cpucp_a' (182 KB)                         OKAY [  0.006s]
+Writing 'cpucp_a'                                  OKAY [  0.002s]
+Finished. Total time: 0.048s
+Sending 'cpucp_b' (182 KB)                         OKAY [  0.006s]
+Writing 'cpucp_b'                                  OKAY [  0.004s]
+Finished. Total time: 0.031s
+Sending 'shrm_a' (44 KB)                           OKAY [  0.003s]
+Writing 'shrm_a'                                   OKAY [  0.002s]
+Finished. Total time: 0.045s
+Sending 'shrm_b' (44 KB)                           OKAY [  0.002s]
+Writing 'shrm_b'                                   OKAY [  0.011s]
+Finished. Total time: 0.029s
+Sending 'boot_a' (98304 KB)                        OKAY [  2.751s]
+Writing 'boot_a'                                   OKAY [  0.279s]
+Finished. Total time: 3.083s
+Sending 'boot_b' (98304 KB)                        OKAY [  2.253s]
+Writing 'boot_b'                                   OKAY [  0.395s]
+Finished. Total time: 2.668s
+Sending 'dtbo_a' (24576 KB)                        OKAY [  0.690s]
+Writing 'dtbo_a'                                   OKAY [  0.074s]
+Finished. Total time: 0.817s
+Sending 'dtbo_b' (24576 KB)                        OKAY [  0.562s]
+Writing 'dtbo_b'                                   OKAY [  0.046s]
+Finished. Total time: 0.627s
+Sending 'vendor_boot_a' (98304 KB)                 OKAY [  2.251s]
+Writing 'vendor_boot_a'                            OKAY [  0.275s]
+Finished. Total time: 2.578s
+Sending 'vendor_boot_b' (98304 KB)                 OKAY [  2.254s]
+Writing 'vendor_boot_b'                            OKAY [  0.299s]
+Finished. Total time: 2.571s
+Sending 'vbmeta_a' (8 KB)                          OKAY [  0.002s]
+Writing 'vbmeta_a'                                 OKAY [  0.002s]
+Finished. Total time: 0.044s
+Sending 'vbmeta_b' (8 KB)                          OKAY [  0.002s]
+Writing 'vbmeta_b'                                 OKAY [  0.002s]
+Finished. Total time: 0.020s
+Sending 'vbmeta_system_a' (4 KB)                   OKAY [  0.001s]
+Writing 'vbmeta_system_a'                          OKAY [  0.002s]
+Finished. Total time: 0.034s
+Sending 'vbmeta_system_b' (4 KB)                   OKAY [  0.002s]
+Writing 'vbmeta_system_b'                          OKAY [  0.000s]
+Finished. Total time: 0.021s
+Sending sparse 'super' 1/6 (773034 KB)             OKAY [ 22.520s]
+Writing 'super'                                    OKAY [  0.002s]
+Sending sparse 'super' 2/6 (777153 KB)             OKAY [ 23.050s]
+Writing 'super'                                    OKAY [  0.006s]
+Sending sparse 'super' 3/6 (762433 KB)             OKAY [ 22.016s]
+Writing 'super'                                    OKAY [  0.005s]
+Sending sparse 'super' 4/6 (770071 KB)             OKAY [ 22.204s]
+Writing 'super'                                    OKAY [  0.004s]
+Sending sparse 'super' 5/6 (786236 KB)             OKAY [ 21.204s]
+Writing 'super'                                    OKAY [  0.000s]
+Sending sparse 'super' 6/6 (387772 KB)             OKAY [  9.112s]
+Writing 'super'                                    OKAY [  0.006s]
+Finished. Total time: 120.754s
+******** Did you mean to fastboot format this f2fs partition?
+Erasing 'userdata'                                 OKAY [  3.704s]
+Finished. Total time: 4.705s
+******** Did you mean to fastboot format this ext4 partition?
+Erasing 'metadata'                                 OKAY [  0.002s]
+Finished. Total time: 0.013s
+Setting current slot to 'a'                        OKAY [  0.010s]
+Finished. Total time: 0.014s
+-----------
+
+INFO: Done. The device will reboot now.
+Rebooting                                          OKAY [  0.000s]
+Finished. Total time: 0.002s
+
+INFO: You can unplug the USB cable now.

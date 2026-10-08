@@ -1,0 +1,43 @@
+OCC 2025 (Day -1) Preparation and Disaster
+==========================================
+
+Since this year I wasn't sure I was going to have time for OCC, because of work
+and my parents visiting me in Portugal, I had not prepared myself beforehand for
+the challenge, much like last year, when I learned about it while it was
+happening by complete accident [1], although today I got word that I would have
+most of the week off, meaning I could join in on the fun!
+
+The first machine I thought of using this year was a brand new (to me) iBook G4
+(Mid-2005) [2] that I bought for cheap (50 euros) 3 weeks ago, so I jumped right
+into it and torn the entire thing down to replace the aging hard drive on the
+thing with a nice SSD replacement [3]. I was so happy with it that I even
+decided to record the entire disassembly and HDD replacement process, with
+commentary and everything.
+
+3 hours later and completely reassembling the iBook back together, I went to
+turn it on to install OS X 10.5 Leopard, and to my surprise, the new hard drive
+wasn't recognized by Disk Utility. I tried everything, including some Open
+Firmware magic, and even trying OpenBSD, nothing worked. Throughly frustrated,
+I decided to completely scrap my these plans and pivot to another machine.
+
+The machine I eventually settled on was last year's PowerBook G4 [1]. A machine
+I almost didn't use, since I was having too much fun with my Power Mac G5, and
+got sidetracked by unsigned into playing with netbooks [4]. I guess I'll be
+joining forces with andreixyz [5].
+
+The good thing about this machine is that it's already setup and I can just
+start having fun right away, which is great! Although I still don't have a goal
+for this year, let's see what I can come up with tomorrow.
+
+I recently (last week) got a brand new Pocket 386 laptop [6], so I guess it may
+also come into play this year, specially since I have already used it to take
+notes in meetings this week.
+
+I hope everyone has an amazing time during OCC 2025! See you all on IRC!
+
+[1]: http://nathancampos.me/blog/2024-07-15_occ-2024-day1/
+[2]: https://everymac.com/systems/apple/ibook/specs/ibook_g4_1.42_14.html
+[3]: https://www.ifixit.com/Guide/iBook+G4+14-Inch+1.42+GHz+Hard+Drive+Replacement/731
+[4]: http://bb.deadnet.se/viewtopic.php?t=94
+[5]: https://andrei.xyz/post/occ-2025/
+[6]: https://8086cpu.com/lm4/100.html

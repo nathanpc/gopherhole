@@ -1,5 +1,7 @@
-# Test gopherhole.
-/gopher
+# Compatible images and old HTML pages.
+*_compat.gif
+*.html
+!*.cnt.html
 
 # IDE and web servers.
 .idea/

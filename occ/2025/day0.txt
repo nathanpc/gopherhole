@@ -1,0 +1,148 @@
+OCC 2025 (Day 0) Non-Stop Compiling
+====================================
+
+Today was a fairly quiet day, mostly hanging around IRC and checking out on
+everyone's progress.
+
+First thing I did today was remove the 1GB SO-DIMM I was using on the iBook G4,
+the one that decided to reject my brand new SSD upgrade and waste an entire
+afternoon. This stick of RAM was previously in the PowerBook G4 12" that I'm
+currently typing this in. The process was easy and straight forward, the
+complete opposite of the hard drive replacement.
+
+While I'm in the subject of typing, the keyboard on this laptop is absolutely
+phenomenal. If I could only have a single keyboard on a laptop until I die, this
+would absolutely be it. It's simply that great.
+
+In summary I spent the whole day compiling things since I didn't prepare for the
+challenge, with my CPU hovering around 100% utilization for the entire day. I
+guess this is my punishment for not preparing for the challenge.
+
+
+First try with MacPorts
+-----------------------
+
+My compilation journey started when I decided to install a newer version of
+Apache and PHP to be able to work on my website on this machine, since OS X 10.4
+ships with an ancient version of Apache and PHP 4.
+
+This decision led me down a MacPorts rabbit hole that I'm still currently in. At
+first MacPorts decided it needed to build icu, which took roughly 3 hours
+(really puts modern CPUs in perspective), then while it was building Apache, it
+decided to fail to run the configure script with the following message:
+
+    configure:6549: checking for -pcre2-config
+    configure:6584: result: no
+    configure:6549: checking for -pcre-config
+    configure:6584: result: no
+    configure:6598: checking for pcre2-config
+    configure:6633: result: no
+    configure:6598: checking for pcre-config
+    configure:6633: result: no
+    configure:6651: error: Did not find working script at /opt/local
+
+Clearly it couldn't find 'pcre-config', the only problem is that it was in the
+PATH, and running 'which' told me it was located at /opt/local/bin, so it
+should've found it, it's clearly looking at the right directory, although for
+some reason it was failling.
+
+As a quick fix I went inside the ports tree and edited the Portfile for apache2
+to point directly to /opt/local/bin. This fixed the error and allowed MacPorts
+to continue to the build phase.
+
+
+Second try with MacPorts
+------------------------
+
+After that weird issue with the configure step I was feeling a bit worried, but
+also hopeful that it was small bug and nothing else. I was terribly wrong. After
+a long while the build failed with the following log:
+
+    :info:build /usr/libexec/gcc/powerpc-apple-darwin8/4.0.1/ld:
+        .libs/mod_authn_file.o has external relocation entries in non-writable
+        section (__TEXT,__text) for symbols:
+    :info:build _apr_palloc
+    :info:build _ap_cfg_getline
+    :info:build _apr_password_validate
+    :info:build _ap_cfg_closefile
+    :info:build _ap_getword
+    :info:build _strcmp
+    :info:build _ap_log_rerror_
+    :info:build _ap_pcfg_openfile
+    :info:build restGPRx
+    :info:build _apr_dynamic_fn_retrieve
+    :info:build _ap_hook_optional_fn_retrieve
+    :info:build _ap_register_auth_provider
+    :info:build collect2: ld returned 1 exit status
+    :info:build make[4]: *** [mod_authn_file.la] Error 1
+
+This was very problematic, as it was clearly one of those errors that only
+happens when your build environment is broken and possibly compiled different
+packages with different versions of GCC, which may have been the case, since
+this is a fairly old MacPorts installation and I have upgraded it last year if
+I remember correctly.
+
+I tried countless incantations and build/configure settings in the Portsfile,
+nothing could fix this error. I have successfully built other pieces of software
+today with the same toolchain, so I don't know what is wrong, but I'll blame
+Apache nonetheless.
+
+
+Third try manually
+------------------
+
+I finally decided that this fancy MacPorts thing wasn't happening and that maybe
+compiling an older release manually would be more fruitful, and boy was I right!
+
+Downloaded a version of Apache from around the end of 2018, the same year that
+PHP 5.6, the version of PHP I want to run, was deemed EOL, and it compiled
+almost right away, it only required a small tweak to the environment variable
+that deals with the OS X deployment target, otherwise it would fail with the
+following log:
+
+    /opt/local/share/apr-1/build/libtool --silent --mode=link
+        /opt/local/bin/gcc-apple-4.2 -std=gnu99 -L/opt/local/lib/db48
+        -L/opt/local/lib -o mod_authn_file.la -rpath /usr/local/apache2/modules
+        -module -avoid-version mod_authn_file.lo 
+    /usr/libexec/gcc/powerpc-apple-darwin8/4.0.1/ld: flag: -undefined
+        dynamic_lookup can't be used with MACOSX_DEPLOYMENT_TARGET environment
+        variable set to: 10.1
+    collect2: ld returned 1 exit status
+    make[4]: *** [mod_authn_file.la] Error 1
+
+Which is interesting, because it failed with the same file during the linking
+step, meaning this error could have something to do with the issue in the newer
+version. If anyone can figure this one out please let me know.
+
+Either way it clearly didn't like the fact that it was trying to target OS X
+10.1, an ancient version of the operating system. Changing the environment
+variable to 10.4 when running 'make' fixed the issue and allowed the program to
+compile all the way to the end. If anyone wants to replicate this successful
+build, here is a nice shell script for you:
+
+    #!/bin/sh
+    curl -O https://archive.apache.org/dist/httpd/httpd-2.4.37.tar.gz
+    tar zxf httpd-2.4.37.tar.gz
+    cd httpd-2.4.37/
+    ./configure --enable-mods-shared=all --enable-ssl --enable-cache \
+        --enable-disk_cache --enable-file_cache --enable-mem_cache \
+        --enable-deflate --enable-proxy --enable-proxy-connect \
+        --enable-proxy-http --enable-proxy-ftp
+    MACOSX_DEPLOYMENT_TARGET=10.4 make
+    sudo make install
+
+This got me a working Apache 2 install and the warm and comforting "It works!"
+welcome page.
+
+
+Conclusion
+----------
+
+It was a pretty slow day, mostly doing the preparation that I should've done
+previously but was unable to, still it was an enjoyable day and it was fun to
+hang around IRC. I guess the goal for tomorrow is to build PHP 5.6 and run my
+website from this beautiful laptop.
+
+Tomorrow will sadly be a very intensive "work day", so I won't be able to
+dedicate myself to OCC and will be forced to use a modern computer so I'm not
+fired, but I'll make an effort to use the old PowerBook whenever possible.

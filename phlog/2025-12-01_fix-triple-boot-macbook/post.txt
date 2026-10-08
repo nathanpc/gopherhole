@@ -1,0 +1,146 @@
+Fixing the BlInitializeLibrary Failed Boot Error on a MacBook
+=============================================================
+
+Today as I was ready to get some work done on the machine I regard as the
+ultimate laptop, a MacBook Air 13-inch from 2017 [1], I rebooted into rEFInd [2]
+and chose my Windows partition, only to be greeted by this lovely message:
+
+    Starting bootmgfw.efi
+    Using load options ''
+    BlInitializeLibrary failed 0xc00000bb
+
+Since it has been quite a long time since I booted into Windows, and since then
+I had also installed Debian 12 on this machine, I thought that maybe it messed
+with the Windows Boot Manager, which is very unlikely, but I was getting
+desperate and just wanted things to work, so I tried booting into GRUB and chose
+the Windows Boot Manager from there. This time the machine simply hang with no
+error on GRUB's wallpaper.
+
+With nothing else to try I decided to give up and search for the problem. The
+search quickly wielded a promising result straight from Microsoft, titled "Error
+(BlInitializeLibrary failed XXX) when you install or start an operating system
+on a 64-bit UEFI-based computer" [3], which in its cause section describes the
+problem as follows:
+
+    This problem occurs because the boot firmware on the computer generates lots
+    of memory fragmentation.
+
+Right below this explanation they also give the worlds best advice ever on how
+to fix it. In the section entitled workaround, this is what they expect you to
+do to fix it:
+
+    We recommend that you do not let boot firmware create large amounts of
+    fragmentation. Large memory fragmentation degrades the overall startup
+    performance and causes problems.
+
+It's literally the "have you tried not having problems" joke, but on the
+official Microsoft documentation!
+
+Eventually, after going to the second page of search results, since the first
+page is always filled with SEO garbage and that amazing Microsoft KB article, I
+was able to find a helpful StackExchange answer that pointed me in the right
+direction [4].
+
+This problem is apparently caused by a corrupted MBR partition on a GPT system,
+something I never heard of before, I always thought GPT completely replaced the
+MBR boot sector, but I guess I was wrong.
+
+First thing to do was disable Mac OS X's System Integrity Protection (SIP) [5],
+which protects you from doing dumb things with the root filesystem. Then I had
+to download the amazing GPT fdisk [6] from the same guy that made rEFInd.
+
+Upon opening GPT fdisk I was greeted with the following output:
+
+    $ sudo gdisk /dev/disk0
+    GPT fdisk (gdisk) version 1.0.10
+    
+    Warning: Devices opened with shared lock will not have their
+    partition table automatically reloaded!
+    Partition table scan:
+      MBR: hybrid
+      BSD: not present
+      APM: not present
+      GPT: present
+    
+    Found valid GPT with hybrid MBR; using GPT.
+    
+    Command (? for help):
+
+I guess I had an MBR boot sector after all, which may have been corrupted along
+my triple boot adventures, so as per the StackExchange answer, I had to convert
+the hybrid MBR partition table into a protective MBR. In order to do this I had
+to execute the following "commands" in this order:
+
+  1. 'x' to enter expert mode.
+  2. 'n' to create a new protective MBR.
+  3. 'w' to write the changes to disk.
+
+The logs of my entire interaction with the program were as follows:
+
+    GPT fdisk (gdisk) version 1.0.10
+    
+    Warning: Devices opened with shared lock will not have their
+    partition table automatically reloaded!
+    Partition table scan:
+      MBR: hybrid
+      BSD: not present
+      APM: not present
+      GPT: present
+    
+    Found valid GPT with hybrid MBR; using GPT.
+    
+    Command (? for help): p
+    Disk /dev/disk0: 1000215216 sectors, 476.9 GiB
+    Sector size (logical): 512 bytes
+    Disk identifier (GUID): 2634FCB6-2B0F-4AA2-9418-B000BF96F5AB
+    Partition table holds up to 128 entries
+    Main partition table begins at sector 2 and ends at sector 33
+    First usable sector is 34, last usable sector is 1000215182
+    Partitions will be aligned on 8-sector boundaries
+    Total free space is 885 sectors (442.5 KiB)
+    
+    Number  Start (sector)    End (sector)  Size       Code  Name
+       1              40          409639   200.0 MiB   EF00  EFI System Partition
+       2          409640       607832063   289.6 GiB   AF0A
+       3       607832064       920332063   149.0 GiB   0700
+       4       920332288       998215679   37.1 GiB    8300
+       5       998215680      1000214527   976.0 MiB   8200
+    
+    Command (? for help): x
+    
+    Expert command (? for help): n
+    
+    Expert command (? for help): o
+    
+    Disk size is 1000215216 sectors (476.9 GiB)
+    MBR disk identifier: 0x00000000
+    MBR partitions:
+    
+    Number  Boot  Start Sector   End Sector   Status      Code
+       1                     1   1000215215   primary     0xEE
+    
+    Expert command (? for help): w
+    
+    Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING
+    PARTITIONS!!
+    
+    Do you want to proceed? (Y/N): y
+    OK; writing new GUID partition table (GPT) to /dev/disk0.
+    Warning: Devices opened with shared lock will not have their
+    partition table automatically reloaded!
+    Warning: The kernel may continue to use old or deleted partitions.
+    You should reboot or remove the drive.
+    The operation has completed successfully.
+
+After this entire ordeal, and a reboot, I was finally able to boot back into
+Windows. Although it was quite a stressful and time consuming task, I learned
+a lot more about GPT through this adventure, and if this were to happen again,
+I now know exactly what to do.
+    
+
+[1]: https://everymac.com/systems/apple/macbook-air/specs/macbook-air-core-i5-1.8-13-2017-specs.html
+[2]: https://www.rodsbooks.com/refind/
+[3]: https://learn.microsoft.com/en-us/troubleshoot/windows-client/setup-upgrade-and-drivers/blinitializelibrary-failed-start-os-on-64-bit-uefi-based-computer
+[4]: https://apple.stackexchange.com/a/325875
+[5]: https://developer.apple.com/documentation/security/disabling-and-enabling-system-integrity-protection
+[6]: https://www.rodsbooks.com/gdisk/

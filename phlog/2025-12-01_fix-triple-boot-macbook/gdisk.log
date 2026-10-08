@@ -1,0 +1,192 @@
+Last login: Mon Dec  1 10:17:30 on console
+                    'c.          nathanpc@peach.local
+                 ,xNMM.          --------------------
+               .OMMMMo           OS: macOS Mojave 10.14.6 18G9323 x86_64
+               OMMM0,            Host: MacBookAir7,2
+     .;loddo:' loolloddol;.      Kernel: 18.7.0
+   cKMMMMMMMMMMNWMMMMMMMMMM0:    Uptime: 34 secs
+ .KMMMMMMMMMMMMMMMMMMMMMMMWd.    Packages: 138 (port)
+ XMMMMMMMMMMMMMMMMMMMMMMMX.      Shell: fish 3.6.1
+;MMMMMMMMMMMMMMMMMMMMMMMM:       Resolution: 1440x900 @ eXtendedHz
+:MMMMMMMMMMMMMMMMMMMMMMMM:       DE: Aqua
+.MMMMMMMMMMMMMMMMMMMMMMMMX.      WM: Quartz Compositor
+ kMMMMMMMMMMMMMMMMMMMMMMMMWd.    WM Theme: Blue (Light)
+ .XMMMMMMMMMMMMMMMMMMMMMMMMMMk   Terminal: iTerm2
+  .XMMMMMMMMMMMMMMMMMMMMMMMMK.   Terminal Font: LiterationMonoNFM 12
+    kMMMMMMMMMMMMMMMMMMMMMMd     CPU: Intel i5-5350U (4) @ 1.80GHz
+     ;KMMMMMMMWXXWMMMMMMMk.      GPU: Intel HD Graphics 6000
+       .cooc,.    .,coo:.        Memory: 2103MiB / 8192MiB
+
+
+
+
+
+Welcome to fish, the friendly interactive shell
+Type help for instructions on how to use fish
+nathanpc@peach ~> sudo gdisk /dev/disk0
+Password:
+GPT fdisk (gdisk) version 1.0.10
+
+Warning: Devices opened with shared lock will not have their
+partition table automatically reloaded!
+Partition table scan:
+  MBR: hybrid
+  BSD: not present
+  APM: not present
+  GPT: present
+
+Found valid GPT with hybrid MBR; using GPT.
+
+Command (? for help): ?
+b	back up GPT data to a file
+c	change a partition's name
+d	delete a partition
+i	show detailed information on a partition
+l	list known partition types
+n	add a new partition
+o	create a new empty GUID partition table (GPT)
+p	print the partition table
+q	quit without saving changes
+r	recovery and transformation options (experts only)
+s	sort partitions
+t	change a partition's type code
+v	verify disk
+w	write table to disk and exit
+x	extra functionality (experts only)
+?	print this menu
+
+Command (? for help): r
+
+Recovery/transformation command (? for help): ?
+b	use backup GPT header (rebuilding main)
+c	load backup partition table from disk (rebuilding main)
+d	use main GPT header (rebuilding backup)
+e	load main partition table from disk (rebuilding backup)
+f	load MBR and build fresh GPT from it
+g	convert GPT into MBR and exit
+h	make hybrid MBR
+i	show detailed information on a partition
+l	load partition data from a backup file
+m	return to main menu
+o	print protective MBR data
+p	print the partition table
+q	quit without saving changes
+t	transform BSD disklabel partition
+v	verify disk
+w	write table to disk and exit
+x	extra functionality (experts only)
+?	print this menu
+
+Recovery/transformation command (? for help): o
+
+Disk size is 1000215216 sectors (476.9 GiB)
+MBR disk identifier: 0x00000000
+MBR partitions:
+
+Number  Boot  Start Sector   End Sector   Status      Code
+   1                     1       409639   primary     0xEE
+   2                409640    607832063   primary     0xDA
+   3      *      607832064    920332063   primary     0x07
+   4             920332288    998215679   primary     0x83
+
+Recovery/transformation command (? for help): q
+nathanpc@peach ~> sudo gdisk /dev/disk0
+GPT fdisk (gdisk) version 1.0.10
+
+Warning: Devices opened with shared lock will not have their
+partition table automatically reloaded!
+Partition table scan:
+  MBR: hybrid
+  BSD: not present
+  APM: not present
+  GPT: present
+
+Found valid GPT with hybrid MBR; using GPT.
+
+Command (? for help): p
+Disk /dev/disk0: 1000215216 sectors, 476.9 GiB
+Sector size (logical): 512 bytes
+Disk identifier (GUID): 2634FCB6-2B0F-4AA2-9418-B000BF96F5AB
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 1000215182
+Partitions will be aligned on 8-sector boundaries
+Total free space is 885 sectors (442.5 KiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              40          409639   200.0 MiB   EF00  EFI System Partition
+   2          409640       607832063   289.6 GiB   AF0A
+   3       607832064       920332063   149.0 GiB   0700
+   4       920332288       998215679   37.1 GiB    8300
+   5       998215680      1000214527   976.0 MiB   8200
+
+Command (? for help): x
+
+Expert command (? for help): n
+
+Expert command (? for help): ?
+a	set attributes
+b	byte-swap a partition's name
+c	change partition GUID
+d	display the sector alignment value
+e	relocate backup data structures to the end of the disk
+f	randomize disk and partition unique GUIDs
+g	change disk GUID
+h	recompute CHS values in protective/hybrid MBR
+i	show detailed information on a partition
+j	move the main partition table
+k	move the backup partition table
+l	set the sector alignment value
+m	return to main menu
+n	create a new protective MBR
+o	print protective MBR data
+p	print the partition table
+q	quit without saving changes
+r	recovery and transformation options (experts only)
+s	resize partition table
+t	transpose two partition table entries
+u	replicate partition table on new device
+v	verify disk
+w	write table to disk and exit
+z	zap (destroy) GPT data structures and exit
+?	print this menu
+
+Expert command (? for help): p
+Disk /dev/disk0: 1000215216 sectors, 476.9 GiB
+Sector size (logical): 512 bytes
+Disk identifier (GUID): 2634FCB6-2B0F-4AA2-9418-B000BF96F5AB
+Partition table holds up to 128 entries
+Main partition table begins at sector 2 and ends at sector 33
+First usable sector is 34, last usable sector is 1000215182
+Partitions will be aligned on 8-sector boundaries
+Total free space is 885 sectors (442.5 KiB)
+
+Number  Start (sector)    End (sector)  Size       Code  Name
+   1              40          409639   200.0 MiB   EF00  EFI System Partition
+   2          409640       607832063   289.6 GiB   AF0A
+   3       607832064       920332063   149.0 GiB   0700
+   4       920332288       998215679   37.1 GiB    8300
+   5       998215680      1000214527   976.0 MiB   8200
+
+Expert command (? for help): o
+
+Disk size is 1000215216 sectors (476.9 GiB)
+MBR disk identifier: 0x00000000
+MBR partitions:
+
+Number  Boot  Start Sector   End Sector   Status      Code
+   1                     1   1000215215   primary     0xEE
+
+Expert command (? for help): w
+
+Final checks complete. About to write GPT data. THIS WILL OVERWRITE EXISTING
+PARTITIONS!!
+
+Do you want to proceed? (Y/N): y
+OK; writing new GUID partition table (GPT) to /dev/disk0.
+Warning: Devices opened with shared lock will not have their
+partition table automatically reloaded!
+Warning: The kernel may continue to use old or deleted partitions.
+You should reboot or remove the drive.
+The operation has completed successfully.
+nathanpc@peach ~>

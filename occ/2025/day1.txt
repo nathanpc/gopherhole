@@ -1,0 +1,163 @@
+OCC 2025 (Day 1) MacPorts to The Rescue and a new Server
+========================================================
+
+The day started with me having to commute to work and unfortunately use my very
+modern MacBook Pro, although it's the i9 2019 model, so some may consider it old
+already.
+
+This was unavoidable, bills have to get paid, although it was interesting that
+using that machine made me feel extremely constrained, even though it's the one
+I use almost every day and should be orders of magnitude more powerful than the
+PowerBook I'm currently writing this on. I'm pretty sure the reason for that is
+the UI, it feels dumbed down and constrained, which in turn probably makes me
+less productive and feeling powerless. That machine is currently running macOS
+Sonoma, so I guess it'll only get worse as time moves on.
+
+Either way, enough about modern crap, let's move to the good stuff!
+
+
+More Compiling
+--------------
+
+Here and there while I had some time at work I was able to SSH back to my
+PowerBook at home using my workstation as the jump host, this allowed me to get
+some more compiling done that was left since yesterday's Apache adventure, only
+this time it was the PHP elephant.
+
+This endeavor did not prove to be fruitful, since I kept running into thread-
+related errors on every single version of PHP 5 that I tried to compile, from
+5.6 all the way back to 5.4. They all pretty much looked like this:
+
+    /bin/sh php56/php-5.6.40/libtool [...] \
+        php56/php-5.6.40/main/php_open_temporary_file.c \
+        -o main/php_open_temporary_file.lo
+    php56/php-5.6.40/main/php_open_temporary_file.c:187:
+        error: thread-local storage not supported for this target
+    make: *** [main/php_open_temporary_file.lo] Error 1
+
+It took me 4 different versions to realize that the issue was not in fact due to
+PHP, but was related to the fact that I had compiled Apache with threading
+support, something that completely breaks compatibility, as you may notice from
+the fact that on their website PHP has always provided binaries that are
+non-thread-safe as well as thread-safe ones.
+
+Since my PowerPC G4 was never going to get thread-local storage, I decided that
+I had to recompile Apache, but this time with MPM prefork enabled, something
+that should've been the default anyway, but before I did that I decided to
+compile PHP 5.6.40 for the last time, without Apache support, just to ensure
+that I was able to have a working application at the end and didn't encounter
+any more issues.
+
+To my surprise, this was a very intelligent move, since compiling the last
+version of PHP 5 wasn't possible due to some weird linking issue:
+
+    cc -I/usr/include -g -O2 -fvisibility=hidden ext/date/php_date.o \
+        ext/date/lib/astro.o [...] -o sapi/cli/php
+    /usr/libexec/gcc/powerpc-apple-darwin8/4.0.1/ld: Undefined symbols:
+        _OSAtomicCompareAndSwapPtrBarrier
+    collect2: ld returned 1 exit status
+    make: *** [sapi/cli/php] Error 1
+
+Searching the web I realized that MacPorts had this fixed with a mixture of
+upstream and local patches. Not looking forward to the mess of patches that this
+would create, I looked back at MacPorts for help.
+
+
+MacPorts to the Rescue
+----------------------
+
+Knowing that the version of the MacPorts ports tree I had on my PowerBook was
+too new (2022-ish) and broke compatibility with Tiger somewhere along the way, I
+decided that I had to get and older version of the ports tree and try this whole
+thing again.
+
+Following the MacPorts guide on how to install older ports [1] on my PowerBook
+would be insane, since it would take literally hours for the poor thing to clone
+and later checkout a revision in the past from such a massive repository, so I
+decided to cheat a little for my own sanity.
+
+To get this going I SSH'd into my local Git server and cloned the ports tree
+repository. When it was done, I literally picked a more or less random commit
+that had touched the Apache port and was of the right vintage that I was looking
+for. In my case this commit from 2019:
+
+    commit b6c8061d1b612be4a9a64a5872a150d542bfe1aa
+    Author: David B. Evans <devans@macports.org>
+    Date:   Thu Nov 21 13:38:21 2019 -0800
+    
+        apache2: explicitly disable modules that may build opportunistically
+
+I then moved to a new branch and traveled back in time to when that commit was
+made. With the time traveling done, I simply rsync'd the entire ports tree back
+to my PowerBook onto a folder that wouldn't conflict with my current ports tree.
+The entire operation that took around 40 minutes.
+
+After that it was a matter of simply going into the Apache port directory and
+telling it to install, a process that worked flawlessly, then going into the PHP
+port and telling MacPorts to install the php56-apache2handler subport, which
+also installed without a hitch.
+
+Maybe I should scrap this MacPorts installation and redo the whole thing with
+this ports tree... Intrusive thoughts are intrusive, although I wouldn't want to
+recompile GCC again, a process that last time took 3 solid days to complete.
+
+The good news is that now I have a working web development setup! I still
+haven't tried to see if my website would work on it yet. Fingers crossed!
+
+
+A New Machine Enters the Challenge
+----------------------------------
+
+During my trials to setup a working web development environment on this machine
+I realized one major problem with the way I'm currently managing my web
+presence: It's super over-engineered, complicated, and doesn't suit a personal
+website well.
+
+Currently I deploy my website just like any other client work I do. I have a Git
+repo where any commits pushed to main are automatically pulled by the web server
+and a rebuild process starts, which eventually leads to a brand new Docker image
+that is presented to my users.
+
+This process is great for businesses that need to scale and work with multiple
+teams of developers, but it's overkill for a personal website, and I do believe
+is one of the factors that made the web a less enjoyable place, both to browse
+and to develop for.
+
+The days when we would simply FTP a couple of files to the server, or if you
+were fancy, rsync them, were great, and led to more experimentation, something
+this challenge once again led me to realize.
+
+So, my plan is to tear down this unnecessary infrastructure and get a setup that
+I'm happier with. In order to do this I'm also going to move part of my cloud
+infrastructure back home, something I've been willing to do and postponing for
+years now.
+
+The setup I'll use to securely put things on the public internet will be
+discussed on tomorrow's post, but the main star of the show will be an HP t5740
+thin client Atom-based PC [2] that I paid 30 euros for 6 years ago. I never used
+it for anything serious before, only a couple of test projects that never
+sticked.
+
+Since this is going to be my main web server, I wanted to ensure that it was in
+full working order for 24/7 operation, so I tore it down and repasted everything
+that needed thermal paste, something it was badly in need, as the old one was
+literally rock solid and required a metal screwdriver to be removed.
+
+While I was in it I decided to upgrade the RAM and add some "storage" in the
+form of a 64GB USB flash drive, hidden within a compartment made for this exact
+purpose.
+
+Pictures of the whole process can be found here:
+   gopher://nathancampos.me/1/occ/2025/day1/
+
+I still haven't decided which OS I'm going to install on it, but with 1GB of
+internal storage my options are limited. I'm torn between OpenBSD, NetBSD, and
+Windows Embedded.
+
+Running a Windows Embedded web server would be absolutely amazing in my book,
+but I'm not sure how useful it will be in the long run, let's see what I pick
+tomorrow after a good night of sleep.
+
+
+[1]: https://trac.macports.org/wiki/howto/InstallingOlderPort
+[2]: https://h10032.www1.hp.com/ctg/Manual/c02558392.pdf

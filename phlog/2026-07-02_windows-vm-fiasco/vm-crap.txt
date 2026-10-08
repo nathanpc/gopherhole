@@ -1,0 +1,27 @@
+List of crap that I had to remove or disable in order to get VirtualBox working:
+
+- Disable in Windows Features:
+  - Hyper-V
+  - Microsoft Virtualization Platform
+  - Virtual Machine Support
+- bcdedit
+  - bcdedit /set hypervisorlaunchtype off
+  - bcdedit /set vsmlaunchtype Off
+- Windows Security
+  - Core Isolation
+  - Memory Integrity
+- Credential Guard
+- Windows Hello CG Scenarios Reg
+
+Disable Hyper-V:
+bcdedit /set hypervisorlaunchtype off
+bcdedit /set vsmlaunchtype off
+dism /online /Disable-Feature /FeatureName:Microsoft-Hyper-V-All /NoRestart
+dism /online /Disable-Feature /FeatureName:HypervisorPlatform /NoRestart
+dism /online /Disable-Feature /FeatureName:VirtualMachinePlatform /NoRestart
+
+
+Useful links:
+https://woshub.com/disable-credential-guard-windows/
+https://forums.virtualbox.org/viewtopic.php?t=112718
+The ultimate guide: https://immortal-blog.github.io/devops/disable-vbs-on-windows-11-24h2.html

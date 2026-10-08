@@ -1,0 +1,95 @@
+<!--
+Using bbUI's onscreenready and ondomready to Dynamically Change Your HTML
+Blog post published on 2012-06-08.
+-->
+
+<!-- Using bbUI's onscreenready and ondomready to Dynamically Change Your HTML -->
+
+<p>I started playing a bit with BlackBerry development these days and since I'm not the best at Java (also hate how it's difficult to do simple things with it) I choose their awesome framework for HTML5 native web development called <a href="https://developer.blackberry.com/html5/">WebWorks</a>. I really loved it because it's like PhoneGap, but a lot easier to build plugins (extensions on WebWorks) for it to make your native WebApp feel a lot more native.</p>
+
+<p>Another great thing that RIM did to make the life of WebWorks developers easier and create apps that are exactly like native ones is a Javascript framework called <a href="https://github.com/blackberry/bbUI.js">bbUI.js</a>, which is like jQuery Mobile, but seriously, it's a lot more than just a UI framework. It makes it a lot easier to interact with the OS, override the back button for example, and makes your development cycle look a lot with native development by using <a href="https://github.com/blackberry/bbUI.js/wiki/Screens"><em>screens</em></a>. On this post I'll teach you how to dynamically manipulate the screen's HTML before it's processed by the bbUI library.</p>
+
+<p>One of the first things that you'll notice after you start working with bbUI is that it's not just a collection Javascript functions and CSS stylings, it actually reformat and customize your screen's HTML before it's shown to the user. As an example, this simple <em>image-list</em> item declaration in your screen HTML source looks like this:</p>
+
+<pre class="code-block sh_markup">&lt;div data-bb-type=&quot;item&quot; data-bb-title=&quot;Title goes here&quot; data-bb-img=&quot;images/test.png&quot; onclick=&quot;alert(&#039;this was clicked&#039;)&quot;&gt;A description is welcome.&lt;/div&gt;</pre>
+<p>After it's processed by the library and shown to the user it will look like this:</p>
+
+<pre class="code-block sh_markup">&lt;div data-bb-type=&quot;item&quot; class=&quot;bb-hires-image-list-item&quot;
+    onclick=&quot;alert(&#039;this was clicked&#039;)&quot;
+    onmouseover=&quot;this.setAttribute(&#039;class&#039;,&#039;bb-hires-image-list-item-hover&#039;)&quot;
+    onmouseout=&quot;this.setAttribute(&#039;class&#039;,&#039;bb-hires-image-list-item&#039;)&quot;
+    x-blackberry-focusable=&quot;true&quot;&gt;
+  &lt;img src=&quot;images/test.png&quot;&gt;
+  &lt;div class=&quot;details&quot;&gt;
+    &lt;span class=&quot;title&quot;&gt;Title goes here&lt;/span&gt;
+    &lt;span class=&quot;accent-text&quot;&gt;&lt;/span&gt;
+    &lt;div class=&quot;description&quot;&gt;A description is welcome.&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+<p>Hopefully we can easily manipulate our screen elements and other things before and after it's processed by bbUI. This is done with the <strong>bb.init()</strong> function (you can always read more at their <a href="https://github.com/blackberry/bbUI.js/wiki/Toolkit-Initialization">documentation</a>). This will be called when the application starts and can be used to listen to events like when a screen is loaded. The main ones are <strong>onscreenready</strong> and <strong>ondomready</strong>.</p>
+
+<p><strong>onscreenready:</strong> This event will be fired before the sources get processed by the library, so here is where you should manipulate, add or remove things from your HTML source using Javascript, so after it's done the code will be passed to bbUI to be processed.</p>
+
+<p><strong>ondomready:</strong> This event will be fired when the screen finished loading and it has been already processed by bbUI and shown to the user. Here you can put things like alerts and other things that will be used to interact with the user, also some little editing to the screen's source like renaming a field grabbing some information from a field and etc.</p>
+
+<p>Here is a example of a <strong>bb.init()</strong> call:</p>
+
+<pre class="code-block sh_js">bb.init({
+  onscreenready: function (element, id) {
+    if (id == &quot;main&quot;) {
+      // code to be executed before the &quot;main&quot; screen is loaded.
+    } else if (id == &quot;add&quot;) {
+      // code to be executed before the &quot;add&quot; screen is loaded.
+    }
+  },
+  ondomready: function (element, id) {
+    if (id == &quot;main&quot;) {
+      // code to be executed after the &quot;main&quot; screen is loaded.
+    } else if (id == &quot;add&quot;) {
+      // code to be executed after the &quot;add&quot; screen is loaded.
+    }
+  }
+});</pre>
+<p>The code is almost self-explanatory. The <strong>id</strong> is the name, second argument, you gave to a screen when you call it to be processed, for example <em>bb.pushScreen("screen/main.html", "main")</em>. And <strong>element</strong> is the screen source code, which is used to be manipulated before the screen is loaded.</p>
+
+<p>A little problem that some developers might come across while using bbUI for the first time is that when you want to append or change the HTML of the screen before it's processed by bbUI you might write your code like if the HTML was already loaded onto the screen, but it's not. Here is an example of a code that won't work, used to populate a <em>image-list</em> and then show a button that was hidden (using jQuery):</p>
+
+<pre class="code-block sh_js">bb.init({
+  onscreenready: function (element, id) {
+    if (id == &quot;main&quot;) {
+      var item = document.createElement(&#039;div&#039;);
+      item.setAttribute(&#039;data-bb-type&#039;,&#039;item&#039;);
+      item.setAttribute(&#039;data-bb-title&#039;,&#039;my title&#039;);
+      item.innerHTML = &#039;my description&#039;;
+      item.setAttribute(&#039;data-bb-img&#039;,&#039;foo.png&#039;);
+
+      document.getElementById(&#039;mylist&#039;).appendItem(item);
+
+      $(&quot;#button&quot;).css(&quot;display&quot;, &quot;block&quot;);
+    }
+  }
+});</pre>
+<p>The main problem here is that it's using <strong>document</strong> as the source to be manipulated. Since bbUI still hasn't appended the screen into the <strong>document</strong> it will give you an error. In order to correct this you should replace <strong>document</strong> with <strong>element</strong>, that is passed by the <strong>onscreenready</strong> event. If you have any jQuery code, just add <strong>element</strong> as a <strong>context</strong> argument as shown below in the corrected code:</p>
+
+<pre class="code-block sh_js">bb.init({
+  onscreenready: function (element, id) {
+    if (id == &quot;main&quot;) {
+      var item = element.createElement(&#039;div&#039;);
+      item.setAttribute(&#039;data-bb-type&#039;,&#039;item&#039;);
+      item.setAttribute(&#039;data-bb-title&#039;,&#039;my title&#039;);
+      item.innerHTML = &#039;my description&#039;;
+      item.setAttribute(&#039;data-bb-img&#039;,&#039;foo.png&#039;);
+
+      element.getElementById(&#039;mylist&#039;).appendItem(item);
+
+      $(&quot;#button&quot;, element).css(&quot;display&quot;, &quot;block&quot;);
+    }
+  }
+});</pre>
+<p>That's it! Now you know how to use the <strong>onscreenready</strong> and <strong>ondomready</strong> events to dynamically insert or modify your bbUI screen's. Any questions or suggestions just leave a comment and I'll reply as soon as possible. </p>
+
+<p style="font-size: 0.8em">
+	This article was imported from <a href="http://currentflow.net/">my old blog
+	</a>. Some things may be broken.
+</p>
+
