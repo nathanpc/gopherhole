@@ -120,9 +120,9 @@ class GopherEntry {
 	public $port;
 
 	// Gopher entry types.
-	public const TYPE_TEXT = '0';
-	public const TYPE_DIRECTORY = '1';
-	public const TYPE_INFO = 'i';
+	const TYPE_TEXT = '0';
+	const TYPE_DIRECTORY = '1';
+	const TYPE_INFO = 'i';
 
 	/**
 	 * Constructs a Gopher directory entry object.
