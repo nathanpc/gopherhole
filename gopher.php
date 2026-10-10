@@ -45,7 +45,7 @@ class Gopher {
 		if ($result === false) {
 			socket_close($socket);
 			throw new GopherException($selector, 'socket_connect() failed: ' .
-				"($result) " . socket_strerror(socket_last_error($socket)));
+				socket_strerror(socket_last_error($socket)));
 		}
 
 		// Send selector to gopher server.
@@ -100,12 +100,43 @@ class Gopher {
 			return true;
 
 		// Check each of the hosts contained in the specials array.
-		foreach ($specials as $item) {
-			if ($host == $item)
-				return true;
-		}
+		return in_array($host, $specials);
+	}
+}
 
-		return false;
+/**
+ * Gopher entry type identifier.
+ */
+class GopherEntryType {
+	const TEXT = '0';
+	const DIRECTORY = '1';
+	const INFO = 'i';
+	const CSO = '2';
+	const ERROR = '3';
+	const BINHEX = '4';
+	const DOS = '5';
+	const UNIX = '6';
+	const SEARCH = '7';
+	const TELNET = '8';
+	const BINARY = '9';
+	const CALENDAR = 'c';
+	const GIF = 'g';
+	const IMAGE = 'I';
+	const BITMAP = ':';
+	const VIDEO = ';';
+	const AUDIO = 's';
+	const DOCUMENT = 'd';
+	const HTML = 'h';
+
+	/**
+	 * Get the HTML representation of an entry type.
+	 *
+	 * @param string $type Gopher entry type.
+	 *
+	 * @return string HTML representation of the entry type.
+	 */
+	public static function asHTML($type) {
+		return "<span class=\"entry-type\">$type</span>";
 	}
 }
 
@@ -118,11 +149,6 @@ class GopherEntry {
 	public $selector;
 	public $host;
 	public $port;
-
-	// Gopher entry types.
-	const TYPE_TEXT = '0';
-	const TYPE_DIRECTORY = '1';
-	const TYPE_INFO = 'i';
 
 	/**
 	 * Constructs a Gopher directory entry object.
@@ -158,7 +184,7 @@ class GopherEntry {
 		// Build the HTML component.
 		$html .= "<div class=\"gopher-entry gopher-entry-type-{$this->type}\"" .
 			">\n";
-		if ($this->type == GopherEntry::TYPE_INFO) {
+		if ($this->type == GopherEntryType::INFO) {
 			$label = $this->label;
 			if (empty(trim($this->label))) {
 				$html .= "\t<span class=\"entry-label\" style=\"visibility: " .
@@ -167,7 +193,7 @@ class GopherEntry {
 				$html .= "\t<span class=\"entry-label\">$label</span>\n";
 			}
 		} else {
-			$html .= "\t<span class=\"entry-type\">{$this->type}</span>\n";
+			$html .= "\t" . GopherEntryType::asHTML($this->type) . "\n";
 			$html .= "\t<a class=\"entry-label\" href=\"$href\">" .
 				"{$this->label}</a>\n";
 		}

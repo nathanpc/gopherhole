@@ -62,7 +62,7 @@ try {
 		}
 
 		// Handle special types.
-		if ($type == GopherEntry::TYPE_DIRECTORY) {
+		if ($type == GopherEntryType::DIRECTORY) {
 			// Directory listing.
 			$entries = $gopher->parseEntries($response);
 			foreach ($entries as $entry) {
