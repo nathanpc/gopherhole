@@ -1,11 +1,12 @@
 <?php
 // User configuration.
-$title = 'webhole';
+$title = 'Nathan Campos';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
 $buffer_size = 2048;
 error_reporting(E_ALL);
 
+require_once __DIR__ . '/extras.php';
 require_once __DIR__ . '/gopher.php';
 
 // Get request parameters.
@@ -50,6 +51,27 @@ try {
 	<title><?= $title ?></title>
 </head>
 <body>
+	<!-- Header -->
+	<div id="header">
+		<span class="title">
+			<!-- (N)athan's (T)echnology, (C)ode, and (P)rojects (S)ite -->
+			<a href="/">ntcps</a>()
+		</span>
+
+		<!-- Important places that you might want to quickly visit. -->
+		<span class="hotlinks">
+			<a href="<?= href('1', '/projects') ?>">projects</a>
+			<a href="<?= href('1', '/phlog') ?>">log</a>
+			<a href="<?= href('1', '/links') ?>">links</a>
+			<a href="//wiki.nathancampos.me/">wiki</a>
+			<a href="//innoveworkshop.com/">work</a>
+			<a href="<?= href('1', '/contact') ?>">contact</a>
+		</span>
+
+		<hr>
+	</div><!-- #header -->
+
+	<!-- Content -->
 	<div id="gophermap"><?php
 		// Check for errors.
 		if (!is_null($error)) {
@@ -74,6 +96,18 @@ try {
 		}
 
 		end:
-	?></div>
+	?></div><!-- #gophermap -->
+
+	<!-- Footer -->
+	 <div id="footer">
+		<hr>
+
+		<span class="copyright">
+			Nathan Campos &#169; <?= '2024-' . date('Y') ?>
+		</span>
+
+		<a href="gopher://nathancampos.me/<?= $type . $selector ?>"
+			class="better-viewed">Better viewed on Gopher</a>
+	 </div><!-- #footer -->
 </body>
 </html>

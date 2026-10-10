@@ -31,3 +31,13 @@ html, body {
 .gopher-entry-type-i .entry-label {
 	margin-left: 28px;
 }
+
+/* Custom CSS */
+
+#header .hotlinks {
+	margin-left: 20px;
+}
+
+#footer .better-viewed {
+	margin-left: 20px;
+}
