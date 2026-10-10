@@ -1,6 +1,11 @@
 # Test gopherhole.
 /gopher
 
+# IDE and web servers.
+.idea/
+.vscode/
+web.config
+
 # Misc.
 .DS_Store
 Thumbs.db
