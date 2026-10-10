@@ -9,6 +9,16 @@ html, body {
 	font-family: 'Menlo', 'DejaVu Sans Mono', 'Courier New', monospace;
 }
 
+#gophermap {
+	max-width: 800px;
+	max-width: 80ch;
+	overflow-x: auto;
+}
+
+#gophermap #response {
+	white-space: pre;
+}
+
 .gopher-entry .entry-label {
 	white-space: pre;
 }

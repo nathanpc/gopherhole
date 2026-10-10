@@ -30,8 +30,8 @@ try {
 	<meta charset="UTF-8">
 
 	<!-- Mobile definitions. -->
-	<!--<meta name="viewport"
-		content="width=600, initial-scale=1, user-scalable=1" />-->
+	<meta name="viewport"
+		content="width=750, initial-scale=1, user-scalable=1" />
 
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="style.css">
@@ -40,7 +40,7 @@ try {
 	<title>webhole</title>
 </head>
 <body>
-	<?php
+	<div id="gophermap"><?php
 		// Check for errors.
 		if (!is_null($error)) {
 			echo "Error when requesting {$error->getSelector()}: " .
@@ -60,10 +60,10 @@ try {
 			}
 		} else {
 			// Other types.
-			echo "<pre id=\"gophermap\">$response</pre>";
+			echo "<div id=\"response\">$response</div>";
 		}
 
 		end:
-	?>
+	?></div>
 </body>
 </html>
