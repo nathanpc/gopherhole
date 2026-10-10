@@ -1,5 +1,6 @@
 <?php
 // User configuration.
+$title = 'webhole';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
 $buffer_size = 2048;
@@ -18,11 +19,20 @@ $response = null;
 try {
 	// Get response from server.
 	$response = $gopher->getContents($selector);
+
+	// Get the title of the page from the first line if possible.
+	if (($type == '1') && (substr($response, 0, 1) == 'i') &&
+			strpos($response, "\t")) {
+		$title = substr($response, 1, strpos($response, "\t") - 1) .
+			" - $title";
+	} else {
+		$fname = substr(strrchr($selector, '/'), 1);
+		$fpath = substr($selector, 0, strrpos($selector, $fname));
+		$title = "$fname - $fpath - $title";
+	}
 } catch (GopherException $e) {
 	$error = $e;
 }
-
-// TODO: Get title from first entry.
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html lang="en">
 <head>
@@ -37,7 +47,7 @@ try {
 	<link rel="stylesheet" href="style.css">
 
 	<!-- Page information. -->
-	<title>webhole</title>
+	<title><?= $title ?></title>
 </head>
 <body>
 	<div id="gophermap"><?php
