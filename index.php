@@ -19,6 +19,8 @@ $response = null;
 try {
 	// Get response from server.
 	$response = $gopher->getContents($selector);
+	if (!isset($_GET['type']))
+		$type = Gopher::DetectResponseType($selector, $response);
 
 	// Get the title of the page from the first line if possible.
 	if (($type == '1') && (substr($response, 0, 1) == 'i') &&

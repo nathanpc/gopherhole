@@ -102,6 +102,26 @@ class Gopher {
 		// Check each of the hosts contained in the specials array.
 		return in_array($host, $specials);
 	}
+
+	/**
+	 * Tries to guess the type of the response from a Gopher server
+	 * automatically based on the response and the selector.
+	 *
+	 * @param string $selector Selector used to request the content.
+	 * @param string $response Response from the server.
+	 *
+	 * @return string Guessed Gopher type of the response.
+	 */
+	public static function DetectResponseType($selector, $response) {
+		$tabs = substr_count($response, "\t");
+		$newlines = substr_count($response, "\r\n");
+
+		// If we have 3 tabs per line it means that we have a listing.
+		if ($tabs > ($newlines * 2.5))
+			return '1';
+
+		return '0';
+	}
 }
 
 /**
