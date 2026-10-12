@@ -87,6 +87,31 @@ class Gopher {
 	}
 
 	/**
+	 * Builds an appropriate title for the webpage based on the information from
+	 * the server response and the selector.
+	 *
+	 * @param string $name     Name of the website, to always be displayed.
+	 * @param string $type     Requested Gopher entry type.
+	 * @param string $selector Selector used to request the content.
+	 * @param string $response Response from the server.
+	 *
+	 * @return string An appropriate title for the webpage.
+	 */
+	public static function BuildPageTitle($name, $type, $selector, $response) {
+		// Get the title of the page from the first line if possible.
+		if (($type == '1') && (substr($response, 0, 1) == 'i') &&
+				strpos($response, "\t")) {
+			return substr($response, 1, strpos($response, "\t") - 1) .
+				" - $name";
+		}
+
+		// Build a regular, path-based, title.
+		$fname = substr(strrchr($selector, '/'), 1);
+		$fpath = substr($selector, 0, strrpos($selector, $fname));
+		return "$fname - $fpath - $name";
+	}
+
+	/**
 	 * Checks if a host is in fact ourselves.
 	 *
 	 * @param string $host     Host to be checked.

@@ -22,16 +22,8 @@ try {
 	if (!isset($_GET['type']))
 		$type = Gopher::DetectResponseType($selector, $response);
 
-	// Get the title of the page from the first line if possible.
-	if (($type == '1') && (substr($response, 0, 1) == 'i') &&
-			strpos($response, "\t")) {
-		$title = substr($response, 1, strpos($response, "\t") - 1) .
-			" - $title";
-	} else {
-		$fname = substr(strrchr($selector, '/'), 1);
-		$fpath = substr($selector, 0, strrpos($selector, $fname));
-		$title = "$fname - $fpath - $title";
-	}
+	// Build a descriptive page title.
+	$title = Gopher::BuildPageTitle($title, $type, $selector, $response);
 } catch (GopherException $e) {
 	$error = $e;
 }
