@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/mimetype.php';
+
 /**
  * Gopher abstraction library.
  *
@@ -296,13 +298,17 @@ class GopherEntryType {
 			case self::DOS:
 			case self::UNIX:
 			case self::BINARY:
+				return 'application/octet-stream';
+			case self::CALENDAR:
+				return 'text/calendar';
 			case self::IMAGE:
 			case self::VIDEO:
 			case self::AUDIO:
 			case self::DOCUMENT:
-				return 'application/octet-stream';
-			case self::CALENDAR:
-				return 'text/calendar';
+				$mime = mime_from_fname(Gopher::SelectorBasename($selector));
+				if ($mime === false)
+					return 'application/octet-stream';
+				return $mime;
 			case self::GIF:
 				return 'image/gif';
 			case self::BITMAP:
