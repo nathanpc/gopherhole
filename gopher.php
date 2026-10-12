@@ -63,30 +63,6 @@ class Gopher {
 	}
 
 	/**
-	 * Parses the response from a Gopher server of type directory (1) into an
-	 * array of entries.
-	 *
-	 * @param string $response Response from the server with entries.
-	 *
-	 * @return array An array of entries as represented in the response.
-	 */
-	public function parseEntries($response) {
-		$entries = array();
-
-		foreach (explode("\n", $response) as $line) {
-			// Ignore empty lines or the terminating dot line.
-			$line = trim($line);
-			if (empty($line) || ($line == '.'))
-				continue;
-
-			// Parse the entry and append it to the array.
-			$entries[] = new GopherEntry($line);
-		}
-
-		return $entries;
-	}
-
-	/**
 	 * Builds an appropriate title for the webpage based on the information from
 	 * the server response and the selector.
 	 *
@@ -146,6 +122,81 @@ class Gopher {
 			return '1';
 
 		return '0';
+	}
+}
+
+/**
+ * Handles the request of content from a Gopher server.
+ */
+class GopherRequest {
+	private $server;
+	public $type;
+	public $selector;
+	public $response;
+
+	/**
+	 * Sets up the Gopher request object. Automatically cleans the selector and
+	 * type variables to ensure they are not malicious.
+	 *
+	 * @param Gopher $server   Gopher server to request the content from.
+	 * @param string $selector Selector to be sent to the Gopher server.
+	 * @param string $type     Gopher request entry type.
+	 */
+	public function __construct($server, $selector, $type = null) {
+		$this->server = $server;
+		$this->selector = trim($selector);
+		$this->type = is_null($type) ? null : substr(trim($type), 0, 1);
+		$this->response = null;
+	}
+
+	/**
+	 * Requests the content from the server.
+	 *
+	 * @throws GopherException if an error occurs with the connection.
+	 */
+	public function request() {
+		// Get response from server.
+		$this->response = $this->server->getContents($this->selector);
+
+		// Infer type automatically if needed.
+		if (is_null($this->type)) {
+			$this->type = Gopher::DetectResponseType($this->selector,
+				$this->response);
+		}
+	}
+
+	/**
+	 * Parses the response from a Gopher server of the directory type (1) into
+	 * an array of entries.
+	 *
+	 * @return array An array of entries as represented in the response.
+	 */
+	public function parseEntries() {
+		$entries = array();
+
+		foreach (explode("\n", $this->response) as $line) {
+			// Ignore empty lines or the terminating dot line.
+			$line = trim($line);
+			if (empty($line) || ($line == '.'))
+				continue;
+
+			// Parse the entry and append it to the array.
+			$entries[] = new GopherEntry($line);
+		}
+
+		return $entries;
+	}
+
+	/**
+	 * Gets a webpage title based on the request.
+	 *
+	 * @param string $name Name of the website, to always be displayed.
+	 *
+	 * @return string An appropriate title for the webpage.
+	 */
+	public function getPageTitle($name) {
+		return Gopher::BuildPageTitle($name, $this->type, $this->selector,
+			$this->response);
 	}
 }
 

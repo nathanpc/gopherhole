@@ -7,23 +7,14 @@ $buffer_size = 2048;
 error_reporting(E_ALL);
 
 require_once __DIR__ . '/gopher.php';
-
-// Get request parameters.
-$type = $_GET['type'];
-$selector = $_GET['selector'];
-
-// Setup Gopher object.
-$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
 $error = null;
-$response = null;
 try {
-	// Get response from server.
-	$response = $gopher->getContents($selector);
-	if (!isset($_GET['type']))
-		$type = Gopher::DetectResponseType($selector, $response);
+	// Set up the request.
+	$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
+	$req = new GopherRequest($gopher, $_GET['selector'], $_GET['type']);
 
-	// Build a descriptive page title.
-	$title = Gopher::BuildPageTitle($title, $type, $selector, $response);
+	// Perform the request to the Gopher server.
+	$req->request();
 } catch (GopherException $e) {
 	$error = $e;
 }
@@ -41,7 +32,7 @@ try {
 	<link rel="stylesheet" href="style.css">
 
 	<!-- Page information. -->
-	<title><?= $title ?></title>
+	<title><?= $req->getPageTitle($title) ?></title>
 </head>
 <body>
 	<div id="gophermap"><?php
@@ -50,21 +41,20 @@ try {
 			echo "Error when requesting {$error->getSelector()}: " .
 				"{$error->getMessage()}\n";
 			goto end;
-		} elseif (is_null($response)) {
+		} elseif (is_null($req->response)) {
 			echo "Error: Empty response\n";
 			goto end;
 		}
 
 		// Handle special types.
-		if ($type == GopherEntryType::DIRECTORY) {
+		if ($req->type == GopherEntryType::DIRECTORY) {
 			// Directory listing.
-			$entries = $gopher->parseEntries($response);
-			foreach ($entries as $entry) {
+			$entries = $req->parseEntries();
+			foreach ($entries as $entry)
 				echo $entry->asHTML();
-			}
 		} else {
 			// Other types.
-			echo "<div id=\"response\">$response</div>";
+			echo "<div id=\"response\">{$req->response}</div>";
 		}
 
 		end:
