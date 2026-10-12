@@ -1,6 +1,7 @@
 <?php
 // User configuration.
 $title = 'webhole';
+$gopher_base_domain = 'server.domain';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
 $buffer_size = 2048;
@@ -44,6 +45,16 @@ try {
 	<title><?= $req->getPageTitle($title) ?></title>
 </head>
 <body>
+	<!-- Header -->
+	<div id="header">
+		<span class="title">
+			<a href="/"><?= $title ?></a>
+		</span>
+
+		<hr>
+	</div><!-- #header -->
+
+	<!-- Content -->
 	<div id="gophermap"><?php
 		// Check for errors.
 		if (!is_null($error)) {
@@ -67,6 +78,16 @@ try {
 		}
 
 		end:
-	?></div>
+	?></div><!-- #gophermap -->
+
+	<!-- Footer -->
+	<div id="footer">
+		<hr>
+
+		<a href="gopher://<?= $gopher_base_domain ?>/<?= $req->type .
+			$req->selector ?>">gopher</a> -
+		<a href="?<?= $_SERVER['QUERY_STRING'] .
+			(empty($_SERVER['QUERY_STRING']) ? '' : '&') . "raw=1" ?>">raw</a>
+	</div><!-- #footer -->
 </body>
 </html>
