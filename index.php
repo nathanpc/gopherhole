@@ -1,6 +1,6 @@
 <?php
 // User configuration.
-$title = 'Nathan Campos';
+$title = 'ntcps';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
 $buffer_size = 2048;
@@ -49,7 +49,7 @@ try {
 	<div id="header">
 		<span class="title">
 			<!-- (N)athan's (T)echnology, (C)ode, and (P)rojects (S)ite -->
-			<a href="/">ntcps</a>()
+			<a href="/"><?= $title ?></a>()
 		</span>
 
 		<!-- Important places that you might want to quickly visit. -->
