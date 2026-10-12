@@ -1,6 +1,7 @@
 <?php
 // User configuration.
 $title = 'ntcps';
+$gopher_base_domain = 'nathancampos.me';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
 $buffer_size = 2048;
@@ -99,10 +100,10 @@ try {
 			Nathan Campos &#169; <?= '2024-' . date('Y') ?>
 		</div>
 
-		<a href="gopher://nathancampos.me/<?= $req->type . $req->selector ?>">gopher</a>
-		-
+		<a href="gopher://<?= $gopher_base_domain . '/' . $req->type .
+			$req->selector ?>">gopher</a> -
 		<a href="?<?= $_SERVER['QUERY_STRING'] .
 			(empty($_SERVER['QUERY_STRING']) ? '' : '&') . "raw=1" ?>">raw</a>
-	 </div><!-- #footer -->
+	</div><!-- #footer -->
 </body>
 </html>
