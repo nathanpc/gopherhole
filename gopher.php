@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/mimetype.php';
+
 /**
  * Gopher abstraction library.
  *
@@ -45,7 +47,7 @@ class Gopher {
 		if ($result === false) {
 			socket_close($socket);
 			throw new GopherException($selector, 'socket_connect() failed: ' .
-				"($result) " . socket_strerror(socket_last_error($socket)));
+				socket_strerror(socket_last_error($socket)));
 		}
 
 		// Send selector to gopher server.
@@ -63,27 +65,28 @@ class Gopher {
 	}
 
 	/**
-	 * Parses the response from a Gopher server of type directory (1) into an
-	 * array of entries.
+	 * Builds an appropriate title for the webpage based on the information from
+	 * the server response and the selector.
 	 *
-	 * @param string $response Response from the server with entries.
+	 * @param string $name     Name of the website, to always be displayed.
+	 * @param string $type     Requested Gopher entry type.
+	 * @param string $selector Selector used to request the content.
+	 * @param string $response Response from the server.
 	 *
-	 * @return array An array of entries as represented in the response.
+	 * @return string An appropriate title for the webpage.
 	 */
-	public function parseEntries($response) {
-		$entries = array();
-
-		foreach (explode("\n", $response) as $line) {
-			// Ignore empty lines or the terminating dot line.
-			$line = trim($line);
-			if (empty($line) || ($line == '.'))
-				continue;
-
-			// Parse the entry and append it to the array.
-			$entries[] = new GopherEntry($line);
+	public static function BuildPageTitle($name, $type, $selector, $response) {
+		// Get the title of the page from the first line if possible.
+		if (($type == '1') && (substr($response, 0, 1) == 'i') &&
+				strpos($response, "\t")) {
+			return substr($response, 1, strpos($response, "\t") - 1) .
+				" - $name";
 		}
 
-		return $entries;
+		// Build a regular, path-based, title.
+		$fname = self::SelectorBasename($selector);
+		$fpath = substr($selector, 0, strrpos($selector, $fname));
+		return "$fname - $fpath - $name";
 	}
 
 	/**
@@ -100,12 +103,222 @@ class Gopher {
 			return true;
 
 		// Check each of the hosts contained in the specials array.
-		foreach ($specials as $item) {
-			if ($host == $item)
-				return true;
+		return in_array($host, $specials);
+	}
+
+	/**
+	 * Tries to guess the type of the response from a Gopher server
+	 * automatically based on the response and the selector.
+	 *
+	 * @param string $selector Selector used to request the content.
+	 * @param string $response Response from the server.
+	 *
+	 * @return string Guessed Gopher type of the response.
+	 */
+	public static function DetectResponseType($selector, $response) {
+		$tabs = substr_count($response, "\t");
+		$newlines = substr_count($response, "\r\n");
+
+		// If we have 3 tabs per line it means that we have a listing.
+		if ($tabs > ($newlines * 2.5))
+			return '1';
+
+		return '0';
+	}
+
+	/**
+	 * Gets a filename (basename) from a selector.
+	 *
+	 * @param string $selector Selector to extract the basename from.
+	 *
+	 * @return string File name extracted from the selector.
+	 */
+	public static function SelectorBasename($selector) {
+		return substr(strrchr($selector, '/'), 1);
+	}
+}
+
+/**
+ * Handles the request of content from a Gopher server.
+ */
+class GopherRequest {
+	private $server;
+	public $type;
+	public $selector;
+	public $response;
+	public $mime;
+
+	/**
+	 * Sets up the Gopher request object. Automatically cleans the selector and
+	 * type variables to ensure they are not malicious.
+	 *
+	 * @param Gopher $server   Gopher server to request the content from.
+	 * @param string $selector Selector to be sent to the Gopher server.
+	 * @param string $type     Gopher request entry type.
+	 */
+	public function __construct($server, $selector = '', $type = null) {
+		$this->server = $server;
+		$this->selector = trim($selector);
+		$this->type = is_null($type) ? null : substr(trim($type), 0, 1);
+		$this->response = null;
+		$this->mime = is_null($type) ? null :
+			GopherEntryType::MimeType($type, $selector);
+	}
+
+	/**
+	 * Requests the content from the server.
+	 *
+	 * @throws GopherException if an error occurs with the connection.
+	 */
+	public function request() {
+		// Get response from server.
+		$this->response = $this->server->getContents($this->selector);
+
+		// Infer type automatically if needed.
+		if (is_null($this->type)) {
+			$this->type = Gopher::DetectResponseType($this->selector,
+				$this->response);
+			$this->mime = GopherEntryType::MimeType($this->type,
+				$this->selector);
+		}
+	}
+
+	/**
+	 * Parses the response from a Gopher server of the directory type (1) into
+	 * an array of entries.
+	 *
+	 * @return array An array of entries as represented in the response.
+	 */
+	public function parseEntries() {
+		$entries = array();
+
+		foreach (explode("\n", $this->response) as $line) {
+			// Ignore empty lines or the terminating dot line.
+			$line = trim($line);
+			if (empty($line) || ($line == '.'))
+				continue;
+
+			// Parse the entry and append it to the array.
+			$entries[] = new GopherEntry($line);
 		}
 
-		return false;
+		return $entries;
+	}
+
+	/**
+	 * Sets the HTTP headers for a raw response from the Gopher server.
+	 */
+	public function setRawHeaders() {
+		header("Content-type: {$this->mime}");
+		if ((substr($this->mime, 0, 11) == 'application') ||
+				($this->mime == 'text/calendar')) {
+			$fname = Gopher::SelectorBasename($this->selector);
+			header("Content-Disposition: attachment; filename=\"$fname\"");
+		}
+	}
+
+	/**
+	 * Checks if we should return the contents from the server's response in raw
+	 * format.
+	 *
+	 * @param bool|string $raw  Should we force the output to be raw?
+	 *
+	 * @return bool True if we should provide a raw output, false otherwise.
+	 */
+	public function shouldReturnRaw($raw) {
+		// Force raw output?
+		if ((is_bool($raw) && $raw) ||
+				filter_var($raw, FILTER_VALIDATE_BOOLEAN)) {
+			return true;
+		}
+
+		// Use MIME type to determine the output format.
+		return !preg_match("/^text\/(?!calendar)/", $this->mime);
+	}
+
+	/**
+	 * Gets a webpage title based on the request.
+	 *
+	 * @param string $name Name of the website, to always be displayed.
+	 *
+	 * @return string An appropriate title for the webpage.
+	 */
+	public function getPageTitle($name) {
+		return Gopher::BuildPageTitle($name, $this->type, $this->selector,
+			$this->response);
+	}
+}
+
+/**
+ * Gopher entry type identifier.
+ */
+class GopherEntryType {
+	const TEXT = '0';
+	const DIRECTORY = '1';
+	const INFO = 'i';
+	const CSO = '2';
+	const ERROR = '3';
+	const BINHEX = '4';
+	const DOS = '5';
+	const UNIX = '6';
+	const SEARCH = '7';
+	const TELNET = '8';
+	const BINARY = '9';
+	const CALENDAR = 'c';
+	const GIF = 'g';
+	const IMAGE = 'I';
+	const BITMAP = ':';
+	const VIDEO = ';';
+	const AUDIO = 's';
+	const DOCUMENT = 'd';
+	const HTML = 'h';
+
+	/**
+	 * Get the HTML representation of an entry type.
+	 *
+	 * @param string $type Gopher entry type.
+	 *
+	 * @return string HTML representation of the entry type.
+	 */
+	public static function asHTML($type) {
+		return "<span class=\"entry-type\">$type</span>";
+	}
+
+	/**
+	 * Gets the appropriate MIME type of the Gopher type.
+	 *
+	 * @param string $type     Gopher entry type.
+	 * @param string $selector Selector used to request the content.
+	 *
+	 * @return string MIME type of the Gopher type.
+	 */
+	public static function MimeType($type, $selector) {
+		switch ($type) {
+			case self::BINHEX:
+			case self::DOS:
+			case self::UNIX:
+			case self::BINARY:
+				return 'application/octet-stream';
+			case self::CALENDAR:
+				return 'text/calendar';
+			case self::IMAGE:
+			case self::VIDEO:
+			case self::AUDIO:
+			case self::DOCUMENT:
+				$mime = mime_from_fname(Gopher::SelectorBasename($selector));
+				if ($mime === false)
+					return 'application/octet-stream';
+				return $mime;
+			case self::GIF:
+				return 'image/gif';
+			case self::BITMAP:
+				return 'image/bmp';
+			case self::HTML:
+				return 'text/html';
+			case self::TEXT:
+			default:
+				return 'text/plain';
+		}
 	}
 }
 
@@ -118,11 +331,6 @@ class GopherEntry {
 	public $selector;
 	public $host;
 	public $port;
-
-	// Gopher entry types.
-	const TYPE_TEXT = '0';
-	const TYPE_DIRECTORY = '1';
-	const TYPE_INFO = 'i';
 
 	/**
 	 * Constructs a Gopher directory entry object.
@@ -158,7 +366,7 @@ class GopherEntry {
 		// Build the HTML component.
 		$html .= "<div class=\"gopher-entry gopher-entry-type-{$this->type}\"" .
 			">\n";
-		if ($this->type == GopherEntry::TYPE_INFO) {
+		if ($this->type == GopherEntryType::INFO) {
 			$label = $this->label;
 			if (empty(trim($this->label))) {
 				$html .= "\t<span class=\"entry-label\" style=\"visibility: " .
@@ -167,7 +375,7 @@ class GopherEntry {
 				$html .= "\t<span class=\"entry-label\">$label</span>\n";
 			}
 		} else {
-			$html .= "\t<span class=\"entry-type\">{$this->type}</span>\n";
+			$html .= "\t" . GopherEntryType::asHTML($this->type) . "\n";
 			$html .= "\t<a class=\"entry-label\" href=\"$href\">" .
 				"{$this->label}</a>\n";
 		}
@@ -202,4 +410,16 @@ class GopherException extends Exception {
 	public function getSelector() {
 		return $this->selector;
 	}
+}
+
+/**
+ * Gets the contents of a URL parameter.
+ *
+ * @param string $key     Name of the URL argument.
+ * @param string $default Value to be used if the parameter wasn't provided.
+ *
+ * @return string|null Content of the URL parameter.
+ */
+function urlparam($key, $default = null) {
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
 }

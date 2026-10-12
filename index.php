@@ -8,30 +8,24 @@ error_reporting(E_ALL);
 
 require_once __DIR__ . '/extras.php';
 require_once __DIR__ . '/gopher.php';
-
-// Get request parameters.
-$type = $_GET['type'];
-$selector = $_GET['selector'];
-
-// Setup Gopher object.
-$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
 $error = null;
-$response = null;
 try {
-	// Get response from server.
-	$response = $gopher->getContents($selector);
+	// Set up the request.
+	$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
+	$req = new GopherRequest($gopher, urlparam('selector', ''),
+		urlparam('type'));
 
-	// Get the title of the page from the first line if possible.
-	if (($type == '1') && (substr($response, 0, 1) == 'i') &&
-			strpos($response, "\t")) {
-		$title = substr($response, 1, strpos($response, "\t") - 1) .
-			" - $title";
-	} else {
-		$fname = substr(strrchr($selector, '/'), 1);
-		$fpath = substr($selector, 0, strrpos($selector, $fname));
-		$title = "$fname - $fpath - $title";
+	// Perform the request to the Gopher server.
+	$req->request();
+
+	// Determine if we should return the raw content of the request.
+	if ($req->shouldReturnRaw(urlparam('raw', false))) {
+		$req->setRawHeaders();
+		echo $req->response;
+		return;
 	}
 } catch (GopherException $e) {
+	http_response_code(500);
 	$error = $e;
 }
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -48,7 +42,7 @@ try {
 	<link rel="stylesheet" href="style.css">
 
 	<!-- Page information. -->
-	<title><?= $title ?></title>
+	<title><?= $req->getPageTitle($title) ?></title>
 </head>
 <body>
 	<!-- Header -->
@@ -78,21 +72,20 @@ try {
 			echo "Error when requesting {$error->getSelector()}: " .
 				"{$error->getMessage()}\n";
 			goto end;
-		} elseif (is_null($response)) {
+		} elseif (is_null($req->response)) {
 			echo "Error: Empty response\n";
 			goto end;
 		}
 
 		// Handle special types.
-		if ($type == GopherEntry::TYPE_DIRECTORY) {
+		if ($req->type == GopherEntryType::DIRECTORY) {
 			// Directory listing.
-			$entries = $gopher->parseEntries($response);
-			foreach ($entries as $entry) {
+			$entries = $req->parseEntries();
+			foreach ($entries as $entry)
 				echo $entry->asHTML();
-			}
 		} else {
 			// Other types.
-			echo "<div id=\"response\">$response</div>";
+			echo "<div id=\"response\">{$req->response}</div>";
 		}
 
 		end:
