@@ -92,15 +92,17 @@ try {
 	?></div><!-- #gophermap -->
 
 	<!-- Footer -->
-	 <div id="footer">
+	<div id="footer">
 		<hr>
 
-		<span class="copyright">
+		<div class="copyright">
 			Nathan Campos &#169; <?= '2024-' . date('Y') ?>
-		</span>
+		</div>
 
-		<a href="gopher://nathancampos.me/<?= $type . $selector ?>"
-			class="better-viewed">Better viewed on Gopher</a>
+		<a href="gopher://nathancampos.me/<?= $req->type . $req->selector ?>">gopher</a>
+		-
+		<a href="?<?= $_SERVER['QUERY_STRING'] .
+			(empty($_SERVER['QUERY_STRING']) ? '' : '&') . "raw=1" ?>">raw</a>
 	 </div><!-- #footer -->
 </body>
 </html>
