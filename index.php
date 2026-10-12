@@ -11,11 +11,20 @@ $error = null;
 try {
 	// Set up the request.
 	$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
-	$req = new GopherRequest($gopher, $_GET['selector'], $_GET['type']);
+	$req = new GopherRequest($gopher, urlparam('selector', ''),
+		urlparam('type'));
 
 	// Perform the request to the Gopher server.
 	$req->request();
+
+	// Determine if we should return the raw content of the request.
+	if ($req->shouldReturnRaw(urlparam('raw', false))) {
+		$req->setRawHeaders();
+		echo $req->response;
+		return;
+	}
 } catch (GopherException $e) {
+	http_response_code(500);
 	$error = $e;
 }
 ?><!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">

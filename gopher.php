@@ -82,7 +82,7 @@ class Gopher {
 		}
 
 		// Build a regular, path-based, title.
-		$fname = substr(strrchr($selector, '/'), 1);
+		$fname = self::SelectorBasename($selector);
 		$fpath = substr($selector, 0, strrpos($selector, $fname));
 		return "$fname - $fpath - $name";
 	}
@@ -123,6 +123,17 @@ class Gopher {
 
 		return '0';
 	}
+
+	/**
+	 * Gets a filename (basename) from a selector.
+	 *
+	 * @param string $selector Selector to extract the basename from.
+	 *
+	 * @return string File name extracted from the selector.
+	 */
+	public static function SelectorBasename($selector) {
+		return substr(strrchr($selector, '/'), 1);
+	}
 }
 
 /**
@@ -133,6 +144,7 @@ class GopherRequest {
 	public $type;
 	public $selector;
 	public $response;
+	public $mime;
 
 	/**
 	 * Sets up the Gopher request object. Automatically cleans the selector and
@@ -142,11 +154,13 @@ class GopherRequest {
 	 * @param string $selector Selector to be sent to the Gopher server.
 	 * @param string $type     Gopher request entry type.
 	 */
-	public function __construct($server, $selector, $type = null) {
+	public function __construct($server, $selector = '', $type = null) {
 		$this->server = $server;
 		$this->selector = trim($selector);
 		$this->type = is_null($type) ? null : substr(trim($type), 0, 1);
 		$this->response = null;
+		$this->mime = is_null($type) ? null :
+			GopherEntryType::MimeType($type, $selector);
 	}
 
 	/**
@@ -162,6 +176,8 @@ class GopherRequest {
 		if (is_null($this->type)) {
 			$this->type = Gopher::DetectResponseType($this->selector,
 				$this->response);
+			$this->mime = GopherEntryType::MimeType($this->type,
+				$this->selector);
 		}
 	}
 
@@ -185,6 +201,37 @@ class GopherRequest {
 		}
 
 		return $entries;
+	}
+
+	/**
+	 * Sets the HTTP headers for a raw response from the Gopher server.
+	 */
+	public function setRawHeaders() {
+		header("Content-type: {$this->mime}");
+		if ((substr($this->mime, 0, 11) == 'application') ||
+				($this->mime == 'text/calendar')) {
+			$fname = Gopher::SelectorBasename($this->selector);
+			header("Content-Disposition: attachment; filename=\"$fname\"");
+		}
+	}
+
+	/**
+	 * Checks if we should return the contents from the server's response in raw
+	 * format.
+	 *
+	 * @param bool|string $raw  Should we force the output to be raw?
+	 *
+	 * @return bool True if we should provide a raw output, false otherwise.
+	 */
+	public function shouldReturnRaw($raw) {
+		// Force raw output?
+		if ((is_bool($raw) && $raw) ||
+				filter_var($raw, FILTER_VALIDATE_BOOLEAN)) {
+			return true;
+		}
+
+		// Use MIME type to determine the output format.
+		return !preg_match("/^text\/(?!calendar)/", $this->mime);
 	}
 
 	/**
@@ -238,11 +285,12 @@ class GopherEntryType {
 	/**
 	 * Gets the appropriate MIME type of the Gopher type.
 	 *
-	 * @param string $type Gopher entry type.
+	 * @param string $type     Gopher entry type.
+	 * @param string $selector Selector used to request the content.
 	 *
 	 * @return string MIME type of the Gopher type.
 	 */
-	public static function MimeType($type) {
+	public static function MimeType($type, $selector) {
 		switch ($type) {
 			case self::BINHEX:
 			case self::DOS:
@@ -356,4 +404,16 @@ class GopherException extends Exception {
 	public function getSelector() {
 		return $this->selector;
 	}
+}
+
+/**
+ * Gets the contents of a URL parameter.
+ *
+ * @param string $key     Name of the URL argument.
+ * @param string $default Value to be used if the parameter wasn't provided.
+ *
+ * @return string|null Content of the URL parameter.
+ */
+function urlparam($key, $default = null) {
+	return isset($_GET[$key]) ? $_GET[$key] : $default;
 }
