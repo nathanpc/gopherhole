@@ -183,6 +183,38 @@ class GopherEntryType {
 	public static function asHTML($type) {
 		return "<span class=\"entry-type\">$type</span>";
 	}
+
+	/**
+	 * Gets the appropriate MIME type of the Gopher type.
+	 *
+	 * @param string $type Gopher entry type.
+	 *
+	 * @return string MIME type of the Gopher type.
+	 */
+	public static function MimeType($type) {
+		switch ($type) {
+			case self::BINHEX:
+			case self::DOS:
+			case self::UNIX:
+			case self::BINARY:
+			case self::IMAGE:
+			case self::VIDEO:
+			case self::AUDIO:
+			case self::DOCUMENT:
+				return 'application/octet-stream';
+			case self::CALENDAR:
+				return 'text/calendar';
+			case self::GIF:
+				return 'image/gif';
+			case self::BITMAP:
+				return 'image/bmp';
+			case self::HTML:
+				return 'text/html';
+			case self::TEXT:
+			default:
+				return 'text/plain';
+		}
+	}
 }
 
 /**
