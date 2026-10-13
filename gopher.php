@@ -281,7 +281,13 @@ class GopherEntryType {
 	 * @return string HTML representation of the entry type.
 	 */
 	public static function asHTML($type) {
-		return "<span class=\"entry-type\">$type</span>";
+		// Correct for types that cannot be in a filename.
+		$imgtype = $type;
+		if ($type == self::BITMAP)
+			$imgtype = self::IMAGE;
+
+		return "<span class=\"entry-type\"><img src=\"/_assets/icons/" .
+			"$imgtype.png\" alt=\"$type\" /></span>";
 	}
 
 	/**
