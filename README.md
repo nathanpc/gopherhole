@@ -1,7 +1,6 @@
-# webhole
+# My gopherhole
 
-A gopherhole to website proxy with the focus on exposing your own gopherhole to
-the web, not being a general proxy for Gopher.
+This is the source code of my personal gopherhole.
 
 ## Setup
 
