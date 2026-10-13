@@ -1,6 +1,6 @@
 <?php
 // User configuration.
-$title = 'ntcps';
+$title = 'nathanpc';
 $gopher_base_domain = 'nathancampos.me';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
@@ -49,7 +49,6 @@ try {
 	<!-- Header -->
 	<div id="header">
 		<span class="title">
-			<!-- (N)athan's (T)echnology, (C)ode, and (P)rojects (S)ite -->
 			<a href="/"><?= $title ?></a>()
 		</span>
 
