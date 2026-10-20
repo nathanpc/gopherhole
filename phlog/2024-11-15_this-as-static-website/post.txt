@@ -1,0 +1,54 @@
+Making this website static
+==========================
+
+If you look through the repository of this website [1], specially if you look at
+the commit history, you'll notice that I've completely rewritten it to be
+completely static, and because of its previous architecture, compiling
+everything into a static website was a breeze and required minimum
+modifications.
+
+In order to pull this off I created a very simple PHP microframework [2] that
+would allow me to keep most of the work I had already done while building the
+website, after all I didn't want all of it to go to waste. Since I'm lazy I
+wanted this change to require a minimum amount of modifications to the code I
+already had for it, but also require no major architectural changes to my
+workflow when building this website, so the framework was built with maximum
+flexibility in mind.
+
+The creation of this microframework was another step for another goal, which is
+that I want to reuse most of what I've already built to automatically build a
+gopherhole [3] and maybe a Gemini capsule [4]. These are my next steps, but I
+may play around more with the design of the website beforehand. Either way the
+right pieces are all in place.
+
+I'm a sucker for automation, so the last thing I've done to make this new
+version of my website even better and motivate me to write more often and keep
+it updated, was to play around with GitHub Actions [5] to create a workflow that
+would build a Docker image [6] of the final built website and automatically
+publish that so that my server, using watchtower [7], could pull the new version
+as it's ready for production. So now all that I have to do in order to update or
+post something here is commit and push, everything else is done automatically. I
+don't like relying on GitHub, but at least it's something that isn't a
+requirement, just a nice thing to have, and can be easily replaced by a script
+if need be in the future.
+
+Given the current level of automation that the website currently has I'm now
+looking into ways keep tabs on my build and deployment workflows, maybe
+something involving Telegram since there are ways to integrate it in GitHub
+Actions [8] and Watchtower [9].
+
+All in all I'm very pleased with the final result and these changes make me even
+more motivated to dedicate time to this website, which was the goal of creating
+this whole thing in the first place [10].
+
+
+[1]: https://github.com/nathanpc/portfolio
+[2]: https://github.com/nathanpc/fantastique
+[3]: https://en.wikipedia.org/wiki/Gopher_(protocol)
+[4]: https://en.wikipedia.org/wiki/Gemini_(protocol)
+[5]: https://github.com/features/actions
+[6]: https://github.com/nathanpc/portfolio/actions/workflows/publish-docker.yml
+[7]: https://containrrr.dev/watchtower/
+[8]: https://github.com/marketplace/actions/telegram-notify
+[9]: https://github.com/Pyenb/Watchtower-telegram-notifications
+[10]: <^base_url^>/0/phlog/2024-07-05_building-website/post.txt
