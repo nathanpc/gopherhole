@@ -6,6 +6,7 @@
 # IDE and web servers.
 .idea/
 .vscode/
+.vstags
 web.config
 
 # Misc.
