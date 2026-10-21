@@ -1,0 +1,19 @@
+[h1]Day 1 - PowerBook motherboard swapping[/h1]
+
+Yesterday was an "interesting" day. I had to start a bit late because I still had a bit of work-related tasks to do before jumping 100% into the challenge. In order to have a system to participate I had to first swap the motherboard of my PowerBook G4 with one from a parts machine. This process took almost my entire day. You have to remove exactly 62 screws in order to get the motherboard out, it's by far the most painful repair I've done in my life. The good news is that the repair was successful. I'm typing this article in it! Although the path to get here wasn't very straightforward.
+
+[img=<^base_url^>/I/<^reldir^>/hollow-chassis.jpeg]The hollow chassis without its motherboard[/img]
+
+Upon finishing the board swap, screwing back every single one of the 62 screws, and lightly cleaning the chassis, I was ready to restore the image of the old spinning rust hard drive (in this case it really feels rusty) into the shiny new SSD. I insert my [url=https://macintoshgarden.org/apps/mac-osx-mac-os-10-ppc] totally legit install media of OS X 10.4[/url], plug my FireWire external drive with the original disk image, and fire it up. Since this is a slow machine I boot it in verbose mode (Command-V on boot) and am immediately greeted with the exact same kernel panics and random errors I've described in the previous post. Apparently the original motherboard was fine after all.
+
+[img=<^base_url^>/I/<^reldir^>/screws.jpeg]Every single one of the 62 screws[/img]
+
+Putting in all this work and getting nowhere was really frustrating, but anyway, I powered through it, trying every imaginable thing to get the machine to boot. In the end I think the 1GB RAM stick I was using was faulty, since it would always kernel panic when it was installed, prompting me to dig through my bag of RAM sticks to find another 1GB one that worked. I had minor success when I swapped the old hard drive back in to the machine, as it booted straightaway. Following that were many attempts to image the drive into the SSD on the machine itself or using my Power Mac G5, all fruitless.
+
+In the end I was only able to get a bootable drive after booting the PowerBook with its original hard drive, connecting the SSD via USB, firing up [url=http://macintoshgarden.org/apps/carbon-copy-cloner-347]Carbon Copy Cloner[/url] and leaving it overnight to very slowly clone the disks. Today I woke up, swapped the SSD in to the PowerBook, assembled everything back, and it's now fully working, and it's blazingly fast (for a 2005 computer).
+
+[img=<^base_url^>/I/<^reldir^>/bbedit.png]Fully working and editing writing this article[/img]
+
+Today my plan is to get a [url=https://wiki.znc.in/ZNC]ZNC bouncer[/url] going so that I can be on IRC on my PowerBook G4 and on my Power Mac G5. I'll also be working on a setup to easily upload files to my cloud server so that I can instantly share images and files directly from my older machines, something that will also be useful for my modern machines, since I've always wanted to FTP into a server, drop some files, and get a link to share. Hopefully this will kill my lazy habit of dropping the files on Google Drive.
+
+One interesting thing about this challenge is that it's making me think of quality of life projects that will enable me to be more inclined to use my retro gear in the future. It's a lot more inviting to use a machine if you know it's all set up and that it'll be able to perform "modern" tasks without you having to spend time setting things up.

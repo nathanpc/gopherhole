@@ -1,0 +1,21 @@
+[h1]Day 2 - Browsing gopherspace and chilling on IRC[/h1]
+
+I'm actually writing this on day 3, but let's ignore this fact and pretend it's still yesterday. I thought I was going to have a bit of free time in the evening to write this post, but I was very tired and went straight to bed.
+
+The day was very calm, mainly hanging out in IRC, browsing gopherspace (this may have a big impact on my activities today), and installing and configuring a bunch of applications on my Power Mac G5 and on my PowerBook G4. It was clearly a day to chill and simply enjoy some old software. At least now my PowerPC Macs have a ton of great software installed and are a lot more usable for daily tasks.
+
+A bit of the day was also spent setting up Quake II and configuring it all since there was the possibility of some [url=https://bb.deadnet.se/viewtopic.php?t=84]evening matches[/url], although by the time everyone was playing I had already signed out for dinner and a quiet evening. I did spend a couple of hours playing on public servers during the afternoon, just to ensure I had it properly configured. *wink* *wink*
+
+Some work was done in terms of setting up a public share box, which is my idea of an FTP server with an HTTP directory listing frontend, allowing me to quickly upload random files to a cloud server from any device, great for temporary sharing files. I wanted to do all of this with Docker, but after some frustrations trying to get a proper FTP server running on Alpine I've decided to put a stop on this project while I play around with shinier things.
+
+[img=<^base_url^>/I/<^reldir^>/znc-desktop.png]A view from my Power Mac 5G's desktop right now with ZNC open in Safari just as I remember setting it up back in 2010[/img]
+
+One quality of life improvement that was quite a nostalgia trip to setup was an IRC bouncer. Since I'm jumping back and forth with different machines and because I do want to get back into regularly chatting on IRC, a bouncer is a must. I went with the venerable [url=https://znc.in/]ZNC[/url], and let me tell you, seeing this web interface again after more than 10 years was one of the biggest nostalgia trips I've ever had in my life. Setup was just as clunky as I remember, but now I can have a proper IRC presence, although I was shocked that it's no longer fashionable to use [url=https://wiki.znc.in/Awaynick]awaynick[/url].
+
+Since a lot of gopherspace browsing was done today, all of it using [url=http://gopher.floodgap.com/overbite/d?ff38]OverbiteFF[/url] since it was the fastest way for me to get a Gopher client running on OS X, it did start feeling a bit wrong using a lot of CPU power and memory simply to display something that was meant to be an extremely lightweight protocol.
+
+[img=<^base_url^>/I/<^reldir^>/gopher-netscape.png]Browsing Gopher on Netscape 3 via VNC[/img]
+
+I do understand that a lot of people prefer browsing gopher using a terminal client such as [url=https://lynx.invisible-island.net/]Lynx[/url], which makes a ton of sense, after all Gopher is mainly a text-based protocol and it does fit nicely with the terminal, although I've always associated Gopher with graphical clients, such as the ones found on early Firefox and classic Mac OS, and as of late we don't have any "native" offerings for modern operating systems that kind of look like the "ListView-based" applications from the past.
+
+Because of all this gophering I may be inclined to use some of my OCC time to enjoy writing a proper graphical Gopher client since the protocol is so easy to implement.

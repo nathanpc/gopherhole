@@ -1,0 +1,114 @@
+Day 0 - Learning about the challenge and preparation
+====================================================
+
+Yesterday while hanging out on #macgarden [1] I had a nice chat with someone
+that goes by the name of Headcrash. They were talking about an ongoing challenge
+that felt as the right thing for me to join. It's called the Old Computer
+Challenge [2], it's in its 4th iteration, and I guess that, by the name, it's
+pretty self-explanatory what the challenge is about.
+
+Since today, as I'm writing this (12:23 GMT), I've officially sent the last
+emails for work and I will now enter a 2 week long holiday break, finally having
+some personal time to work on my hobbies. This means it's the perfect timing to
+have some fun on a challenge such as this.
+
+As  the announcement post [3] says:
+
+> There is a single rule, do it for fun! Do not impede yourself for weird
+> reasons, it is here for fun, and doing the whole week is as good as failing
+> and writing about the why you failed. It is not a contest, just try and see
+> how it goes, and tell us your story :)
+  -- solene
+
+With this spirit of simply having as much fun as possible, I've decided that I
+won't be using a single machine during the challenge, but instead I will have a
+main machine, and a couple of secondary ones that will be used depending on what
+I want to work on during the week.
+
+Primary machine: PowerBook G4 12"
+---------------------------------
+
+The primary machine I'll be using is a classic PowerBook G4 12" running Mac OS X
+10.4 Tiger. It's a lovely machine, in such a great form-factor, with a lot of
+power. Its main purpose along the challenge will be to **finish the design of
+this website**, since it still need a ton of work, and also to **completely
+redesign the website and brand identity of my consulting company [4]**, meaning
+I'll be spending a lot of time in Illustrator CS2 and BBEdit 8.6 [5].
+
+The PowerBook G4 circa 2023 before the memory disaster:
+<^base_url^>/I/<^reldir^>/powerbook-g4-2023.jpg
+
+There is only one problem with this machine... The last time I used it was in
+2023 because it developed what I can only describe as a memory issue in one of
+the soldered-on memory chips. It started randomly crashing and when I tried
+reinstalling the operating system it would randomly crash at different points
+during the installation with a kernel panic and some times would crash with
+weird linking and memory allocation errors [6].
+
+The PowerBook G4 and its kernel panics:
+<^base_url^>/I/<^reldir^>/powerbook-kernel-panic.jpg
+
+Because of this I'll have to transplant the motherboard of a parts machine I
+bought on eBay right after this one died. Hopefully this will fix the issues.
+While I'm at it I'll also take the time to upgrade the RAM and the hard drive so
+I can have a bit better performance and a much more enjoyable experience during
+the challenge.
+
+My first day of the challenge will mostly be comprised of machine repairs,
+operating system setup, and software installations. Although I'll try to skip
+the software part and migrate the data from the old hard drive to the new SSD,
+since I'm not looking forward to spending 4 days compiling the GNU toolchain [7]
+again.
+
+Secondary machine: Power Mac G5 2.3 Dual
+----------------------------------------
+
+The secondary machine I'll most likely be using will be my amazing Power Mac G5
+with dual processors [8]. It's a dream machine of mine ever since I saw one at
+the Apple Store back in 2005. Even today, having a machine with two physical
+processors, that isn't a server, still amazes me.
+
+The beast in the sidewalk's of Lisbon while I was taking a break from carrying it:
+<^base_url^>/I/<^reldir^>/powermac-sidewalk.jpg
+
+My machine was a bargain I found on Facebook Marketplace last year, where an
+employee of a multi-national marketing firm was selling them for 15 euros (they
+had 5 of them). I went to their offices to pick mine up and after talking a bit
+to the manager and some negotiation I was able to score the machine with its
+keyboard and mouse for 20 euros. I did refrain from buying all of them so that
+others could also have chance to score one. Having to walk 1km with the machine
+to the car may have also had an impact in this decision.
+
+This machine will be included since it's currently running Mac OS X 10.5 Leopard
+with everything installed and ready to go, also it's a lot more powerful than
+the PowerBook could ever hope to be.
+
+Auxiliary machines
+------------------
+
+I do love old Macs, specially PowerPC ones, due to their ability to run fairly
+modern UNIX software thanks to the help of MacPorts [9], but I may to use
+Windows during the week, for this I'll probably use my Compaq Armada E500 [10],
+running Windows 2000, or setup Windows 7 on old Eee PC 1005PE [11] if I need
+"modern" Windows.
+
+Conclusions
+-----------
+
+I'm glad I randomly stumbled upon this community and this challenge. I hope I'm
+able to finish it without failing, although I'm sure I'll have a ton of fun
+nonetheless. I should start disassembling PowerBooks and get to swapping
+motherboards...
+
+
+[1]: https://web.libera.chat/?channel=#macgarden
+[2]: https://occ.deadnet.se
+[3]: https://dataswamp.org/~solene/2024-06-24-old-computer-challenge-v4-announce.html
+[4]: http://innoveworkshop.com/
+[5]: https://macintoshgarden.org/apps/bare-bones-software-cd-2007
+[6]: <^base_url^>/I/<^reldir^>/powerbook-crash-hard.jpg
+[7]: https://fosstodon.org/@nathanpc/110865146201593235
+[8]: https://everymac.com/systems/apple/powermac_g5/specs/powermac_g5_2.3_dp.html
+[9]: https://www.macports.org
+[10]: http://ixbtlabs.com/articles/armadae500/index.html
+[11]: https://www.notebookcheck.net/Review-Asus-Eee-PC-1005PE-Netbook.24722.0.html
