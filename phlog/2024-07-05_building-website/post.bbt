@@ -1,0 +1,9 @@
+[h1]I'm building this website[/h1]
+
+Over the past couple of years, I've been growing increasingly disgusted at the current state of the web in general where every website that you visit takes way too long to load, is filled with trackers and ads that I have to block, uses more CPU than a real application, and generally feels like a scam website from around 2008.
+
+Adding to this feeling was the fact that I've always wanted to build my own personal website and get rid of my [url=https://about.me/nathanpc]about.me profile[/url], which I used as the landing page of this domain because I'm lazy and I didn't want to allocate time to build a website.
+
+When last year's about.me premium plan renewal came I decided to cancel it to force myself to build the website that I've always wanted to, but because I live a hectic life, almost an entire year later, I've finally allocated some time to build this, and it's everything that I've ever wanted.
+
+It's built with PHP, available on [url=https://github.com/nathanpc/portfolio]GitHub[/url], and is tested on Internet Explorer 5. It's the pinnacle of what I believe a website should look and feel. It's exactly like the websites I used to visit when I was trying to learn everything that I could about computers back in the early 2000s.

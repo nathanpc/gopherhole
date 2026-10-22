@@ -1,0 +1,11 @@
+[h1]MintyCharger Released![/h1]
+
+In [url=<^base_url^>/0/phlog/2021-04-06_revisiting-mintycharger/post.txt]a previous post[/url], we've talked about how we were developing a better "9V" (PP3) battery charger and how it was based on an old project of mine. After about a week since the first prototype PCB was soldered up and ready for firmware development, we've [url=https://innoveworkshop.com/product/mintycharger]released our latest product[/url].
+
+[img=<^base_url^>/I/<^reldir^>/product-hero-shot.jpg]The final version of the product[/img]
+
+We were able to quickly build the firmware for the final version because most of the work was already done from the prototype that we had built last year, but that only got us so far. Most of the work this time wasn't on the voltage/current regulation code, but instead was on the user interface, and on the actual detection of the charge/discharge status of the battery.
+
+This is a pretty small product and something that is, in my opinion, quite different from what's currently available on the market. I hope you enjoy it and consider purchasing one!
+
+Link to the Tindie page for purchase: https://www.tindie.com/products/23461/

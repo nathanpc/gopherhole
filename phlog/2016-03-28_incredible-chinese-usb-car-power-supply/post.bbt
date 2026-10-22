@@ -1,0 +1,9 @@
+[h1]Incredible Chinese USB Car Power Supply[/h1]
+
+Recently I bought a couple of those [url=<^base_url^>/I/<^reldir^>/extension.jpg]super ultra cheap cigarette plug extensions[/url] to distribute 12V in the lab for various things. As usual with everything chinese, I decided to open it up to see how horrible it was inside, but I also did that to upgrade the wiring since I would be pulling a couple of amps from this and I want to minimize the voltage drop.
+
+[img=<^base_url^>/I/<^reldir^>/thing.jpg]The thing[/img]
+
+This is the incredible thing I found inside the thing as the 5V supply for the USB socket. A 7805 regulator and a 20 ohm 1/4W resistor [b]in series with the 5V output[/b]. I guess it could have been worse, they could have used a 5.2V zener diode or the worst of all just a resistor voltage divider.
+
+China never ceases to amaze me.

@@ -1,0 +1,160 @@
+[h1]Setup File Screens to Block macOS System Files Being Created[/h1]
+
+If you've ever had an Apple computer or has worked with someone that uses one you're more than likely familiar with the infamous [url=https://en.wikipedia.org/wiki/.DS_Store].DS_Store[/url], [url=https://superuser.com/questions/1067054/what-is-the-point-of-the-trashes-file-in-mac-os-x].Trashes[/url], and other files that macOS leaves absolutely everyone. These files are akin to [url=https://en.wikipedia.org/wiki/Windows_thumbnail_cache]Thumbs.db[/url], and [url=https://www.digitalcitizen.life/why-are-there-two-desktopini-files-my-desktop-what-do-they-do/]desktop.ini[/url] on Windows, they are used by the operating system as either cache, temporary/special storage, or as a way to store special attributes that are not natively supported by the underlying filesystem. They are, for the most part, completely optional, and shouldn't be hanging around your file server, littering your folders and causing confusion. Thankfully deleting and blocking these files from being created is quite a trivial task under Windows Server if you have the [url=https://docs.microsoft.com/en-us/windows-server/storage/fsrm/fsrm-overview]File Server Resource Manager[/url] role installed.
+
+Before we begin, make sure that you have the FSRM role installed in your file server by going to the Server Manager and selecting the "File and Storage Services > File and iSCSI Services > File Server Resource Manager" role from the Add Roles and Features Wizard like this:
+
+[img=<^base_url^>/I/<^reldir^>/Add-Roles-and-Features-Wizard.png]Installing FSRM role using the GUI[/img]
+
+Alternatively if you're running [url=https://en.wikipedia.org/wiki/Server_Core]Windows Server Core[/url], like I am in this case, you can install this role by running the following PowerShell command:
+
+[code=powershell]Install-WindowsFeature -Name FS-Resource-Manager -IncludeManagementTools[/code]
+
+After you have everything installed and properly setup let's focus our attention to the files that we want to block/remove from our network shares. The most common ones that are created by macOS are:
+
+[list]
+	[*]._*
+	[*].DS_Store
+	[*].Trashes/
+	[*].TemporaryItems/
+	[*].apdisk
+[/list]
+
+All of these files are completely optional and can be blocked from being created without any problems to the users of your network shares. From here you can block the files from this list using the GUI or PowerShell by [url=https://docs.microsoft.com/en-us/windows-server/storage/fsrm/file-screening-management]following this tutorial from Microsoft[/url] or, since this is quite a tedious task, run my PowerShell script to setup all of the file screening rules and delete any of these files that are already in your network shares. This way you can easily set this up even on Server Core installations, which is the case of my file server.
+
+[code=powershell]# Block-FsrmMacJunk.ps1
+# Sets up file screens to block junk files from Mac OS from your network shares.
+#
+# Author: Nathan Campos <nathan@innoveworkshop.com>
+
+# Variables
+$MacJunkPatterns = @("._*", "*.DS_Store", "*._.DS_Store", "*.Trashes",
+    "*.apdisk", "*.TemporaryItems")
+
+<#
+.SYNOPSIS
+Comfirms an action with the user.
+
+.PARAMETER Message
+Message that will be shown for the user to accept or reject.
+
+.OUTPUTS
+True if the user confirmed the action.
+#>
+Function Confirm-WithUser {
+    Param(
+        [Parameter(Mandatory = $true)]
+        [String]$Message
+    )
+
+    $Response = Read-Host -Prompt "$Message [y/n]"
+    While ($Response -NotMatch "[YyNn]") {
+        $Response = Read-Host -Prompt "$Message [y/n]"
+    }
+
+    Return $Response -Match "[Yy]"
+}
+
+<#
+.SYNOPSIS
+Creates the file group describing all the junk files a Mac can place on a file system.
+
+.DESCRIPTION
+Creates the file group describing all the junk files a Mac can place on a file system.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Nothing.
+
+.LINK
+New-FsrmFileGroup
+#>
+Function New-MacJunkFileGroup {
+    Write-Output "Creating junk Mac files file group..."
+    New-FsrmFileGroup -Name "Mac Files" -IncludePattern $MacJunkPatterns | Out-Null
+}
+
+<#
+.SYNOPSIS
+Creates the file screen template to block all the junk files from Macs.
+
+.DESCRIPTION
+Creates the file screen template to block all the junk files from Macs.
+
+.INPUTS
+None.
+
+.OUTPUTS
+Nothing.
+
+.LINK
+New-FsrmFileScreenTemplate
+
+.LINK
+New-MacJunkFileGroup
+#>
+Function New-MacJunkFileScreenTemplate {
+    Write-Output "Creating junk Mac files file screen template..."
+    New-FsrmFileScreenTemplate -Name "Block Mac Junk Files" -IncludeGroup "Mac Files" `
+        -Active | Out-Null
+}
+
+<#
+.SYNOPSIS
+Creates the file screen to block all the junk files from Macs in a particular directory.
+
+.DESCRIPTION
+Creates the file screen to block all the junk files from Macs in a particular directory.
+
+.PARAMETER Path
+Path of the directory that you want to screen for Mac junk.
+
+.INPUTS
+Path of the directory that you want to screen for Mac junk.
+
+.OUTPUTS
+Nothing.
+
+.LINK
+New-FsrmFileScreen
+
+.LINK
+New-MacJunkFileScreenTemplate
+#>
+Function New-MacJunkFileScreen {
+    [CmdletBinding()]
+    Param(
+        [Parameter(ValueFromPipeline, Position = 0, Mandatory = $true)]
+        [String]$Path
+    )
+
+    Write-Output "Creating junk Mac files screen in `"$Path`"..."
+    New-FsrmFileScreen -Path $Path -Template "Block Mac Junk Files" -Active | Out-Null
+}
+
+# Check for the required arguments.
+If ($args.Count -lt 1) {
+    Write-Error "No directory to create the Mac junk file screen was passed to the script."
+    Write-Output "Usage: Block-FsrmMacJunk "
+    Write-Output
+    Write-Output "    PathToScreen    Path of the directory that you want to screen for Mac junk."
+    Exit
+}
+$SharePath = $args[0]
+
+# Create everything needed for the file screen.
+New-MacJunkFileGroup
+New-MacJunkFileScreenTemplate
+New-MacJunkFileScreen $SharePath
+
+# Delete any existing Mac junk.
+If (Confirm-WithUser "Do you want to delete the Mac junk files that are already in the directory?") {
+    Write-Output "Deleting all of the Mac junk for your network share..."
+    Get-ChildItem -Path $SharePath -Include $MacJunkPatterns -Recurse -Force | Remove-Item -Force
+}
+
+Write-Output "All done!"[/code]
+
+When you run this script please remember to specify the network share that you want to setup the file screening in (e.g. .\Block-FsrmMacJunk.ps1 E:\Shares), but don't worry that the script will throw an error and remind you of this in case you forget. The script will also ask if you want to delete any of these files that might already be in your network shares.
