@@ -1,0 +1,82 @@
+Power12 (Rev A)
+
+** Power12 (Rev A)
+** A compact 6 watts per channel amplifier.
+**
+** More Info: https://github.com/nathanpc/Power12
+** Author: Nathan Campos <nathanpc@dreamintech.net>
+
+**
+** Models
+**
+.include models/bjt/2N3904.mod
+.include models/bjt/2N3906.mod
+.include models/bjt/BD139.mod
+.include models/bjt/BD140.mod
+.include models/diode/1N4007.mod
+
+**
+** Circuit
+**
+
+** Differential pair.
+R1 v+ dpe 12k
+Q1 diffoutput vin+ dpe 2n3906
+Q2 q2c vin- dpe 2n3906
+
+** Current mirror.
+Q3 diffoutput q2c v- 2n3904
+Q4 q2c q2c v- 2n3904
+
+** Gain stage.
+C1 q5c diffoutput 100p
+Q5 q5c diffoutput v- 2n3904
+
+** Active current source.
+D1 v+ ncs1 1n4007
+D2 ncs1 q6b 1n4007
+R2 q6b 0 4.7k
+R3 v+ q6e 560
+Q6 qd1b q6b q6e 2n3906
+
+** Output buffer.
+D3 qd1b n001 1n4007
+D4 n001 q5c 1n4007
+
+R4 v+ qd1c 1k
+QD1 qd1c qd1b nout1 2n3904
+QP1 nout1 qd1c v+ BD140
+R5 nout1 output 0.33
+
+R6 v- qd2c 1k
+QD2 qd2c q5c nout2 2n3906
+QP2 nout2 qd2c v- BD139
+R7 nout2 output 0.33
+
+** Zobel network.
+Rzobel output nzobel 10
+Czobel nzobel 0 100n
+
+** Input.
+Cin input vin+ 4.7u
+Rin vin+ 0 10k
+
+** Feedback.
+Rf1 output vin- 10k
+Rf2 vin- 0 560
+
+** Output
+Rout output 0 8
+
+** Sources.
+V1 v+ 0 dc 12
+V2 v- 0 dc -12
+V3 input 0 sin(0 0.45 1kHz 0 0)
+
+**
+** Commands
+**
+.tran 1u 10m 0
+*.plot tran v(input) v(output)
+.four 1kHz v(output)
+.end

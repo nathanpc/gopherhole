@@ -1,0 +1,69 @@
+Mini6 Amplifier
+===============
+
+Mini6 amplifier:
+<^base_url^>/I/<^reldir^>/mini6.jpg
+
+I was a bit bored a couple of weeks ago so I decided to design a very simple
+discrete amplifier rated for 6W/channel just to make sure it would't oscillate
+and be more confident to build bigger ones.
+
+Amplifier schematic:
+<^base_url^>/I/<^reldir^>/schematic.png
+
+As you can see it's a fairly simple design with a op-amp pre-amplifier and a
+discrete power amplifier. Building it was extremely simple, the difficult part
+is always mounting all the panel components and wiring everything.
+
+Checking components to be placed:
+<^base_url^>/I/<^reldir^>/checking-values.jpg
+
+A while ago I built a program called build-bom [1] to help me quickly find the
+component values when assembling a board. It's a great use for a old EeePC that
+you may have laying around.
+
+PCB with all components soldered:
+<^base_url^>/I/<^reldir^>/overview.jpg
+
+One thing that you may have noticed is that I've used canned transistors instead
+of your typical plastic TO-92. The only reason I did this was because they
+looked cool and I have a bunch laying around.
+
+How the board looks like in CAD:
+<^base_url^>/I/<^reldir^>/board-cad.png
+
+Organizing the components to begin soldering:
+<^base_url^>/I/<^reldir^>/components.jpg
+
+Started soldering:
+<^base_url^>/I/<^reldir^>/begin-soldering.jpg
+
+Checking the values with my program:
+<^base_url^>/I/<^reldir^>/checking-values.jpg
+
+Top view of the board after soldering:
+<^base_url^>/I/<^reldir^>/top-view.jpg
+
+Side view of the board:
+<^base_url^>/I/<^reldir^>/side-view.jpg
+
+Board with the heatsinks:
+<^base_url^>/I/<^reldir^>/overview.jpg
+
+Wires soldered:
+<^base_url^>/I/<^reldir^>/wiring.jpg
+
+First power-up:
+<^base_url^>/I/<^reldir^>/lights-on.jpg
+
+Front panel:
+<^base_url^>/I/<^reldir^>/front.jpg
+
+Back panel:
+<^base_url^>/I/<^reldir^>/back.jpg
+
+If you want to know more about the amplifier check out the GitHub repo [2].
+
+
+[1]: https://github.com/nathanpc/build-bom
+[2]: https://github.com/nathanpc/Mini6

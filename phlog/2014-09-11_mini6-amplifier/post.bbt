@@ -1,0 +1,41 @@
+[h1]Mini6 Amplifier[/h1]
+
+[img=<^base_url^>/I/<^reldir^>/mini6.jpg]Mini6 amplifier[/img]
+
+I was a bit bored a couple of weeks ago so I decided to design a very simple discrete amplifier rated for 6W/channel just to make sure it would't oscillate and be more confident to build bigger ones.
+
+[img=<^base_url^>/I/<^reldir^>/schematic.png]Amplifier schematic[/img]
+
+As you can see it's a fairly simple design with a op-amp pre-amplifier and a discrete power amplifier. Building it was extremely simple, the difficult part is always mounting all the panel components and wiring everything.
+
+[img=<^base_url^>/I/<^reldir^>/checking-values.jpg]Checking components to be placed[/img]
+
+A while ago I built a program called [url=https://github.com/nathanpc/build-bom]build-bom[/url] to help me quickly find the component values when assembling a board. It's a great use for a old EeePC that you may have laying around.
+
+[img=<^base_url^>/I/<^reldir^>/overview.jpg]PCB with all components soldered[/img]
+
+One thing that you may have noticed is that I've used canned transistors instead of your typical plastic TO-92. The only reason I did this was because they looked cool and I have a bunch laying around.
+
+[img=<^base_url^>/I/<^reldir^>/board-cad.png]How the board looks like in CAD[/img]
+
+[img=<^base_url^>/I/<^reldir^>/components.jpg]Organizing the components to begin soldering[/img]
+
+[img=<^base_url^>/I/<^reldir^>/begin-soldering.jpg]Started soldering[/img]
+
+[img=<^base_url^>/I/<^reldir^>/checking-values.jpg]Checking the values with my program[/img]
+
+[img=<^base_url^>/I/<^reldir^>/top-view.jpg]Top view of the board after soldering[/img]
+
+[img=<^base_url^>/I/<^reldir^>/side-view.jpg]Side view of the board[/img]
+
+[img=<^base_url^>/I/<^reldir^>/overview.jpg]Board with the heatsinks[/img]
+
+[img=<^base_url^>/I/<^reldir^>/wiring.jpg]Wires soldered[/img]
+
+[img=<^base_url^>/I/<^reldir^>/lights-on.jpg]First power-up[/img]
+
+[img=<^base_url^>/I/<^reldir^>/front.jpg]Front panel[/img]
+
+[img=<^base_url^>/I/<^reldir^>/back.jpg]Back panel[/img]
+
+If you want to know more about the amplifier check out the [url=https://github.com/nathanpc/Mini6]GitHub repo[/url].

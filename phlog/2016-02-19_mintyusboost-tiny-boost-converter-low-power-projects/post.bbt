@@ -1,0 +1,119 @@
+[h1]MintyUSBoost: A tiny boost converter for low power projects[/h1]
+
+First of all a bit of a back story: This is my first attempt at a DC-DC converter, I've always thought they were magic black-boxes that you just had to accept and building one yourself without a dedicated chip was something extremely difficult, something that could only be done with some high-speed complex analog circuitry or high-speed microcontrollers. I think a lot of people think the same way and I decided to try out my luck and it worked fine, switchmode converters are not black magic (now only RF is black magic), and I hope I demystify them for you too in this article.
+
+[img=<^base_url^>/I/<^reldir^>/final.jpg]The MintyUSBoost in its fitting enclosure[/img]
+
+The idea for this project came because I built a nice portable Class-A headphone amplifier (blog post coming in the future) and I wanted a simple power supply for it when I was using it with my computer, so I had to step the 5V from the USB to the 9V required by the amplifier circuit, the amplifier even though it's Class-A has a low current consumption, so the 2.5W from a normal USB was more than enough. Taking into consideration all this I needed a boost converter with the following specs:
+
+[list]
+	[*]5V input at 450mA maximum to work with any USB port
+	[*]9V output able to source up to 110mA (more than enough for my amp)
+	[*]Acceptable voltage ripple and noise since this will be used with pre-amps and the headphone amp
+[/list]
+
+[img=<^base_url^>/I/<^reldir^>/schematic.png]Schematic of Rev A[/img]
+
+As you can see there's not a lot happening, and that's the beauty of this design, since it was made for low power projects it doesn't require any of the complexities, it was designed to be minimalistic and easy to build for someone that is new to switchmode converters. The entire feedback control loop is contained inside the PIC12F683 microcontroller, it is a pretty tiny and under-powered micro, but as you will see it works perfectly for this task.
+
+First the power input goes through a 3.3V regulator which provides power to the PIC and also acts as a voltage reference, then the microcontroller takes control of things and starts the PWM, pulsing current through the main inductor L1 while sensing the output voltage, if the voltage is lower than the set voltage it increases the PWM duty cycle, if the voltage is higher than the set voltage it decreases the PWM duty cycle, and that's all you need to create a simple switchmode converter. Here's the code that runs the whole thing (I still need to improve it, so changes are coming):
+
+[code=c]/*
+ * File:   MintyUSBoost.c
+ * Author: Nathan Campos <nathanpc@dreamintech.net>
+ *
+ * Created on February 14, 2016, 2:45 PM
+ */
+
+//                        12F683
+//                      +---------+
+//                     -|Vdd   Vss|-
+// 18MHz XTAL = CLKIN  -|GP5   GP0|- AN0  = Vout Sense
+// 18MHz XTAL = CLKOUT -|GP4   GP1|-
+//                     -|GP3   GP2|- CCP1 = PWM Output
+//                      +---------+
+
+#include <xc.h>
+#include <pic12f683.h>
+#include <stdint.h>
+
+#pragma config MCLRE = OFF, CP = OFF, CPD = OFF, BOREN = OFF, WDTE = OFF
+#pragma config PWRTE = OFF, FOSC = INTOSCIO
+
+#define VREF 3.25
+#define VSET 602
+#define _XTAL_FREQ 8000000
+#define HIGH 1
+#define LOW  0
+
+uint8_t sGPIO = 0;
+
+void main(void) {
+    OSCCONbits.IRCF = 0b111;  // 8MHz clock frequency.
+    OSCCONbits.SCS = 1;  // Internal clock.
+
+    // Setup the pins.
+    TRISIO = 0b110001;
+    ANSEL = 0;
+    GPIO = sGPIO;
+
+    // Setup ADC.
+    ANSELbits.ADCS = 0b001;  // Fosc / 8 = 2.0us (4MHz clock).
+    ANSELbits.ANS = 0b0001;  // Enable AN0.
+    ADCON0bits.ADFM = 1;     // LSB of result in ADRESH<7>
+    ADCON0bits.VCFG = 0;     // Voltage reference set to Vdd.
+    ADCON0bits.CHS = 0b00;   // Select channel AN0.
+    ADCON0bits.ADON = 1;     // Turn ADC ON.
+
+    // Initialize the PWM module.
+    T2CONbits.T2CKPS = 0b00;     // Timer2 Prescaler = 1.
+    T2CONbits.TMR2ON = 1;        // Enable Timer2.
+    PR2 = 0x19;                  // Period = 76.92kHz from datasheet.
+    CCP1CONbits.CCP1M = 0b1100;  // Single output active high PWM.
+
+    CCP1CONbits.DC1B  = 0;
+    CCPR1L = 0;
+
+    uint8_t pwm = 0;
+
+    // ADC value.
+    unsigned int res = 0;
+
+    while (1) {
+        __delay_us(10);  // Acquisition delay.
+        ADCON0bits.GO = 1;
+        while (ADCON0bits.nDONE)
+            ;
+        res = (ADRESH << 8) | ADRESL;
+
+        if (res < VSET) {
+            if (pwm <, 253) {
+                pwm++;
+
+                CCP1CONbits.DC1B = pwm & 0b0000000011;
+                CCPR1L = pwm >> 2;
+            } else {
+                pwm = 0;
+            }
+        } else if (res > VSET) {
+            if (pwm > 0) {
+                pwm--;
+
+                CCP1CONbits.DC1B = pwm & 0b0000000011;
+                CCPR1L = pwm >> 2;
+            }
+        }
+    }
+}[/code]
+
+If you're a bit more experienced with DC-DC converters you'll notice that the components used are a bit overkill, but that's by design because I wanted very low ripple at the output, also in the topic of components, I selected a IRL520 MOSFET and this is very important, since I'm driving the gate with very low voltages a logic-level MOSFET is a must, if you want to use a regular MOSFET you'll have to increase the gate voltage using a [url=http://electronics.stackexchange.com/q/91897]technique shown here[/url].
+
+A very handy tool for everyone designing their own DC-DC converters is [url=https://learn.adafruit.com/diy-boost-calc/the-calculator]Adafruit's DIY DC-DC Boost Calculator[/url], it was extremely useful to choose the components used in this project and it'll surely help you in yours too. I've also written an [url=https://github.com/nathanpc/statistics-playground/blob/master/boost_calc.R]R script[/url] to have a offline version of the calculator, it'll be improved in the future, but it's usable right now.
+
+The only issue that I'm having with this project so far is the fact that no matter what I try, I can't get the crystal to oscillate, I checked everything, set all the registers correctly and I still can't get it to work, if anyone wants to help it'll be greatly appreciated.
+
+[img=<^base_url^>/I/<^reldir^>/noise-scope.png]Noise Figures[/img]
+
+Since all my designs have a lot of local decoupling to keep any noise or ripple from the power source away from sensitive parts I didn't care too much about having extremely low ripple/noise, but if you want to upgrade this you can add a small shunt regulator to really kill any ripple or just add a LC filter to the output.
+
+If you've got any questions feel free to ask and I'm open to suggestions for improvement.
