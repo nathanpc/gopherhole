@@ -1,0 +1,87 @@
+[h1]Docker storage woes and reclaiming VMDK free space[/h1]
+
+I currently have a massive virtual machine in one of my homelab severs that hosts all of my local services that are deployed using Docker. This virtual machine began life as most virtual machines do: "Let's fire up a VM to play around with Docker and host some local services that are Docker-first".
+
+In the beginning the idea behind it was simply to act as a way for me to play around with Docker on my local network, when I started converting some of my own projects to be deployed via Docker, and to host some self-hosted services that, at the time, were moving to a Docker-only deployment strategy.
+
+When I provisioned this virtual machine, I thought Docker wasn't going to be the main, and almost only, way that software got deployed on my local network, so I didn't give much thought into its architecture or how it was setup. I simply installed Debian, ran the Docker installation script, and started pulling in containers.
+
+After a year of running these services, and their scope, importance, and number grew exponentially to the point where this virtual machine was basically the only virtual machine that had self-hosted projects on my network. A transition that was quite painless but almost forced, since every project adopted Docker pretty quickly and most moved to a Docker-only approach, meaning I had to migrate my old installations to containers if I wanted continuous updates.
+
+This transition was done willfully, since I loved the fact that I could now manage all of my local services with a lot more ease, and because of the declarative approach of Docker and docker-compose, I finally felt that my local services were no longer special snowflakes that would be difficult to migrate or set up again, and instead got the peace of mind that I could easily migrate or set up a service quickly if I ever needed to.
+
+[h2]First issues with storage[/h2]
+
+Eventually, after 2 years of continuous service without any additional management or oversight apart from package updates, I finally hit an issue with my duck-taped-together setup: My ZNC bouncer started misbehaving and all of a sudden my Jellyfin instance was giving me 500 errors, and upon a restart could no longer start up and lost all of its configuration.
+
+When I logged into the virtual machine to debug the issue I quickly noticed that what happened was that the virtual hard drive was completely full and have 0 bytes left. Of course this is a major issue and I'm sure has happened to everyone that's reading this post in the past, be it because of Docker or not.
+
+This was the first time I had this issue because of Docker, in the past, when this happened to me on production servers, it was usually because of user's file storage or log files, but Docker in production was still a "new" thing for me, and I didn't have a lot of experience to know what was causing this, specially after running "du -hs" and learning that the folder where all my containers were wasn't the culprit.
+
+After running "du -hs" on a couple of specific folders on my file system, I narrowed the issue down to a /var/lib/docker/overlay2 folder, which at the time was consuming almost 80% of all my disk space, upon some research I realized that this was the [url=https://docs.docker.com/engine/storage/drivers/overlayfs-driver/]folder where Docker stores all of the image layers[/url] it uses to build up a container.
+
+[h2]Cleaning up Docker's image storage and a temporary fix[/h2]
+
+Since I the only maintenance I did on this server was update the host system and occasionally perform a "docker compose pull" to update all my services, I figured I had accumulated a bunch of stale images that had to be cleaned up. I searched the internet for [url=https://stackoverflow.com/questions/46672001]advice on how to clean up this folder in a safe manner[/url].
+
+After reading all of the answers on StackOverflow and also a couple of blog posts giving more details on how Docker's storage system works, I built [url=<^base_url^>/0/<^reldir^>/docker-clean.sh]a simple script[/url] to automate the process of completely cleaning up all the cruft that Docker accumulates over time:
+
+[code=bash]echo "Docker Cleanup Script"
+
+# Show current status to user.
+echo "Calculating space used by Docker..."
+prevsize=$(sudo du -hs /var/lib/docker/overlay2)
+echo ""
+echo "Space currently used by Docker images: $prevsize"
+echo ""
+docker system df
+echo ""
+
+# Prune stuff up.
+docker image prune -a
+docker builder prune -a
+echo ""
+
+# Show the difference.
+echo "Calculating gains from pruning..."
+newsize=$(sudo du -hs /var/lib/docker/overlay2)
+echo ""
+echo "Previously: $prevsize"
+echo "Now: $newsize"[/code]
+
+With this script I was able to reclaim almost 15GB of space, which was huge, and meant that I could have a working system, but given the overall size of that folder and the potential it had to grow.
+
+I was sure that this would be a problem in the future, so I decided to, in line with the way I've been treating this server so far, "fix" this issue by moving the folder to another virtual disk, allowing it to grow without compromising the entire virtual machine. Of course this is not the right way to solve this problem, I'm just kicking the issue down the line, but sadly this is how most homelabs are managed, so it is definitely on-brand to do this.
+
+After a bit of research I found [url=https://www.guguweb.com/2019/02/07/how-to-move-docker-data-directory-to-another-location-on-ubuntu/]a nice blog post[/url] detailing how to move the offending folder to another place with more space available. The process was simple and only required me to create a new VMDK file, format and mount it, move everything and restart the Docker daemon.
+
+At the end, I had a working system, and was sure that Docker wouldn't fill up the new 128GB virtual disk I made only for its image storage...
+
+[h2]Storage ain't infinite, but you can still reclaim it[/h2]
+
+After my "fix" of moving all of Docker's stuff into its own, very large, virtual disk, everything was running smoothly during the next 3 years, until one day I had to create a new virtual machine to test something on my main homelab server and I couldn't, because the host's hard drive had less than 10GB of free space.
+
+I ran some simple disk usage diagnostics and quickly realized that my "fix" was the culprit. The VMDK file had managed to grow to its maximum size of 128GB, even though my Docker pruning script was being run whenever I updated my containers, and "df -h" on my Docker VM was reporting that I still had 60% of free space on that particular disk.
+
+I decided to shutdown the virtual machine and compact the disk image, but I was quickly reminded that this wasn't going to be an easy process, because of the way that ext4 filesystems work, VMWare's disk compact tool didn't do anything, since although the disk image had free space on the filesystem, it was still filled with random garbage that had been written to it and marked as deleted.
+
+The process to reclaim the unused space was very tedious and took more than an hour to complete. It took so long that while it was running I was able to write this post.
+
+The first step in this process is [url=https://gist.github.com/denji/43da14c7160c17da5a48434ca87c8b3b]filling up the disk image with zeroes[/url] so that VMWare has something to reclaim when compacting the disk:
+
+[code=bash]echo "Zero filling the current drive..."
+sudo dd if=/dev/zero of=/.vmware-zero-fill bs=4M oflag=direct conv=excl,fsync \
+	status=progress
+
+echo "Reclaiming disk space..."
+sudo sync /.vmware-zero-fill && sudo rm -- /.vmware-zero-fill && sync[/code]
+
+After filling the disk with zeroes, you should shutdown the virtual machine, and perform a disk defragmentation within VMWare's virtual machine settings, this will ensure that the zeroes are all aligned together at the end of the disk image file.
+
+After the defragmentation, all that's left to do is run the disk compact tool from the same window as the defragmentation. This will now finally reclaim the unused space and allow you to have your host's system storage back.
+
+[h2]Not the final solution[/h2]
+
+Although this is not the final solution to my storage issues, it at least, once again, gives me some room to breathe and kicks my storage issues down the line once more.
+
+I have yet to find a permanent solution to my Docker storage issue, but I believe this will come in the form of a full migration to a new server. I'll be moving to a new apartment at the end of the year and I'm thinking about buying an SFF PC to turn into a bare-metal Docker host server.
