@@ -1,0 +1,30 @@
+Deploying Litter Box
+====================
+
+First you should create a docker-compose.yml file with the following contents:
+
+    ---
+    services:
+    app:
+      image: 'ghcr.io/nathanpc/litterbox:main'
+      restart: unless-stopped
+      ports:
+        - '8001:80'
+      volumes:
+        - ./uploads:/app/u
+      environment:
+        TOTP_SECRET: 'changeme'
+
+This will pull the image from the registry and expose the service on port 8001.
+It will also setup a volume where the uploaded files will be stored. You should
+**change the TOTP_SECRET environment variable** to something a bit more secure,
+since this will be the key used to generate your one-time passwords.
+
+And after running "docker compose up -d" you should have the system up and
+running. The next step is to get the base32-encoded secret key for your TOTP
+application. To do so simply execute the following command:
+
+    docker compose exec app php /app/totp.php
+
+You should now have a working application and the TOTP token configured in your
+authenticator software!

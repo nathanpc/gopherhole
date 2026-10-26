@@ -1,0 +1,29 @@
+Fantastique
+
+An unopinionated, and labour intensive, static website generator for
+PHP. Allows developers to have all the flexibility they need to create
+any kind of static web site as if it were a classic PHP project.
+
+This framework was developed to convert my own website to static,
+making it a great showcase of the capabilities of this project,
+although in May of 2025 the site was brought back to a dynamic PHP
+website and is sadly no longer using the framework.
+
+0Phlog post about converting my website to static	/phlog/2024-11-15_this-as-static-website/post.txt
+0Motivation for building this library	./motivation.txt
+
+i--- Example Usage ----------------------------------------------------	header null 0
+
+Using this microframework is extremely simple, and only requires the
+knowledge of 3 methods: 'copy_static' which simply copies assets and
+already static objects into the website build directory. 'render_page'
+which renders a PHP file into a static HTML page, and its recursive
+brother render_folder, which does the same, but on an entire folder
+structure.
+
+0generate_example.php	./generate_example.php
+
+i--- Downloads --------------------------------------------------------	header null 0
+
+hPackagist	URL:https://packagist.org/packages/nathanpc/fantastique
+hSource code	URL:https://github.com/nathanpc/fantastique

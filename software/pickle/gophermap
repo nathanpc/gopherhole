@@ -1,0 +1,86 @@
+PickLE
+
+An application and a parsing library to create an electronic component
+pick list file format designed to be human-readable and completely
+usable in its own plain-text form. You can think of it as Markdown for
+your project's pick lists.
+
+hMarkdown file syntax	URL:https://daringfireball.net/projects/markdown/syntax
+
+The name of the project is supposed to be a fun little combination of
+the words in the phrase [Pick] [L]ist for [E]lectronics.
+
+This project was conceived out of a need to create pick lists for my
+company when we were building/assembling projects for customers,
+allowing us to quickly create definition files that compiled all the
+necessary information about a project's prototype or production run.
+
+hOriginal library and reference implementation	URL:https://github.com/nathanpc/pickle
+
+The first library and reference implementation, was developed in Perl,
+as this allowed us to quickly develop the parser for the file, since
+it's easily parseable with regular expressions, although ports have
+been made for many other languages due to some of our internal
+requirements and projects.
+
+i--- Software Ports ---------------------------------------------------	header null 0
+
+Although the original library and reference implementation was written
+in Perl, many ports of the library, and some applications, were also
+developed:
+
+hWeb application (PHP)	URL:https://github.com/nathanpc/pickle-web
+h.NET Framework 2.0	URL:https://github.com/nathanpc/PickLE.NET
+hJava Library	URL:https://github.com/nathanpc/jPickLE
+hC Library (ISO C89)	URL:https://github.com/nathanpc/libpickle
+
+i--- Screenshots ------------------------------------------------------	header null 0
+
+Since only the PHP web application is available publicly, here's how
+that specific application looks like with an example document loaded
+using all of the available themes:
+
+Bootstrap theme:
+IList of pick lists page	./screenshots/bootstrap-archive.png
+IPick list page	./screenshots/bootstrap-pick.png
+IUpload page	./screenshots/bootstrap-upload.png
+IFile specification page	./screenshots/bootstrap-spec.png
+
+Golden Era theme:
+IList of pick lists page	./screenshots/goldenera-archive.png
+IPick list page	./screenshots/goldenera-pick.png
+IUpload page	./screenshots/goldenera-upload.png
+
+Nineties theme:
+IList of pick lists page	./screenshots/nineties-archive.png
+IPick list page	./screenshots/nineties-pick.png
+
+Because the web application was built to support all kinds of devices,
+a nice theming engine was built from scratch to skin the application
+to the user's taste, but also to support extremely old and outdated
+browsers, when we (only me to be fair) were feeling like using a retro
+computer for work.
+
+i--- File Specification -----------------------------------------------	header null 0
+
+Examples of usage of the libraries can be found in the their
+respective repositories, since each language is different, but most
+importantly is to show how a PickLE document is easily readable and
+can even store the state of the pick list itself:
+
+0example.pkl	./example.pkl
+
+The full specification of PickLE files (*.pkl) was originally written
+and published within the PHP web application, thus it has been written
+in HTML. Although a new, RFC-styled version, will be written in the
+future, currently only the HTML version is available:
+
+hPickLE (.pkl) File Specification	./file-specification.html
+
+i--- Downloads --------------------------------------------------------	header null 0
+
+hCPAN	URL:https://metacpan.org/dist/PickLE
+hSource code (Perl library)	URL:https://github.com/nathanpc/pickle
+
+For links to download any of the ports of the parser or application
+you should consult the ports section of this page.

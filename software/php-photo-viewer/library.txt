@@ -1,0 +1,15 @@
+Using PHP Photo Viewer as a Library For Your Own Projects
+=========================================================
+
+The application was intended to also work as a library for embedding photo
+galleries into other websites, so the code is very modular and everything is
+contained in the photo_viewer.php source file, the index.php is simply a
+front-end for it.
+
+You can import the photo_viewer.php into your application and use it standalone
+to embed a similar feature right into your own website. Use this repository as
+an example, read the documentation inside the source file and you should have
+everything you need to embed this feature.
+
+If you create any additional functionality please contribute back your changes
+since it helps the community.

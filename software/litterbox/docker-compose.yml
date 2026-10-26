@@ -1,0 +1,11 @@
+---
+services:
+  app:
+    image: 'ghcr.io/nathanpc/litterbox:main'
+    restart: unless-stopped
+    ports:
+      - '8001:80'
+    volumes:
+      - ./uploads:/app/u
+    environment:
+      TOTP_SECRET: 'changeme'

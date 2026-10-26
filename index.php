@@ -54,7 +54,7 @@ try {
 
 		<!-- Important places that you might want to quickly visit. -->
 		<span class="hotlinks">
-			<a href="<?= href('1', '/projects') ?>">projects</a>
+			<a href="<?= href('1', '/software') ?>">software</a>
 			<a href="<?= href('1', '/phlog') ?>">log</a>
 			<a href="<?= href('1', '/links') ?>">links</a>
 			<a href="//wiki.nathancampos.me/">wiki</a>

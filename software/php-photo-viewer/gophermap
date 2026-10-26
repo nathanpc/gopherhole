@@ -1,0 +1,35 @@
+PHP Photo Viewer
+
+A super lightweight and retro-friendly PHP 5.4 photo viewer library
+and website. Great for sharing your digicam photos with your friends
+and family members, but also great if you want to use it as a library
+and build your own image gallery website with it.
+
+The goal of this project is to be extremely simple, all that you have
+to do is create a folder named photos and drop your photos that you
+want displayed there. You can organize them into folders, which
+subsequently will become albums in the gallery. The thumbnails for
+each photo will be generated automatically by the application and will
+be stored in a folder named thumbs.
+
+i--- Screenshots ------------------------------------------------------	header null 0
+
+IHome page of the application	./screenshots/home.png
+IA folder/gallery page	./screenshots/gallery.png
+ITop of a photo page	./screenshots/photo-top.png
+IBottom of a photo page	./screenshots/photo-bottom.png
+
+i--- Deployment -------------------------------------------------------	header null 0
+
+This application was developed with the intent of being capable of
+running on bare-metal web servers running ancient versions of PHP and
+deployed manually, and at the same time being deployed to a Docker
+instance instantly.
+
+0Deployment instructions	./deploy.txt
+0Usage as a library for your own projects	./library.txt
+0docker-compose.yml	./docker-compose.yml
+
+i--- Downloads --------------------------------------------------------	header null 0
+
+hSource code	URL:https://github.com/nathanpc/php-photo-viewer

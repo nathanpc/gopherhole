@@ -1,0 +1,9 @@
+---
+services:
+  web:
+    build: .
+    restart: unless-stopped
+    ports:
+      - '8005:80'
+    volumes:
+      - ./photos:/var/www/localhost/htdocs/photos

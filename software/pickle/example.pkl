@@ -1,0 +1,42 @@
+Name: Example Project
+Revision: A
+Description: A very simple pick list example.
+Website: https://example.com/pickle
+Source-Control: https://github.com/pickle/example/
+License: CC BY-NC-SA 4.0
+
+---
+
+Ceramic Capacitor:
+[ ]	6	C0805	(0.1u)	"100nF Ceramic Capacitor"	[C0805]
+C1 C2 C3 C5 C6 C7
+
+[X]	1	C0805	(1u)	"1uF Ceramic Capacitor"	[C0805]
+C4
+
+Resistor:
+[ ]	1	R1206	(1)	"1 Ohm Current Sense Resistor"	[R1206]
+R1
+
+[ ]	12	R0805	(1k)	"1k Ohm Resistor"	[R0805]
+R2 R4 R7 R9 R14 R15 R19 R23 R30 R31 R32 R33
+
+Integrated Circuit:
+[X]	2	74HC595D	"8-bit Shift Register"	[SO16]
+IC1 IC2
+
+[ ]	2	LM258ADR	"Generic Operational Amplifier"	[SO08]
+U1 U2
+
+[ ]	1	PIC16F18325-I/SL	"Microchip PIC 8-bit Microcontroller"	[SO14]
+U3
+
+Connector:
+[ ]	1	USB-MICRO-10118194-0001LF	"Micro USB Connector"	[AMPHENOL_10118194-0001LF]
+USB1
+
+[X]	1	PIC-ICSP-JST-XH	"PIC In-Circuit Serial Programming Header"	[B5B-XH-A]
+ICSP1
+
+[X]	1	KEYSTONE-590-9V	"Keystone 590 - Arranged for a 9V (PP3) Battery"	[KEYSTONE-590-9V]
+BATT1

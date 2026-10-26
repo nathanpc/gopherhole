@@ -1,0 +1,32 @@
+ascii-image
+
+A simple Ruby gem that relies on RMagick to convert an image, local or
+from a URL, into a sequence of colored ANSI blocks to be displayed
+nicely on a terminal.
+
+hRMagick	URL:https://github.com/rmagick/rmagick
+
+This is the first Ruby gem that I ever developed, and also the first
+library that I ever published on an online package repository. When I
+was a lot younger and very naive.
+
+This library was very successful for what it was, with a total of 17k
+downloads throughout its lifetime (checked on 2025-04-18). I don't
+know what people were doing with it, since it has no reverse
+dependencies, but I guess it was mainly wrapped into scripts and used
+to preview images in the terminal or simply generate ANSI art to embed
+into bash profiles, which was my main use for it.
+
+hLibrary's reverse dependencies	URL:https://rubygems.org/gems/ascii-image/reverse_dependencies
+
+i--- Example Usage ----------------------------------------------------	header null 0
+
+Using this library is as simple as a one-liner, or two for greater
+legibility:
+
+0example.rb	./example.rb
+
+i--- Downloads --------------------------------------------------------	header null 0
+
+hRubyGems	URL:https://rubygems.org/gems/ascii-image
+hSource code	URL:https://github.com/nathanpc/ascii-image

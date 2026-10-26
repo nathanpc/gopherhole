@@ -1,0 +1,39 @@
+Litter Box
+
+A simple solution to upload and share files extremely quickly with
+strangers on the internet, no matter if you, or your strangers, are
+using ancient browsers from the nineties.
+
+The goal of this project is to provide a quick and super simple
+solution that allows you, and only you, to upload files to a server
+you control and make them available on the internet for other people.
+Think of it as a public Google Drive folder that's self hosted and can
+be used with ancient browsers.
+
+hTime-based One-Time Password (TOTP)	URL:https://en.wikipedia.org/wiki/Time-based_one-time_password
+
+This project can, and by its own design and goal, should be exposed to
+the public internet. All your uploads will by default be public, but
+uploading new content requires the usage of a TOTP, so you are
+protected against random people uploading things to your server.
+
+i--- Screenshots ------------------------------------------------------	header null 0
+
+IHome page of the application	./screenshots/home.png
+IHome page with every field populated	./screenshots/home-filled.png
+ISuccessful upload page	./screenshots/uploaded.png
+
+i--- Deployment -------------------------------------------------------	header null 0
+
+If this project seems like the sort of thing that floats your boat,
+getting it up and running is extremely simple, and only requires two
+steps, all thanks to the magic of Docker.
+
+0Deployment instructions	./deploy.txt
+0docker-compose.yml	./docker-compose.yml
+
+i--- Downloads --------------------------------------------------------	header null 0
+
+hMy personal instance	URL:http://box.innove.link
+hDocker image registry	URL:https://github.com/nathanpc/litterbox/pkgs/container/litterbox
+hSource code	URL:https://github.com/nathanpc/litterbox
