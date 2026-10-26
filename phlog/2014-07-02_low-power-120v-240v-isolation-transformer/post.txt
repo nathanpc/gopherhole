@@ -1,4 +1,5 @@
-Low Power 120V+240V Isolation TransformerH1
+Low Power 120V+240V Isolation Transformer
+=========================================
 
 Since I was tired of using the flash circuit hack [1], or my version of it [2],
 to power my tube experiments I finally decided to build a isolation transformer

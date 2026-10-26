@@ -1,0 +1,11 @@
+[h1]Lightwave AM Transmitter/Receiver[/h1]
+
+This week I've been experimenting with a very simple and cheap project for wireless transmissions, a lightwave AM transmitter and receiver based on [url=http://www.cheapscience.com/2012/03/voice-led-modulator.html]Scott's design[/url], which was based on [url=https://www.youtube.com/watch?v=vvF77YdkzcY]VK2ZAY's design[/url]. In my final design I've increased the base biasing resistors to decrease the size of the coupling capacitor and also used a darlington transistor to get more current gain.
+
+[img=<^base_url^>/I/<^reldir^>/basic-schematic.png]Circuit schematic[/img]
+
+The transmitter is pretty straight forward, the input modulates the current passing by the LED, which modulates the intensity of light, if you've designed any class A amplifiers in the past you surely know how it works. The receiver is just a simple [url=http://en.wikipedia.org/wiki/Transimpedance_amplifier]transimpedance amplifier[/url], which is amplifying the signal quite a bit (~56x gain) since the transmitter will usually be a bit far from the receiver. You can do the same with a op-amp, but I much prefer a discrete circuit for these simple things.
+
+You can put a buffer stage with a darlington [url=http://en.wikipedia.org/wiki/Common_collector]emitter follower[/url] on the output of the receiver so you can drive a speaker directly. Something that I would recommend is to add a small (10x gain maybe?) pre-amplifier for the transmitter, that way you'll get a bit more signal if you're source isn't very loud, specially if you want to drive some high power LEDs, since you have a lot of current headroom with those.
+
+If you want to experiment with different values in a simulation, here is the [url=<^base_url^>/0/<^reldir^>/asm-lightwave.asc]LTspice schematic[/url]. The best way to choose the best LED + photodiode combination to maximize the range is to build some breakout boards that you can plug different LEDs and photodiodes until you have the perfect combination.
