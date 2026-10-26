@@ -1,0 +1,74 @@
+Software Projects
+
+           __________
+         .'----------`.
+         | .--------. |
+         | |########| |       __________
+         | |########| |      /__________\
+.--------| `--------' |------|    --=-- |-------------.
+|        `----,-.-----'      |o ======  |             |
+|       ______|_|_______     |__________|             |
+|      /  %%%%%%%%%%%%  \                             |
+|     /  %%%%%%%%%%%%%%  \       Nathan's Software    |
+|     ^^^^^^^^^^^^^^^^^^^^           Projects         |
++-----------------------------------------------------+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+hGitHub repositories	URL:https://github.com/nathanpc
+
+A small collection of some of my most recent, or at least most
+impactful works. This is by far not a list of everything that I've
+done professionally, most of which is closed source and unfortunately
+protected by NDAs, but if you want to have a better idea of everything
+I've done publicly you can browse through my GitHub profile linked
+above.
+
+i--- Desktop Applications ---------------------------------------------	header null 0
+
+Remember when we had applications that ran locally on our computers
+and didn't require a constant internet connection and spied on you? I
+do and I have made quite a bunch of them!
+
+1Rodent	./rodent
+Modern, native, graphical Gopher client for new and old computers
+
+i--- Libraries --------------------------------------------------------	header null 0
+
+Some of the libraries that I have created to help myself and other
+developers when writing solutions.
+
+1Fantastique	./fantastique
+An unopinionated static website generator for PHP
+
+1PickLE	./pickle
+Library and applications for managing electronic component pick lists
+
+1ascii-image	./ascii-image
+Ruby gem to convert any image into a lovely and colored ASCII art
+
+i--- Web Applications -------------------------------------------------	header null 0
+
+The concept of a web application these days is, sadly, of a
+full-fledged desktop application that runs in your browser, with
+millions of lines of obfuscated Javascript, and sometimes other
+languages compiled to WebAssembly and running straight on your
+browser. The web applications that I have developed are nothing like
+that, never will be, and are basically what you would expect a web
+application to be back in 2010.
+
+1PickLE	./pickle
+Web application for managing and using electronic component pick lists
+
+1Litter Box	./litterbox
+Simple solution to upload and share files quickly with strangers
+
+1PHP Photo Viewer	./php-photo-viewer
+Super lightweight and retro-friendly PHP 5.4 photo viewer website
+
+i--- Under Construction -----------------------------------------------	header null 0
+
+More content, and more up-to-date content, is currently being written
+to go on this page. Consider everything that you see here as
+thoroughly incomplete.
+
+IObligatory "Under construction" GIF	/_assets/under-construction.gif
