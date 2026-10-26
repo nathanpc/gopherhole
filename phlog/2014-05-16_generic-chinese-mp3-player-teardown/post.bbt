@@ -1,0 +1,25 @@
+[h1]Generic Chinese MP3 Player Teardown[/h1]
+
+As I've described in [url=<^base_url^>/0/phlog/2014-05-11_unbelievable_prices/post.txt]Unbelievable Prices[/url], I bought a crappy chinese MP3 player to use as a "true" sound source (instead of the function generator I use while early-testing my audio projects) for testing my audio circuits without having to worry about accidentally shorting 12V into my iPod's headphone jack or something like that while probing around.
+
+Yesterday it arrived and as it was expected, it's the best of Shenzhen. Horrible plastics and build quality, the buttons are super stiff, and overall a shitty product as it was expected to be, but since I'm only going to use it for testing, I don't care. Here are some pictures of the "beautiful" thing:
+
+[img=<^base_url^>/I/<^reldir^>/unboxed.jpg]Unboxing this cheap little thing[/img]
+
+[img=<^base_url^>/I/<^reldir^>/disassembled.jpg]Taking it to bits[/img]
+
+[img=<^base_url^>/I/<^reldir^>/front.jpg]Front side[/img]
+
+[img=<^base_url^>/I/<^reldir^>/left-side.jpg]Left side[/img]
+
+[img=<^base_url^>/I/<^reldir^>/right-side.jpg]Right side[/img]
+
+As you can see it's a typical chinese product. The LiPo battery has no markings, except for a weird XI logo, it doesn't look like a protected pack and the flimsy wires that connect it to the main board can snap off at any second and short the thing out.
+
+[img=<^base_url^>/I/<^reldir^>/board-view.jpg]Board view[/img]
+
+Right next to what looks like the main processor, which sadly I couldn't find any information about it, there's a very nicely heat-shrunk clock crystal. On the center of the board you can see a generic [url=http://www.ti.com/lit/ds/symlink/lm4871.pdf]4871 audio power amplifier[/url], and on the left side there's a [url=http://www.kingroad-china.net/Uploadfiles/2010763471154996.pdf]BK1080 FM receiver IC[/url].</p>
+
+[img=<^base_url^>/I/<^reldir^>/top-board.jpg]Top board view[/img]
+
+On the other side of the board all you can see is the horrible LCD and the shittiest buttons you can buy in the Shenzhen market.

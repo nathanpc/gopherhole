@@ -1,0 +1,9 @@
+[h1]Low Power 120V+240V Isolation Transformer[/h1]
+
+Since I was tired of using the [url=http://thesignalpath.com/blogs/2011/06/12/camera-flash-circuit-and-nixie-tube-tutorial/]flash circuit hack[/url], or [url=https://plus.google.com/+NathanCampos/posts/f2zAfrbQJmw]my version of it[/url], to power my tube experiments I finally decided to build a isolation transformer using two identical step-down transformers as suggested by Mike in his [url=http://www.electricstuff.co.uk/nixclock.html]nixie clock documentation[/url]. Here are some photos of it:
+
+[img=<^base_url^>/I/<^reldir^>/inside.jpg]View of the inside with the transformers back-to-back[/img]
+
+[img=<^base_url^>/I/<^reldir^>/case.jpg]Outside of the case with banana jacks and labels[/img]
+
+I'm planing to build a adjustable HV lab power supply in the future (which I may sell as a kit), so stay tuned.

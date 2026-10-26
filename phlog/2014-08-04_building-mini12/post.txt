@@ -1,0 +1,95 @@
+Building the Mini12
+===================
+
+**Update:** This project was my first try at building an amplifier, because of
+this it is pretty awful in terms of performance, it has very noticeable
+crossover distortion. For better designs please look at newer posts here.
+
+Last week, I decided to take on a very simple project: build a very low
+distortion, reasonably powerful, battery-powered amplifier that could fit in a
+very small, transparent enclosure that I had.
+
+The finished project:
+<^base_url^>/I/<^reldir^>/mini12.jpg
+
+The main idea was to have this very small amplifier that could be moved around
+the house and powered from some 18650 cells so that I could enjoy some music
+with my friends when they come for our regular LAN parties. Usually we use one
+of those crappy iPod dock/speaker things that everyone loves, but, personally,
+they don't sound very good to me.
+
+Since this was a quick project, I decided to make it as simple as possible to
+avoid any trouble. The easiest it could be was to use an audio op-amp driving a
+class B output made with darlington transistors with some negative feedback to
+keep the distortion really low, so that's what I did:
+
+Amplifier schematic:
+<^base_url^>/I/<^reldir^>/schematic.png
+
+I also designed a very simple peak detector [1] to detect any clipping on the
+output to make sure the signal was as clean as possible, but, sadly, my case was
+so small that I couldn't fit it in. Since it would be powered from 2 18650 packs
+(3 cells each) or a pair of 9V batteries, the power supply [2] is extremely
+simplistic.
+
+When all of the parts arrived, I decided to get everything prepared to be
+assembled the next day.
+
+All the parts needed to built it have been collected:
+<^base_url^>/I/<^reldir^>/pre-assembly.jpg
+
+Choosing where to put the jacks and switches was a bit tricky since the space
+inside the enclosure was extremely small.
+
+Holes drilled in the case and panel components test fitted:
+<^base_url^>/I/<^reldir^>/drilling.jpg
+
+Since I wasn't patient enough to wait for a PCB, I decided to build the whole
+thing on a piece of protoboard which was a bit tricky because of the space the
+jacks took.
+
+All components soldered:
+<^base_url^>/I/<^reldir^>/protoboard.jpg
+
+After soldering the headphone jack and on/off switch, mounted from the inside,
+it was time to solder the RCA jacks which had to be mounted from the outside.
+This was very difficult since I had to make the shortest cable possible while
+making sure that I could still lift the board up to solder the cable to the PCB.
+
+Started soldering the panel mount components:
+<^base_url^>/I/<^reldir^>/more-jacks.jpg
+
+Sliding the board back into place was extremely difficult, but after a lot of
+wiggling, it was perfectly placed on the bottom of the enclosure, and I was
+ready to plug the power jacks into the JST connectors on the board. It was the
+only way to mount them, otherwise I wouldn't be able to lift the board to solder
+them.
+
+All finished up and ready for testing:
+<^base_url^>/I/<^reldir^>/finished.jpg
+
+Since it was 1:38AM, I was quite tired, and since I had been working on this
+thing for **7 hours and 12 minutes** [3], I decided that it was time to sleep
+and leave the enclosure closing and testing for the next day.
+
+Obligatory picture of the pile of wires and component leads:
+<^base_url^>/I/<^reldir^>/trash.jpg
+
+First thing to do in the morning was to test the little beast. This was the test
+setup (after using my oscilloscope and a dummy load to make sure everything was
+working fine). I had to use the living room table since my bench was a mess (as
+usual), and there was no space for the 2 speakers.
+
+Testing the amplifier on my living room:
+<^base_url^>/I/<^reldir^>/testing.jpg
+
+And that's all! If you want more technical information about the project, be
+sure to visit the GitHub repo [4]. If you want to discuss it, jump on over to
+the diyAudio thread [5].
+
+
+[1]: <^base_url^>/I/<^reldir^>/peak-detector.png
+[2]: <^base_url^>/I/<^reldir^>/power-supply.png
+[3]: <^base_url^>/I/<^reldir^>/time.jpg
+[4]: https://github.com/nathanpc/mini12
+[5]: http://www.diyaudio.com/forums/solid-state/260161-mini12-my-first-amplifier.html
