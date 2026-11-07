@@ -11,7 +11,7 @@ switchmode converters are not black magic (now only RF is black magic), and I
 hope I demystify them for you too in this article.
 
 The MintyUSBoost in its fitting enclosure:
-<^base_url^>/I/<^reldir^>/final.jpg
+gopher://nathanpc.eu/I/phlog/2016-02-19_mintyusboost-tiny-boost-converter-low-power-projects/final.jpg
 
 The idea for this project came because I built a nice portable Class-A headphone
 amplifier (blog post coming in the future) and I wanted a simple power supply
@@ -27,7 +27,7 @@ the following specs:
     and the headphone amp
 
 Schematic of Rev A:
-<^base_url^>/I/<^reldir^>/schematic.png
+gopher://nathanpc.eu/I/phlog/2016-02-19_mintyusboost-tiny-boost-converter-low-power-projects/schematic.png
 
 As you can see there's not a lot happening, and that's the beauty of this
 design, since it was made for low power projects it doesn't require any of the
@@ -152,7 +152,7 @@ set all the registers correctly and I still can't get it to work, if anyone
 wants to help it'll be greatly appreciated.
 
 Noise Figures:
-<^base_url^>/I/<^reldir^>/noise-scope.png
+gopher://nathanpc.eu/I/phlog/2016-02-19_mintyusboost-tiny-boost-converter-low-power-projects/noise-scope.png
 
 Since all my designs have a lot of local decoupling to keep any noise or ripple
 from the power source away from sensitive parts I didn't care too much about

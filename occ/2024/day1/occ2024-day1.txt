@@ -11,7 +11,7 @@ the repair was successful. I'm typing this article in it! Although the path to
 get here wasn't very straightforward.
 
 The hollow chassis without its motherboard:
-<^base_url^>/I/<^reldir^>/hollow-chassis.jpeg
+gopher://nathanpc.eu/I/occ/2024/day1/hollow-chassis.jpeg
 
 Upon finishing the board swap, screwing back every single one of the 62 screws,
 and lightly cleaning the chassis, I was ready to restore the image of the old
@@ -23,7 +23,7 @@ greeted with the exact same kernel panics and random errors I've described in
 the previous post. Apparently the original motherboard was fine after all.
 
 Every single one of the 62 screws:
-<^base_url^>/I/<^reldir^>/screws.jpeg
+gopher://nathanpc.eu/I/occ/2024/day1/screws.jpeg
 
 Putting in all this work and getting nowhere was really frustrating, but anyway,
 I powered through it, trying every imaginable thing to get the machine to boot.
@@ -41,7 +41,7 @@ up, swapped the SSD in to the PowerBook, assembled everything back, and it's now
 fully working, and it's blazingly fast (for a 2005 computer).
 
 Fully working and editing writing this article:
-<^base_url^>/I/<^reldir^>/bbedit.png
+gopher://nathanpc.eu/I/occ/2024/day1/bbedit.png
 
 Today my plan is to get a ZNC bouncer [3] going so that I can be on IRC on my
 PowerBook G4 and on my Power Mac G5. I'll also be working on a setup to easily

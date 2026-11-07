@@ -27,7 +27,7 @@ put a stop on this project while I play around with shinier things.
 
 A view from my Power Mac 5G's desktop right now with ZNC open in Safari just as
 I remember setting it up back in 2010:
-<^base_url^>/I/<^reldir^>/znc-desktop.png
+gopher://nathanpc.eu/I/occ/2024/day2/znc-desktop.png
 
 One quality of life improvement that was quite a nostalgia trip to setup was an
 IRC bouncer. Since I'm jumping back and forth with different machines and
@@ -44,7 +44,7 @@ it did start feeling a bit wrong using a lot of CPU power and memory simply to
 display something that was meant to be an extremely lightweight protocol.
 
 Browsing Gopher on Netscape 3 via VNC:
-<^base_url^>/I/<^reldir^>/gopher-netscape.png
+gopher://nathanpc.eu/I/occ/2024/day2/gopher-netscape.png
 
 I do understand that a lot of people prefer browsing gopher using a terminal
 client such as Lynx [5], which makes a ton of sense, after all Gopher is mainly

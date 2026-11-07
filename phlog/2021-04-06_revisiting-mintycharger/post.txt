@@ -58,7 +58,7 @@ same time, and was very easy to write the code for. This was the schematic and
 board that I came up with:
 
 First Concept Schematic:
-<^base_url^>/I/<^reldir^>/prototype-schematic.png
+gopher://nathanpc.eu/I/phlog/2021-04-06_revisiting-mintycharger/prototype-schematic.png
 
 If you want to know more the GitHub repository [6] is still up, but as you can
 see it's a pretty simple board, and unfortunately due to size limitations it
@@ -70,7 +70,7 @@ USD value and my lack of interest in the project I've never manufactured this
 board, and just continued charging my batteries with my lab power supply.
 
 First Concept PCB Layout:
-<^base_url^>/I/<^reldir^>/prototype-pcb.png
+gopher://nathanpc.eu/I/phlog/2021-04-06_revisiting-mintycharger/prototype-pcb.png
 
 Last year, while I was developing the Bipolary project [7], I was reminded of
 this long-forgotten project and decided to revisit it, use the knowledge that
@@ -93,13 +93,13 @@ These were my goals when I've designed the circuit of this new version. Here's a
 sneak peek:
 
 Manufactured PCB:
-<^base_url^>/I/<^reldir^>/professional-pcb.jpg
+gopher://nathanpc.eu/I/phlog/2021-04-06_revisiting-mintycharger/professional-pcb.jpg
 
 Homemade Prototypes:
-<^base_url^>/I/<^reldir^>/homemade-pcb.jpg
+gopher://nathanpc.eu/I/phlog/2021-04-06_revisiting-mintycharger/homemade-pcb.jpg
 
 PCB Layout:
-<^base_url^>/I/<^reldir^>/board-eagle.png
+gopher://nathanpc.eu/I/phlog/2021-04-06_revisiting-mintycharger/board-eagle.png
 
 Due to a whole bunch of reasons I'm only coming around to work on this project
 now, but I promise I'll try my best to finish it quickly this time. I hope to

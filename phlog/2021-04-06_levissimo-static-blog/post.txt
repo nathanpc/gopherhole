@@ -16,7 +16,7 @@ Levissimo, so if you want to see exactly how an instance of this blog generator
 is, that's the place to go.
 
 How a Levissimo instance looks like:
-<^base_url^>/I/<^reldir^>/current-flow.png
+gopher://nathanpc.eu/I/phlog/2021-04-06_levissimo-static-blog/current-flow.png
 
 If you want to learn more about this project or maybe even try it out make sure
 to head over to the GitHub repository [4] where you'll find everything about it

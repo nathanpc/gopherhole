@@ -8,7 +8,7 @@ increased the base biasing resistors to decrease the size of the coupling
 capacitor and also used a darlington transistor to get more current gain.
 
 Circuit schematic:
-<^base_url^>/I/<^reldir^>/basic-schematic.png
+gopher://nathanpc.eu/I/phlog/2014-05-14_lightwave-am-transmitter-receiver/basic-schematic.png
 
 The transmitter is pretty straight forward, the input modulates the current
 passing by the LED, which modulates the intensity of light, if you've designed
@@ -35,4 +35,4 @@ plug different LEDs and photodiodes until you have the perfect combination.
 [2]: https://www.youtube.com/watch?v=vvF77YdkzcY
 [3]: http://en.wikipedia.org/wiki/Transimpedance_amplifier
 [4]: http://en.wikipedia.org/wiki/Common_collector
-[5]: <^base_url^>/0/<^reldir^>/asm-lightwave.asc
+[5]: gopher://nathanpc.eu/0/phlog/2014-05-14_lightwave-am-transmitter-receiver/asm-lightwave.asc

@@ -18,7 +18,7 @@ checking for software updates using the Software Update tool on Mac OS X 10.5.
 If there are no updates available you're set!
 
 A completely up-to-date installation of Mac OS X 10.5:
-<^base_url^>/I/<^reldir^>/up-to-date.png
+gopher://nathanpc.eu/I/phlog/2024-09-21_setup-java-eclipse-mac-ppc/up-to-date.png
 
 After that you'll need a period correct IDE to develop on. I choose to use
 Eclipse Juno 3.8.2 since it was the last version of Eclipse from this era and
@@ -40,7 +40,7 @@ should look more or less like this after Eclipse finds all the system libraries
 included:
 
 JRE Definition for Java 1.5.0 on Eclipse 3.8.2:
-<^base_url^>/I/<^reldir^>/jre-definition.png
+gopher://nathanpc.eu/I/phlog/2024-09-21_setup-java-eclipse-mac-ppc/jre-definition.png
 
 Now you should have everything to start developing Java apps on Mac OS X, but if
 you want to build graphical applications with ease it's always recommended to

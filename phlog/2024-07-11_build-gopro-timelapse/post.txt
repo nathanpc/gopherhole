@@ -23,7 +23,7 @@ new folder will be created and the process will start over, just like every
 digital camera you ever had.
 
 The folder structure created by the GoPro for timelapses:
-<^base_url^>/I/<^reldir^>/gopro-folder.png
+gopher://nathanpc.eu/I/phlog/2024-07-11_build-gopro-timelapse/gopro-folder.png
 
 That wouldn't be such a big deal, you could always copy the contents of each
 folder into another one and simply point a timelapse program at this new folder

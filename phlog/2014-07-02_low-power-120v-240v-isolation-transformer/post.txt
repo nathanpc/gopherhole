@@ -7,10 +7,10 @@ using two identical step-down transformers as suggested by Mike in his nixie
 clock documentation [3]. Here are some photos of it:
 
 View of the inside with the transformers back-to-back:
-<^base_url^>/I/<^reldir^>/inside.jpg
+gopher://nathanpc.eu/I/phlog/2014-07-02_low-power-120v-240v-isolation-transformer/inside.jpg
 
 Outside of the case with banana jacks and labels:
-<^base_url^>/I/<^reldir^>/case.jpg
+gopher://nathanpc.eu/I/phlog/2014-07-02_low-power-120v-240v-isolation-transformer/case.jpg
 
 I'm planing to build a adjustable HV lab power supply in the future (which I may
 sell as a kit), so stay tuned.

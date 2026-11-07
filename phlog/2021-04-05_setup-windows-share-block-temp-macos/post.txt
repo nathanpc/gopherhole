@@ -19,7 +19,7 @@ Services > File and iSCSI Services > File Server Resource Manager" role from the
 Add Roles and Features Wizard like this:
 
 Installing FSRM role using the GUI:
-<^base_url^>/I/<^reldir^>/Add-Roles-and-Features-Wizard.png
+gopher://nathanpc.eu/I/phlog/2021-04-05_setup-windows-share-block-temp-macos/Add-Roles-and-Features-Wizard.png
 
 Alternatively if you're running Windows Server Core [6], like I am in this case,
 you can install this role by running the following PowerShell command:

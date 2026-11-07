@@ -36,7 +36,7 @@ redesign the website and brand identity of my consulting company [4]**, meaning
 I'll be spending a lot of time in Illustrator CS2 and BBEdit 8.6 [5].
 
 The PowerBook G4 circa 2023 before the memory disaster:
-<^base_url^>/I/<^reldir^>/powerbook-g4-2023.jpg
+gopher://nathanpc.eu/I/occ/2024/day0/powerbook-g4-2023.jpg
 
 There is only one problem with this machine... The last time I used it was in
 2023 because it developed what I can only describe as a memory issue in one of
@@ -46,7 +46,7 @@ during the installation with a kernel panic and some times would crash with
 weird linking and memory allocation errors [6].
 
 The PowerBook G4 and its kernel panics:
-<^base_url^>/I/<^reldir^>/powerbook-kernel-panic.jpg
+gopher://nathanpc.eu/I/occ/2024/day0/powerbook-kernel-panic.jpg
 
 Because of this I'll have to transplant the motherboard of a parts machine I
 bought on eBay right after this one died. Hopefully this will fix the issues.
@@ -69,7 +69,7 @@ the Apple Store back in 2005. Even today, having a machine with two physical
 processors, that isn't a server, still amazes me.
 
 The beast in the sidewalk's of Lisbon while I was taking a break from carrying it:
-<^base_url^>/I/<^reldir^>/powermac-sidewalk.jpg
+gopher://nathanpc.eu/I/occ/2024/day0/powermac-sidewalk.jpg
 
 My machine was a bargain I found on Facebook Marketplace last year, where an
 employee of a multi-national marketing firm was selling them for 15 euros (they
@@ -106,7 +106,7 @@ motherboards...
 [3]: https://dataswamp.org/~solene/2024-06-24-old-computer-challenge-v4-announce.html
 [4]: http://innoveworkshop.com/
 [5]: https://macintoshgarden.org/apps/bare-bones-software-cd-2007
-[6]: <^base_url^>/I/<^reldir^>/powerbook-crash-hard.jpg
+[6]: gopher://nathanpc.eu/I/occ/2024/day0/powerbook-crash-hard.jpg
 [7]: https://fosstodon.org/@nathanpc/110865146201593235
 [8]: https://everymac.com/systems/apple/powermac_g5/specs/powermac_g5_2.3_dp.html
 [9]: https://www.macports.org

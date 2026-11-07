@@ -12,7 +12,7 @@ the Win32 API. Since the Eee PC is finally ready to go it'll probably be my main
 development machine for the first implementation of the client.
 
 A long way to go with the updates...:
-<^base_url^>/I/<^reldir^>/during-updates.png
+gopher://nathanpc.eu/I/occ/2024/day5/during-updates.png
 
 Speaking of the Eee PC, it spent the whole day getting Office 2010, Visual
 Visual Studio 2010, and 216 Windows updates installed. Getting from a fresh
@@ -22,7 +22,7 @@ whole process even more tedious and cumbersome, leaving me feeling as an admin
 recovering from the CrowdStrike fiasco [2].
 
 Had to reboot multiple times to get all of them to install successfully:
-<^base_url^>/I/<^reldir^>/after-updates.png
+gopher://nathanpc.eu/I/occ/2024/day5/after-updates.png
 
 Today was also the day when many of the participants in the challenge finished
 their journey, many of them will stick around IRC and due to the creation of the

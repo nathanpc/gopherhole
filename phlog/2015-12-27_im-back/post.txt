@@ -18,7 +18,7 @@ idea. We even had the pleasure of meeting some polish researchers and the prince
 of Nigeria.
 
 A photo with the Prince Momodu Joel Shaka:
-<^base_url^>/I/<^reldir^>/innovacities-prince-nigeria.jpg
+gopher://nathanpc.eu/I/phlog/2015-12-27_im-back/innovacities-prince-nigeria.jpg
 
 Of course during this year I did a bunch of projects for myself including
 headphone amps, pre amplifiers, battery chargers, LED lighting, electronic
@@ -37,13 +37,13 @@ named miniload [3]. Discharging batteries now is a lot faster and a lot less
 problematic.
 
 The miniload board:
-<^base_url^>/I/<^reldir^>/messy-protoboard.jpg
+gopher://nathanpc.eu/I/phlog/2015-12-27_im-back/messy-protoboard.jpg
 
 This is just a bit of what happened when I was away. Tomorrow I'm on a trip to
 Dubai, I'll be there for the new year celebrations and will be back in the
 middle of January, so don't go away, there's a lot more to come in 2016!
 
 
-[1]: <^base_url^>/0/phlog/2014-05-14_lightwave-am-transmitter-receiver/post.txt
+[1]: gopher://nathanpc.eu/0/phlog/2014-05-14_lightwave-am-transmitter-receiver/post.txt
 [2]: https://github.com/nathanpc/battery-capacity
 [3]: https://github.com/nathanpc/miniload

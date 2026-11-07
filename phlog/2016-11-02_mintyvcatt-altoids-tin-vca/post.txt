@@ -10,7 +10,7 @@ instead of a rack, which will make patching a real nightmare, but I'm sure will
 look even messier than a rack modular synth.
 
 The final project:
-<^base_url^>/I/<^reldir^>/final.jpg
+gopher://nathanpc.eu/I/phlog/2016-11-02_mintyvcatt-altoids-tin-vca/final.jpg
 
 The project turned up rather well, it was designed to be extremely simple and
 easy to build, and had to fit inside the tin with the 9V battery and the
@@ -18,7 +18,7 @@ connectors, this lead to some restrictions in the size of the circuit
 (compromises).
 
 Schematic:
-<^base_url^>/I/<^reldir^>/schematic.jpg
+gopher://nathanpc.eu/I/phlog/2016-11-02_mintyvcatt-altoids-tin-vca/schematic.jpg
 
 As you can clearly see the circuit is extremely simple, but gets the job done
 quite well. I've used the simplest method of voltage controlled attenuation, the
@@ -35,7 +35,7 @@ a mono plug into the socket, the ring and sleeve will be shorted out, connecting
 your power negative to your circuit's ground.
 
 Close-up of the circuit:
-<^base_url^>/I/<^reldir^>circuit.jpg
+gopher://nathanpc.eu/I/phlog/2016-11-02_mintyvcatt-altoids-tin-vcacircuit.jpg
 
 The circuit is pretty simple and was made as a quick hack to do some audio
 experiments, but feel free to play around with it, and feedback is always

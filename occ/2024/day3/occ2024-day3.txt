@@ -13,7 +13,7 @@ implement things in a way that's maintainable and future proof. I sure don't
 want to be spelunking around this code base in the future.
 
 Using good old TextMate, my editor of choice back on the day:
-<^base_url^>/I/<^reldir^>/programming-desktop.png
+gopher://nathanpc.eu/I/occ/2024/day3/programming-desktop.png
 
 Since I later want to port my client to as many platforms as I possibly can, I
 decided to write a portable, single header/source, Gopher implementation in
