@@ -6,6 +6,8 @@
  * @author Nathan Campos <hi@nathancampos.me>
  */
 
+require_once __DIR__ . '/gopher.php';
+
 /**
  * Creates the URL pointing to a specific Gopher resource.
  *
@@ -15,5 +17,6 @@
  * @return string Proxied URL to the Gopher resource.
  */
 function href($type, $selector) {
-	return "/?type=$type&selector=" . urlencode($selector);
+	$config = GopherConfig::getInstance();
+	return Gopher::ProxySelector($type, $selector, $config->get('rewrite'));
 }

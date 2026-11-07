@@ -1,18 +1,20 @@
 <?php
-// User configuration.
-$title = 'nathanpc';
-$gopher_base_domain = 'nathanpc.eu';
-$gopher_host = '127.0.0.1';
-$gopher_port = 70;
-$buffer_size = 2048;
 error_reporting(E_ALL);
-
-require_once __DIR__ . '/extras.php';
 require_once __DIR__ . '/gopher.php';
+require_once __DIR__ . '/extras.php';
+
+// User configuration.
+$config = GopherConfig::getInstance();
+$config->set('title', 'nathanpc');
+$config->set('proxy_url', '//portal.mozz.us/gopher/');
+$config->set('base_domain', 'nathanpc.eu');
+$config->set('rewrite', true);
+
+// Initialize the Gopher handler and request the selector.
 $error = null;
 try {
 	// Set up the request.
-	$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
+	$gopher = new Gopher($config);
 	$req = new GopherRequest($gopher, urlparam('selector', ''),
 		urlparam('type'));
 
@@ -40,16 +42,16 @@ try {
 		content="width=750, initial-scale=1, user-scalable=1" />
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="/style.css">
 
 	<!-- Page information. -->
-	<title><?= $req->getPageTitle($title) ?></title>
+	<title><?= $req->getPageTitle($config->get('title')) ?></title>
 </head>
 <body>
 	<!-- Header -->
 	<div id="header">
 		<span class="title">
-			<a href="/"><?= $title ?></a>()
+			<a href="/"><?= $config->get('title') ?></a>()
 		</span>
 
 		<!-- Important places that you might want to quickly visit. -->
@@ -85,10 +87,10 @@ try {
 				echo $entry->asHTML();
 		} else if ($req->type == GopherEntryType::TEXT) {
 			// Plain text.
-			$content = htmlspecialchars($req->response,
-				ENT_SUBSTITUTE | ENT_HTML401);
+			$content = htmlspecialchars($req->response, ENT_SUBSTITUTE |
+				ENT_HTML401);
 			echo "<div id=\"response\" class=\"plain-text\">\n" .
-				autolink($content, $gopher_base_domain) . "\n</div>";
+				autolink($content) . "\n</div>";
 		} else {
 			// Other types.
 			echo "<div id=\"response\">{$req->response}</div>";
@@ -105,10 +107,17 @@ try {
 			Nathan Campos &#169; <?= '2024-' . date('Y') ?>
 		</div>
 
-		<a href="gopher://<?= $gopher_base_domain . '/' . $req->type .
+		<a href="gopher://<?= $config->get('base_domain') . '/' . $req->type .
 			$req->selector ?>">gopher</a> -
-		<a href="?<?= $_SERVER['QUERY_STRING'] .
-			(empty($_SERVER['QUERY_STRING']) ? '' : '&') . "raw=1" ?>">raw</a>
+		<?php
+			if ($config->get('rewrite')) {
+				echo '<a href="?raw=1">raw</a>';
+			} else {
+				echo '<a href="/?' . $_SERVER['QUERY_STRING'] .
+					(empty($_SERVER['QUERY_STRING']) ? '' : '&') .
+					'raw=1">raw</a>';
+			}
+		?>
 	</div><!-- #footer -->
 </body>
 </html>
