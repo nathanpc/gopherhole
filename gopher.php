@@ -449,3 +449,40 @@ class GopherException extends Exception {
 function urlparam($key, $default = null) {
 	return isset($_GET[$key]) ? $_GET[$key] : $default;
 }
+
+/**
+ * Automatically creates HTML links within the contents of a plain text output.
+ *
+ * @param string $text Plain text response from a Gopher server.
+ *
+ * @return string Text with links automatically converted to HTML links.
+ */
+function autolink($text, $host = null) {
+	// Base regex: https://github.com/asika32764/php-autolink/blob/master/src/Autolink.php
+	$regex = "/([a-zA-Z]{3,}):\/\/([\-\p{L}\p{N}\p{M}.]+)([\/\p{L}\p{N}\p{M}\-._~:?#\[\]@!$&'()*+,;=%\">]*)?/u";
+
+	return preg_replace_callback($regex, function ($matches) use ($host) {
+		$url = $matches[0];
+		$scheme = $matches[1];
+		$domain = $matches[2];
+
+		// Proxy Gopher links.
+		if ($scheme == 'gopher') {
+			if (Gopher::IsHostOurs($domain, is_null($host) ? [] : [$host])) {
+				// Handle links to ourselves.
+				$m = [];
+				if (preg_match('/\/(.)(.+)/', substr($url, 9), $m) == 1) {
+					return "<a href=\"" . Gopher::ProxySelector($m[1], $m[2]) .
+						"\">$url</a>";
+				}
+			} else {
+				// Proxy links to other Gopher servers.
+				$proxy = preg_replace('/gopher:\/\//', Gopher::PROXY_URL, $url);
+				return "<a href=\"$proxy\">$url</a>";
+			}
+		}
+
+		// Return a regular linked URL.
+		return "<a href=\"$url\">$url</a>";
+	}, $text);
+}
