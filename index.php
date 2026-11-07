@@ -7,6 +7,7 @@ $config = GopherConfig::getInstance();
 $config->set('title', 'webhole');
 $config->set('proxy_url', '//portal.mozz.us/gopher/');
 $config->set('base_domain', 'domain.tld');
+$config->set('rewrite', false);
 
 // Initialize the Gopher handler and request the selector.
 $error = null;
@@ -40,7 +41,7 @@ try {
 		content="width=750, initial-scale=1, user-scalable=1" />
 
 	<!-- Stylesheets -->
-	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="/style.css">
 
 	<!-- Page information. -->
 	<title><?= $req->getPageTitle($config->get('title')) ?></title>

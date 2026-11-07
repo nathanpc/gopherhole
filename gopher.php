@@ -369,7 +369,8 @@ class GopherEntry {
 		$html = '';
 
 		// Build the address of the entry's link.
-		$href = Gopher::ProxySelector($this->type, $this->selector);
+		$href = Gopher::ProxySelector($this->type, $this->selector,
+			$config->get('rewrite'));
 		if (preg_match("/^URL:/", $this->selector)) {
 			$href = substr($this->selector, 4);
 		} elseif (!Gopher::IsHostOurs($this->host)) {
@@ -452,6 +453,7 @@ class GopherConfig {
 			'gopher_host' => '127.0.0.1',
 			'gopher_port' => 70,
 			'buffer_size' => 2048,
+			'rewrite' => true,
 			'proxy_url' => '//portal.mozz.us/gopher/'
 		);
 	}
@@ -524,8 +526,8 @@ function autolink($text) {
 				// Handle links to ourselves.
 				$m = [];
 				if (preg_match('/\/(.)(.+)/', substr($url, 9), $m) == 1) {
-					return "<a href=\"" . Gopher::ProxySelector($m[1], $m[2]) .
-						"\">$url</a>";
+					return "<a href=\"" . Gopher::ProxySelector($m[1], $m[2],
+							$config->get('rewrite')) . "\">$url</a>";
 				}
 			} else {
 				// Proxy links to other Gopher servers.

@@ -32,6 +32,20 @@ If you want to know all the available options that can be tweaked, consult the
 all the defaults for the configuration handler, and you can tweak any of these
 values from the `index.php` file.
 
+### URL Rewriting
+
+If you have [mod_rewrite](https://httpd.apache.org/docs/2.4/rewrite/) installed
+you can use the supplied `.htaccess` and enable the pretty URLs by changing the
+`rewrite` configuration in the `ìndex.php` with the following line:
+
+```php
+$config->set('rewrite', true);
+```
+
+This enables that all URLs provided by the application will be in a format that
+is exactly the same as Gopher URLs, allowing you to simply change the URL scheme
+and switch between your gopherhole and the HTTP proxy of it.
+
 ## License
 
 Everything related to the source code (how the website is actually built) is
