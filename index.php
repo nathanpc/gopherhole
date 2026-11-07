@@ -74,8 +74,10 @@ try {
 				echo $entry->asHTML();
 		} else if ($req->type == GopherEntryType::TEXT) {
 			// Plain text.
+			$content = htmlspecialchars($req->response,
+				ENT_SUBSTITUTE | ENT_HTML401);
 			echo "<div id=\"response\" class=\"plain-text\">\n" .
-				autolink($req->response, $gopher_base_domain) . "\n</div>";
+				autolink($content, $gopher_base_domain) . "\n</div>";
 		} else {
 			// Other types.
 			echo "<div id=\"response\">{$req->response}</div>";
