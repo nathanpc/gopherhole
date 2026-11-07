@@ -13,6 +13,11 @@ class Gopher {
 	private $bufsize;
 
 	/**
+	 * Proxy URL to be used for accessing Gopher via HTTP.
+	 */
+	const PROXY_URL = '//portal.mozz.us/gopher/';
+
+	/**
 	 * Constructs the Gopher handler.
 	 *
 	 * @param string  $host    IP address of the Gopher server.
@@ -359,8 +364,8 @@ class GopherEntry {
 		if (preg_match("/^URL:/", $this->selector)) {
 			$href = substr($this->selector, 4);
 		} elseif (!Gopher::IsHostOurs($this->host)) {
-			$href = "https://portal.mozz.us/gopher/{$this->host}%3A" .
-				"{$this->port}/{$this->type}{$this->selector}";
+			$href = Gopher::PROXY_URL . "{$this->host}%3A{$this->port}/" .
+				"{$this->type}{$this->selector}";
 		}
 
 		// Build the HTML component.
