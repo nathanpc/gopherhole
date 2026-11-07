@@ -1,17 +1,18 @@
 <?php
-// User configuration.
-$title = 'webhole';
-$gopher_base_domain = 'server.domain';
-$gopher_host = '127.0.0.1';
-$gopher_port = 70;
-$buffer_size = 2048;
 error_reporting(E_ALL);
-
 require_once __DIR__ . '/gopher.php';
+
+// User configuration.
+$config = GopherConfig::getInstance();
+$config->set('title', 'webhole');
+$config->set('proxy_url', '//portal.mozz.us/gopher/');
+$config->set('base_domain', 'domain.tld');
+
+// Initialize the Gopher handler and request the selector.
 $error = null;
 try {
 	// Set up the request.
-	$gopher = new Gopher($gopher_host, $gopher_port, $buffer_size);
+	$gopher = new Gopher($config);
 	$req = new GopherRequest($gopher, urlparam('selector', ''),
 		urlparam('type'));
 
@@ -42,13 +43,13 @@ try {
 	<link rel="stylesheet" href="style.css">
 
 	<!-- Page information. -->
-	<title><?= $req->getPageTitle($title) ?></title>
+	<title><?= $req->getPageTitle($config->get('title')) ?></title>
 </head>
 <body>
 	<!-- Header -->
 	<div id="header">
 		<span class="title">
-			<a href="/"><?= $title ?></a>
+			<a href="/"><?= $config->get('title') ?></a>
 		</span>
 
 		<hr>
@@ -77,7 +78,7 @@ try {
 			$content = htmlspecialchars($req->response,
 				ENT_SUBSTITUTE | ENT_HTML401);
 			echo "<div id=\"response\" class=\"plain-text\">\n" .
-				autolink($content, $gopher_base_domain) . "\n</div>";
+				autolink($content) . "\n</div>";
 		} else {
 			// Other types.
 			echo "<div id=\"response\">{$req->response}</div>";

@@ -13,21 +13,14 @@ class Gopher {
 	private $bufsize;
 
 	/**
-	 * Proxy URL to be used for accessing Gopher via HTTP.
-	 */
-	const PROXY_URL = '//portal.mozz.us/gopher/';
-
-	/**
 	 * Constructs the Gopher handler.
 	 *
-	 * @param string  $host    IP address of the Gopher server.
-	 * @param integer $port    Port where the Gopher server is listening on.
-	 * @param integer $bufsize Size of the socket read buffer.
+	 * @param GopherConfig $config Configuration handler instance.
 	 */
-	public function __construct($host, $port, $bufsize = 2048) {
-		$this->host = $host;
-		$this->port = $port;
-		$this->bufsize = $bufsize;
+	public function __construct($config) {
+		$this->host = $config->get('gopher_host');
+		$this->port = $config->get('gopher_port');
+		$this->bufsize = $config->get('buffer_size');
 	}
 
 	/**
@@ -147,10 +140,13 @@ class Gopher {
 	 *
 	 * @param string $type     Gopher entry type.
 	 * @param string $selector Selector to be proxied.
+	 * @param bool   $pretty   Should we use rewritten pretty URLs?
 	 *
 	 * @return string Proxied URL for the specified selector.
 	 */
-	public static function ProxySelector($type, $selector) {
+	public static function ProxySelector($type, $selector, $pretty = false) {
+		if ($pretty)
+			return "/{$type}{$selector}";
 		return "/?type={$type}&selector=" . urlencode($selector);
 	}
 }
@@ -369,6 +365,7 @@ class GopherEntry {
 	 * @return string HTML representation of the object.
 	 */
 	public function asHTML() {
+		$config = GopherConfig::getInstance();
 		$html = '';
 
 		// Build the address of the entry's link.
@@ -376,8 +373,8 @@ class GopherEntry {
 		if (preg_match("/^URL:/", $this->selector)) {
 			$href = substr($this->selector, 4);
 		} elseif (!Gopher::IsHostOurs($this->host)) {
-			$href = Gopher::PROXY_URL . "{$this->host}%3A{$this->port}/" .
-				"{$this->type}{$this->selector}";
+			$href = "{$config->get('proxy_url')}{$this->host}%3A{$this->port}" .
+				"/{$this->type}{$this->selector}";
 		}
 
 		// Build the HTML component.
@@ -439,6 +436,60 @@ class GopherException extends Exception {
 }
 
 /**
+ * Configuration handler for webhole's settings.
+ */
+class GopherConfig {
+	private $configs;
+	private static $obj;
+
+	/**
+	 * Initializes the configuration handler with sane defaults.
+	 */
+	private final function  __construct() {
+		$this->configs = array(
+			'title' => 'webhole',
+			'base_domain' => 'domain.tld',
+			'gopher_host' => '127.0.0.1',
+			'gopher_port' => 70,
+			'buffer_size' => 2048,
+			'proxy_url' => '//portal.mozz.us/gopher/'
+		);
+	}
+
+	/**
+	 * Sets the value of a configuration option.
+	 *
+	 * @param string $key   Configuration option name.
+	 * @param mixed  $value Configuration option value.
+	 */
+	public function set($key, $value) {
+		$this->configs[$key] = $value;
+	}
+
+	/**
+	 * Gets the value of a configuration option.
+	 *
+	 * @param string $key Configuration option name.
+	 *
+	 * @return mixed Configuration option value.
+	 */
+	public function get($key) {
+		return $this->configs[$key];
+	}
+
+	/**
+	 * Gets the single instance of the configuration handler.
+	 *
+	 * @return GopherConfig Configuration handler instance.
+	 */
+	public static function getInstance() {
+		if (!isset(self::$obj))
+			self::$obj = new GopherConfig();
+		return self::$obj;
+	}
+}
+
+/**
  * Gets the contents of a URL parameter.
  *
  * @param string $key     Name of the URL argument.
@@ -457,18 +508,19 @@ function urlparam($key, $default = null) {
  *
  * @return string Text with links automatically converted to HTML links.
  */
-function autolink($text, $host = null) {
+function autolink($text) {
 	// Base regex: https://github.com/asika32764/php-autolink/blob/master/src/Autolink.php
 	$regex = "/([a-zA-Z]{3,}):\/\/([\-\p{L}\p{N}\p{M}.]+)([\/\p{L}\p{N}\p{M}\-._~:?#\[\]@!$&'()*+,;=%\">]*)?/u";
+	$config = GopherConfig::getInstance();
 
-	return preg_replace_callback($regex, function ($matches) use ($host) {
+	return preg_replace_callback($regex, function ($matches) use ($config) {
 		$url = $matches[0];
 		$scheme = $matches[1];
 		$domain = $matches[2];
 
 		// Proxy Gopher links.
 		if ($scheme == 'gopher') {
-			if (Gopher::IsHostOurs($domain, is_null($host) ? [] : [$host])) {
+			if (Gopher::IsHostOurs($domain, [ $config->get('base_domain') ])) {
 				// Handle links to ourselves.
 				$m = [];
 				if (preg_match('/\/(.)(.+)/', substr($url, 9), $m) == 1) {
@@ -477,7 +529,8 @@ function autolink($text, $host = null) {
 				}
 			} else {
 				// Proxy links to other Gopher servers.
-				$proxy = preg_replace('/gopher:\/\//', Gopher::PROXY_URL, $url);
+				$proxy = preg_replace('/gopher:\/\//',
+					$config->get('proxy_url'), $url);
 				return "<a href=\"$proxy\">$url</a>";
 			}
 		}
