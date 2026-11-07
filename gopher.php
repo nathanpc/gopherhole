@@ -141,6 +141,18 @@ class Gopher {
 	public static function SelectorBasename($selector) {
 		return substr(strrchr($selector, '/'), 1);
 	}
+
+	/**
+	 * Creates a proxy URL for a Gopher selector from our own server.
+	 *
+	 * @param string $type     Gopher entry type.
+	 * @param string $selector Selector to be proxied.
+	 *
+	 * @return string Proxied URL for the specified selector.
+	 */
+	public static function ProxySelector($type, $selector) {
+		return "/?type={$type}&selector=" . urlencode($selector);
+	}
 }
 
 /**
@@ -360,7 +372,7 @@ class GopherEntry {
 		$html = '';
 
 		// Build the address of the entry's link.
-		$href = "?type={$this->type}&selector={$this->encodedSelector()}";
+		$href = Gopher::ProxySelector($this->type, $this->selector);
 		if (preg_match("/^URL:/", $this->selector)) {
 			$href = substr($this->selector, 4);
 		} elseif (!Gopher::IsHostOurs($this->host)) {
