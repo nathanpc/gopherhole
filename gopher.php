@@ -355,11 +355,11 @@ class GopherEntry {
 		$html = '';
 
 		// Build the address of the entry's link.
-		$href = "?type={$this->type}&selector={$this->selector}";
+		$href = "?type={$this->type}&selector={$this->encodedSelector()}";
 		if (preg_match("/^URL:/", $this->selector)) {
 			$href = substr($this->selector, 4);
 		} elseif (!Gopher::IsHostOurs($this->host)) {
-			$href = "https://portal.mozz.us/gopher/{$this->host}:" .
+			$href = "https://portal.mozz.us/gopher/{$this->host}%3A" .
 				"{$this->port}/{$this->type}{$this->selector}";
 		}
 
@@ -382,6 +382,15 @@ class GopherEntry {
 		$html .= '</div>';
 
 		return $html;
+	}
+
+	/**
+	 * Gets the selector string encoded for usage in URL parameter.
+	 *
+	 * @return string Selector string encoded for URL parameters.
+	 */
+	public function encodedSelector() {
+		return urlencode($this->selector);
 	}
 }
 
