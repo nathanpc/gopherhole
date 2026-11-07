@@ -1,7 +1,7 @@
 <?php
 // User configuration.
 $title = 'nathanpc';
-$gopher_base_domain = 'nathancampos.me';
+$gopher_base_domain = 'nathanpc.eu';
 $gopher_host = '127.0.0.1';
 $gopher_port = 70;
 $buffer_size = 2048;
