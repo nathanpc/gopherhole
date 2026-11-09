@@ -1,7 +1,5 @@
-# Compatible images and old HTML pages.
-#*_compat.gif
-#*.html
-#!*.cnt.html
+# Generated files.
+mimes.php
 
 # IDE and web servers.
 .idea/
