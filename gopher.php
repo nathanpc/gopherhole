@@ -96,9 +96,13 @@ class Gopher {
 	 * @return bool True if the host is ourselves, false otherwise.
 	 */
 	public static function IsHostOurs($host, $specials = []) {
+		$config = GopherConfig::getInstance();
+
 		// Check for common host names that are used for ourselves or invalid.
-		if (empty($host) || ($host == 'localhost') || ($host == 'null.host'))
+		if (empty($host) || ($host == $config->get('base_domain'))  ||
+				($host == 'localhost') || ($host == 'null.host')) {
 			return true;
+		}
 
 		// Check each of the hosts contained in the specials array.
 		return in_array($host, $specials);
@@ -528,7 +532,7 @@ function autolink($text) {
 
 		// Proxy Gopher links.
 		if ($scheme == 'gopher') {
-			if (Gopher::IsHostOurs($domain, [ $config->get('base_domain') ])) {
+			if (Gopher::IsHostOurs($domain)) {
 				// Handle links to ourselves.
 				$m = [];
 				if (preg_match('/\/(.)(.+)/', substr($url, 9), $m) == 1) {
