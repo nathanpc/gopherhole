@@ -1,0 +1,48 @@
+# Build the website.
+FROM alpine:3 AS builder
+
+RUN apk update && apk add \
+	curl \
+	make \
+    sed \
+	perl \
+	php85 \
+	php85-sockets \
+	php85-apache2 \
+	&& rm -rf /var/cache/apk/*
+
+# Configure extra features needed in Apache and PHP.
+RUN sed -zie 's|\(<Directory "/var/www/localhost/htdocs">\)\(.*\)\(</Directory>\)|\1\nOptions Indexes FollowSymLinks MultiViews\nAllowOverride All\nRequire all granted\n\3|g' /etc/apache2/httpd.conf && \
+	sed -zie 's|#\(LoadModule rewrite_module modules/mod_rewrite.so\)|\1|g' /etc/apache2/httpd.conf && \
+	sed -zie 's|\(display_errors =\) Off|\1 On|g' /etc/php85/php.ini && \
+	sed -zie 's|\(display_startup_errors =\) Off|\1 On|g' /etc/php85/php.ini && \
+	sed -zie 's|;\(html_errors = On\)|\1|g' /etc/php85/php.ini && \
+	sed -zie 's|;\(error_log =\) syslog|\1 /dev/stderr|g' /etc/php85/php.ini
+
+# Copy all files for building the project.
+WORKDIR /app
+COPY *.php Makefile .htaccess /bin .
+
+# Download dependencies and build the project.
+RUN make www
+
+# Build the final image.
+FROM alpine:3
+
+RUN apk update && apk add \
+	php85 \
+	php85-sockets \
+	php85-apache2 \
+	&& rm -rf /var/cache/apk/*
+
+# Copy over the configuration files.
+COPY --from=builder /etc/apache2/httpd.conf /etc/apache2/httpd.conf
+COPY --from=builder /etc/php85/php.ini /etc/php85/php.ini
+
+# Copy over our files for deployment.
+WORKDIR /var/www/localhost/htdocs/
+RUN rm -r *
+COPY --from=builder --exclude=bin/ --exclude=Makefile /app/ .
+
+EXPOSE 80
+ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]

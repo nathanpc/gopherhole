@@ -16,18 +16,19 @@ BINDIR = ./bin
 HTDOCS = ./
 PHLOG  = ./phlog
 
-.PHONY: all build images phlog
+.PHONY: all build images phlog www
 
 all: build
 
-build: $(HTDOCS)/mimes.php images phlog
-	$(CURL) -o "$(HTDOCS)/robots.txt" 'https://raw.githubusercontent.com/ai-robots-txt/ai.robots.txt/refs/heads/main/robots.txt'
+build: images phlog
 
 images:
 	$(BINDIR)/update-compat-images.pl
 
 phlog:
 	$(BINDIR)/build-phlog-index.pl
+
+www: $(HTDOCS)/mimes.php $(HTDOCS)/robots.txt
 
 $(HTDOCS)/mimes.php:
 	$(PHP) $(HTDOCS)/mimetype.php > $@

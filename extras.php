@@ -20,3 +20,14 @@ function href($type, $selector) {
 	$config = GopherConfig::getInstance();
 	return Gopher::ProxySelector($type, $selector, $config->get('rewrite'));
 }
+
+/**
+ * Gets the contents of an environment variable, if it wasn't found a default
+ * value is used instead.
+ *
+ * @param string $name    Name of the environment variable.
+ * @param any    $default Default value if the environment variable wasn't set.
+ */
+function env($name, $default) {
+	return (getenv($name) === false) ? $default : getenv($name);
+}

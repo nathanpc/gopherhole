@@ -8,6 +8,7 @@ $config = GopherConfig::getInstance();
 $config->set('title', 'nathanpc');
 $config->set('proxy_url', '//portal.mozz.us/gopher/');
 $config->set('base_domain', 'nathanpc.eu');
+$config->set('gopher_host', env('GOPHER_HOST', '127.0.0.1'));
 $config->set('rewrite', true);
 
 // Initialize the Gopher handler and request the selector.

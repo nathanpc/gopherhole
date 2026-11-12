@@ -1,0 +1,22 @@
+# Build the gopherhole.
+FROM alpine:3 AS builder
+
+RUN apk update && apk add \
+	curl \
+	make \
+    sed \
+	perl \
+	&& rm -rf /var/cache/apk/*
+
+# Copy all files for building the project.
+WORKDIR /app
+COPY --exclude=*.php --exclude=.htaccess . .
+
+# Download dependencies and build the project.
+RUN make
+
+# Build the final image.
+FROM ghcr.io/nathanpc/amigos:main
+
+# Copy over our files for deployment.
+COPY --from=builder --exclude=bin/ --exclude=Makefile /app/ /docroot/

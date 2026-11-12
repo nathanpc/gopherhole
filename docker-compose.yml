@@ -1,0 +1,22 @@
+---
+services:
+  proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile.www
+    restart: unless-stopped
+    ports:
+      - '8001:80'
+    environment:
+      GOPHER_HOST: 'gopher'
+    depends_on:
+      - gopher
+  gopher:
+    build:
+      context: .
+      dockerfile: Dockerfile.gopher
+    restart: unless-stopped
+    ports:
+      - '7001:70'
+    environment:
+      GOPHER_HOSTNAME: 'nathanpc.eu'

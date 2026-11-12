@@ -1,0 +1,13 @@
+# Misc
+README.md
+LICENSE
+mimes.php
+
+# Repository
+.git/
+.git*
+
+# Docker files.
+/.dockerignore
+/docker-compose.yml
+/Dockerfile
