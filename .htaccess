@@ -1,3 +1,21 @@
+# Protect the .htaccess file.
+<FilesMatch "\.htaccess$">
+	Order Allow,Deny
+	Deny from all
+</FilesMatch>
+
+# Only allow users to access the index.php file.
+<Files *.php>
+	Order Deny,Allow
+	Deny from all
+	Allow from 127.0.0.1
+</Files>
+<Files index.php>
+	Order Allow,Deny
+	Allow from all
+</Files>
+
+# Pretty URLs that look just like Gopher URIs.
 <IfModule mod_rewrite.c>
 	RewriteEngine On
 
