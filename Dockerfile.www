@@ -21,7 +21,7 @@ RUN sed -zie 's|\(<Directory "/var/www/localhost/htdocs">\)\(.*\)\(</Directory>\
 
 # Copy all files for building the project.
 WORKDIR /app
-COPY *.php *.js *.css Makefile .htaccess .
+COPY *.php *.js *.css favicon.ico Makefile .htaccess .
 ADD bin bin
 ADD _assets _assets
 
