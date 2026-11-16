@@ -1,0 +1,29 @@
+## Docker ignore file for the Gopher container.
+##
+## Author: Nathan Campos <hi@nathancampos.me>
+
+# Proxy-only files.
+/*.php
+/*.css
+/*.js
+.htaccess
+
+# Misc
+README.md
+LICENSE
+
+# Repository
+.git/
+.git*
+
+# Docker files.
+/.dockerignore
+/docker-compose.yml
+/Dockerfile
+/Dockerfile.*
+
+# Temporary files.
+.DS_Store
+._*
+*~
+Thumbs.db
